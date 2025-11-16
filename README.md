@@ -60,6 +60,11 @@
 - **Alternative**: Planetscale/MySQL with Vercel KV or Neon Postgres; requires custom auth wiring, so only pick if Supabase limits are hit.
 - **Static Assets & Hosting**: Deploy the Vue frontend on Vercel; use Supabase storage buckets for receipts/screenshots if needed.
 
+## Current Implementation Status
+- Focused on the Vue frontend specification/UI; backend integrations (Supabase/Postgres) are postponed.
+- Placeholder services or environment variables that reference Supabase are unused until a backend is chosen.
+- When ready to add a backend, revisit the earlier Supabase-oriented plan or adapt it to the selected service.
+
 ## Success Metrics
 - Runner can create and share a session in under 30 seconds.
 - Joiner can add their meal and mark payment in under 5 taps.
