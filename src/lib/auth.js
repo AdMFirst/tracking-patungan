@@ -17,3 +17,8 @@ export const initAuth = async () => {
         user.value = session?.user ?? null
     })
 }
+
+export async function signOut() {
+  const { error } = await supabase.auth.signOut({ scope: 'local' })
+  return error
+}

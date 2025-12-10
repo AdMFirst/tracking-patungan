@@ -63,9 +63,9 @@ import { Badge } from '@/components/ui/badge'
 
 import { ref, inject, computed } from 'vue'
 import UserAvatar from '@/components/UserAvatar.vue'
+import { signOut } from '@/lib/auth'
 
 const user = inject('user')
-const signOut = inject('signOut')
 
 const loading = ref(false)
 
