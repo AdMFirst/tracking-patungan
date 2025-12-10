@@ -7,15 +7,11 @@
 ## Primary Users
 - **Runner** – person placing the group order and paying the delivery platform or restaurant.
 - **Joiner** – anyone adding their own meal(s) to an open order and settling their debt afterwards.
-- **Treasurer** (optional) – friend that audits the history of orders to ensure everyone is square.
 
 ## Key Concepts & Data
-- **Group Order Session**: title, restaurant/platform, order date/time, delivery fee, promo/voucher data, payment method, currency.
-- **Participant**: name, nick/emoji, preferred payment channel, default share for common fees (delivery, tax, tips).
-- **Order Item**: dish name, quantity, base price, add-ons, per-item notes, assigned participant(s).
-- **Shared Fees**: delivery, service, tax, tip, miscellaneous; split equally, by percentage, by item price, or custom overrides.
-- **Payment Record**: payer, payee, amount, payment method, proof/reference, status (pending/confirmed).
-- **Reference Attachments**: screenshots/links to GrabFood/GoFood/ShopeeFood orders, receipts, or spreadsheet exports.
+- **Room**: 
+- **Order Item**: dish name, quantity, base price, per-item notes, assigned participant(s).
+
 
 ## Functional Requirements
 1. **Order Session Lifecycle**
