@@ -1,18 +1,10 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
-import { Home, Search, User, Book } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
+import { navItems } from '@/lib/router'
 
 const router = useRouter()
 const route = useRoute()
-
-const navItems = [
-    { icon: Home, label: 'Home', route: '/' },
-    { icon: Search, label: 'Search', route: '/search' },
-    { icon: Book, label: 'My Room', route: '/myroom' },
-    { icon: User, label: 'Profile', route: '/profile' },
-]
-
 
 function navigateTo(route) {
     router.push(route)
