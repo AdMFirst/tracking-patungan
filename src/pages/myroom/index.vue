@@ -33,17 +33,14 @@
                             <Skeleton class="h-4 w-[50px]" />
                             <Skeleton class="h-4 w-[180px]" />
                         </div>
-                        
                         <div class="flex justify-between">
                             <Skeleton class="h-4 w-[50px]" />
                             <Skeleton class="h-4 w-[180px]" />
                         </div>
-                        
                         <div class="flex justify-between">
                             <Skeleton class="h-4 w-[50px]" />
                             <Skeleton class="h-4 w-[180px]" />
                         </div>
-                        
                         <Separator class="my-2" />
                         <div class="flex justify-between pt-2">
                             <Skeleton class="h-4 w-[50px]" />
@@ -67,8 +64,7 @@
                 <Card
                     v-for="room in rooms"
                     :key="room.id"
-                    class="hover:shadow-lg cursor-pointer transition-shadow"
-                    @click="setRoom(room.id)"
+                    class="transition-shadow"
                 >
                     <CardHeader class="p-4 pb-3">
                         <div class="flex justify-between items-start">
@@ -81,141 +77,85 @@
                             <span class="text-muted-foreground">Restaurant:</span>
                             <span>{{ room.restaurant || 'Not specified' }}</span>
                         </div>
-                        
+                         
                         <div class="flex justify-between">
                             <span class="text-muted-foreground">Order Time:</span>
                             <span>{{ formatDateTime(room.order_time) }}</span>
                         </div>
-                        
+                         
                         <div class="flex justify-between">
                             <span class="text-muted-foreground">Created:</span>
                             <span>{{ formatDateTime(room.created_at) }}</span>
                         </div>
-                        
+                         
                         <Separator class="my-2" />
-                        <div class="flex justify-between pt-2">
-                            <span class="text-muted-foreground">Final Total:</span>
-                            <span class="text-lg font-semibold text-green-600 dark:text-green-400">
-                                {{ formatCurrency(room.final_total) }}
-                            </span>
+                        <div v-if="room.final_total" class="flex flex-col gap-2 pt-2">
+                            <div class="flex justify-between flex-row">
+                                <span class="text-muted-foreground">Final Total:</span>
+                                <span class="text-lg font-semibold text-green-600 dark:text-green-400">
+                                    {{ formatCurrency(room.final_total) }}
+                                </span>
+                            </div>
+                            
+                            <Button @click="openRoom(room)">
+                                Manage Room
+                            </Button>
+                            
+                        </div>
+                        <div v-else class="flex flex-col pt-2">
+                            <span class="text-muted-foreground font-semibold">The room is still hopping! Jump in and add your order</span>
+                            <div class="w-full flex flex-row gap-2 mt-2">
+                                <Button
+                                    @click="openCloseRoomModal(room)"
+                                    variant="destructive"
+                                    class="flex-1"
+                                >
+                                    Close Room
+                                </Button>
+                                <Button
+                                    @click="openRoom(room)"
+                                    variant="default"
+                                    class="flex-1"
+                                >
+                                    Open Room
+                                </Button>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
             </div>
         </div>
         
-        <Dialog :open="showFilters" @update:open="showFilters = $event">
-            <DialogContent class="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Filters</DialogTitle>
-                    <DialogDescription>
-                        Adjust your room search criteria.
-                    </DialogDescription>
-                </DialogHeader>
+        <FilterModal
+            v-model:open="showFilters"
+            :filters="filters"
+            @apply="handleApplyFilters"
+            @clear="handleClearFilters"
+            @update:form="handleLiveFilterUpdate"
+        />
 
-                <div class="space-y-4 py-2">
-                    <div class="space-y-1">
-                        <Label for="search">Search by title/name</Label>
-                        <Input
-                            id="search"
-                            v-model="filterForm.search"
-                            type="text"
-                            placeholder="Search rooms..."
-                        />
-                    </div>
-
-                    <div class="space-y-1">
-                        <Label for="platform">Platform</Label>
-                        <Select v-model="filterForm.platform">
-                            <SelectTrigger id="platform">
-                                <SelectValue placeholder="All Platforms" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value="">All Platforms</SelectItem>
-                                    <SelectItem value="GrabFood">GrabFood</SelectItem>
-                                    <SelectItem value="GoFood">GoFood</SelectItem>
-                                    <SelectItem value="ShopeeFood">ShopeeFood</SelectItem>
-                                    <SelectItem value="FoodPanda">FoodPanda</SelectItem>
-                                    <SelectItem value="Lalafood">Lalafood</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <div class="space-y-1">
-                        <Label for="restaurant">Restaurant (Specific)</Label>
-                        <Input
-                            id="restaurant"
-                            v-model="filterForm.restaurant"
-                            type="text"
-                            placeholder="Filter by specific restaurant..."
-                        />
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <Label for="dateFrom">From Date</Label>
-                            <Input
-                                id="dateFrom"
-                                v-model="filterForm.dateFrom"
-                                type="date"
-                            />
-                        </div>
-                        <div class="space-y-1">
-                            <Label for="dateTo">To Date</Label>
-                            <Input
-                                id="dateTo"
-                                v-model="filterForm.dateTo"
-                                type="date"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <DialogFooter class="flex sm:justify-between pt-4">
-                    <Button
-                        @click="clearFilters"
-                        variant="ghost"
-                        class="w-full sm:w-auto"
-                    >
-                        Clear Filters
-                    </Button>
-                    <Button
-                        @click="applyFilters"
-                        class="w-full sm:w-auto mt-2 sm:mt-0"
-                    >
-                        Apply Filters
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <CloseRoomModal
+            v-model:open="showCloseRoomModal"
+            :roomId="currentRoomId"
+            @submit="handleCloseRoomSubmit"
+        />
     </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRouter } from 'vue-router'
-
-// SHADCN/UI COMPONENTS IMPORTS
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-
-// ICON IMPORTS (Requires 'lucide-vue-next' or similar icon library)
-import { Filter, Home } from 'lucide-vue-next'
-
-// Assume this is imported from your project setup
-import { supabase } from '../../lib/supabaseClient'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Filter, Home } from 'lucide-vue-next'
+import { supabase } from '../../lib/supabaseClient'
+import { formatCurrency, formatDateTime } from '@/lib/utils'
+import CloseRoomModal from '@/components/CloseRoomModal.vue'
+import FilterModal from '@/components/FilterModal.vue'
 
-// Import debounce utility (you might need to install 'lodash-es' or write a simple debounce function)
-// For this example, we assume you have a utility function called 'debounce'
 const debounce = (fn, delay) => {
     let timeoutId
     return (...args) => {
@@ -225,13 +165,14 @@ const debounce = (fn, delay) => {
 }
 
 const user = inject('user')
+const router = useRouter()
 
-// State
 const rooms = ref([])
 const loading = ref(false)
 const showFilters = ref(false)
+const showCloseRoomModal = ref(false)
+const currentRoomId = ref(null)
 
-// Main Filters state (controls the data fetched)
 const filters = ref({
     search: '',
     platform: '',
@@ -240,67 +181,30 @@ const filters = ref({
     dateTo: ''
 })
 
-// Temporary form state for the Dialog (allows user to edit without immediate list changes)
-const filterForm = ref({ ...filters.value })
-
-// Computed check for empty state
 const hasActiveFilters = computed(() => {
     return Object.values(filters.value).some(val => val !== '')
 })
 
-// --- Helper Functions ---
-
-// Formats date string to ISO date string for Supabase comparison (end of day)
 const getEndOfDayISO = (dateString) => {
     if (!dateString) return null
     const date = new Date(dateString)
-    // Set time to 23:59:59.999 to include the whole day
     date.setHours(23, 59, 59, 999)
     return date.toISOString()
 }
 
-// Format date and time for display
-const formatDateTime = (dateString) => {
-    if (!dateString) return 'N/A'
-    const date = new Date(dateString)
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    })
-}
-
-// Format currency
-const formatCurrency = (amount) => {
-    if (amount == null) return 'N/A' // Use loose comparison for 0 or null
-    // Note: Using 'id-ID' locale for Rupiah, adjust as needed
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR'
-    }).format(amount)
-}
-
-// --- Filtering and Fetching Logic ---
-
-// Fetch rooms from Supabase (now includes all filtering logic)
 const fetchRooms = async () => {
     if (!user.value) return
-
     loading.value = true
     
     let query = supabase
         .from('rooms')
         .select('*')
-        .order('order_time', { ascending: false }) // Sort on server
+        .order('created_at', { ascending: false })
 
-    // 1. Platform Filter
     if (filters.value.platform) {
         query = query.eq('platform', filters.value.platform)
     }
 
-    // 2. Search & Restaurant Filters (Combined using Supabase OR operator and ILIKE)
     let searchClauses = []
     const searchLower = filters.value.search.trim().toLowerCase()
     const restaurantLower = filters.value.restaurant.trim().toLowerCase()
@@ -309,35 +213,24 @@ const fetchRooms = async () => {
         searchClauses.push(`title.ilike.%${searchLower}%`)
         searchClauses.push(`restaurant.ilike.%${searchLower}%`)
     } else if (restaurantLower) {
-        // Only apply specific restaurant filter if general search is empty
         searchClauses.push(`restaurant.ilike.%${restaurantLower}%`)
     }
     
     if (searchClauses.length > 0) {
-        // Supabase OR requires the clauses to be joined by a comma
         query = query.or(searchClauses.join(','))
     }
     
-    // 3. Date Range Filter
     if (filters.value.dateFrom) {
-        // We append T00:00:00Z to ensure comparison starts at the beginning of the day (UTC/ISO)
         query = query.gte('order_time', filters.value.dateFrom + 'T00:00:00Z')
     }
 
     if (filters.value.dateTo) {
-        // Use the helper to include the entire end day
         query = query.lte('order_time', getEndOfDayISO(filters.value.dateTo))
     }
 
     try {
         const { data, error } = await query
-
-        if (error) {
-            console.error('Error fetching rooms:', error)
-            rooms.value = []
-            return
-        }
-
+        if (error) throw error
         rooms.value = data || []
     } catch (error) {
         console.error('Error fetching rooms:', error)
@@ -346,84 +239,62 @@ const fetchRooms = async () => {
     }
 }
 
-// Debounced version of fetchRooms for instant feedback on text inputs
 const debouncedFetchRooms = debounce(fetchRooms, 300)
 
-// Handles the filter dialog closing and triggering a fetch
-const applyFilters = () => {
-    // Commit the temporary form values to the main filters state
-    filters.value = { ...filterForm.value }
+// This keeps your original live search logic intact
+const handleLiveFilterUpdate = (newFormState) => {
+    filters.value.search = newFormState.search
+    filters.value.restaurant = newFormState.restaurant
+    debouncedFetchRooms()
+}
+
+const handleApplyFilters = (newFilters) => {
+    filters.value = { ...newFilters }
     showFilters.value = false
-    // Fetch is triggered by the watch on `filters`
+    fetchRooms()
 }
 
-// Clear all filters
-const clearFilters = () => {
-    const clearedState = {
-        search: '',
-        platform: '',
-        restaurant: '',
-        dateFrom: '',
-        dateTo: ''
-    }
-    filterForm.value = { ...clearedState }
-    filters.value = { ...clearedState } // Clear and trigger fetch
+const handleClearFilters = (clearedState) => {
+    filters.value = { ...clearedState }
+    showFilters.value = false
+    fetchRooms()
 }
 
-// --- Watchers and Lifecycle Hooks ---
-
-// 1. Watch the user to trigger the initial fetch
 watch(() => user.value, (newUser) => {
-    if (newUser) {
-        fetchRooms()
-    }
+    if (newUser) fetchRooms()
 }, { immediate: true })
 
-// 2. Watch text filters for immediate feedback via debounce
-// We only watch 'search' and 'restaurant' on the filterForm (while dialog is open)
-watch(() => filterForm.value.search, (newVal) => {
-    // Only fetch if the dialog is open and the filterForm is actively being changed
-    if(showFilters.value) {
-        // Optimistically update main filters for debounce, but don't close dialog
-        filters.value.search = newVal
-        debouncedFetchRooms()
-    }
-})
-watch(() => filterForm.value.restaurant, (newVal) => {
-    if(showFilters.value) {
-        filters.value.restaurant = newVal
-        debouncedFetchRooms()
-    }
-})
-
-// 3. Watch platform/date filters (applied only when dialog is closed or via Apply button)
-watch(filters, () => {
-    // This watch catches changes from clearFilters or applyFilters
-    if(!showFilters.value) {
-        fetchRooms()
-    }
-}, { deep: true })
-
-
-// Initial setup when opening the dialog
-watch(showFilters, (isShowing) => {
-    if (isShowing) {
-        // When opening, sync the form state with the active filters state
-        filterForm.value = { ...filters.value }
-    }
-})
-
-// Final fetch on mount (if user is already loaded)
 onMounted(() => {
-    if (user.value) {
-        fetchRooms()
-    }
+    if (user.value) fetchRooms()
 })
 
-const router = useRouter()
+function openRoom({id, final_total}) {
+    const next = final_total? `/myroom/${id}` : `/active-room/${id}`
+    router.push(next)
+}
 
+const openCloseRoomModal = ({id}) => {
+    currentRoomId.value = id
+    showCloseRoomModal.value = true
+}
 
-function setRoom(id) {
-    router.push(`/myroom/${id}`)
+const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
+    if (!roomId || !finalTotal) return
+    try {
+        const { error } = await supabase
+            .from('rooms')
+            .update({
+                final_total: finalTotal,
+                order_time: new Date().toISOString()
+            })
+            .eq('id', roomId)
+
+        if (error) throw error
+        showCloseRoomModal.value = false
+        await fetchRooms()
+        router.push(`/myroom/${roomId}`)
+    } catch (error) {
+        console.error('Error closing room:', error)
+    }
 }
 </script>

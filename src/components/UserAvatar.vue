@@ -18,6 +18,7 @@ const fallbackInitial = computed(() => {
   const name =
     props.userMetadata?.full_name ||
     props.userMetadata?.user_name ||
+    props.userMetadata?.name ||
     'U'
   return name.charAt(0).toUpperCase()
 })
@@ -78,7 +79,7 @@ const fallbackInitial = computed(() => {
 
     <div>
         <CardTitle class="text-xl font-bold text-foreground">
-        {{ props.userMetadata.full_name }}
+        {{ props.userMetadata?.full_name || props.userMetadata?.name || 'Unknown' }}
         </CardTitle>
         <CardDescription class="text-sm text-muted-foreground">
         {{ props.userMetadata.email }}
