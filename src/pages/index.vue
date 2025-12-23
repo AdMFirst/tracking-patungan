@@ -20,17 +20,17 @@
                         <CardTitle>Monthly Spending</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div class="space-y-4">
+                        <div class="space-y-4 max-h-1/2 overflow-y-scroll">
                             <div
                                 v-for="month in monthlySpending"
                                 :key="month.month"
                                 class="flex justify-between items-center p-3 bg-muted rounded-lg"
                             >
                                 <span class="text-sm font-medium">{{
-                                    month.month
+                                    formatMonthYear(month.month)
                                 }}</span>
                                 <span class="text-sm font-bold"
-                                    >Rp {{ formatCurrency(month.total) }}</span
+                                    >Rp {{ formatCurrency(month.total_spent) }}</span
                                 >
                             </div>
                             <div
@@ -126,6 +126,13 @@ const monthlySpending = ref([]);
 // Format currency
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID').format(amount || 0);
+};
+
+// Format month and year
+const formatMonthYear = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long' };
+    return date.toLocaleDateString('id-ID', options);
 };
 
 // Fetch monthly spending data

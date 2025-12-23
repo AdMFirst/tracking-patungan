@@ -68,7 +68,14 @@ export async function fetchRoomParticipants(roomID) {
 }
 
 // Fetch monthly spending for a user
-export async function fetchMonthlySpending(userID) {
-    // This function will be replaced with the new database logic
-    return [];
+export async function fetchMonthlySpending() {
+    const { data, error } = await supabase
+        .rpc("get_my_monthly_spending");
+
+    if (error) {
+        console.error("Failed to fetch monthly spending:", error);
+        throw error;
+    }
+
+    return data;
 }
