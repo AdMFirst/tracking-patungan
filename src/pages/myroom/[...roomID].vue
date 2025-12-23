@@ -59,16 +59,16 @@
                 </Card>
 
                 <!-- Participants List -->
-                <Card>
-                    <CardHeader class="p-4 pb-3">
+                <Card >
+                    <CardHeader class="p-4">
                         <CardTitle class="text-lg font-semibold">Participants</CardTitle>
                     </CardHeader>
-                    <CardContent class="p-4 pt-0 text-sm space-y-4">
+                    <CardContent class="p-4 pt-0 text-sm space-y-1">
                         <div v-if="participants.length === 0" class="text-center py-4">
                             <p class="text-muted-foreground">No participants found.</p>
                         </div>
                         
-                        <div v-else class="space-y-4">
+                        <div v-else class="space-y-1">
                             <div v-for="participant in participants" :key="participant.id" class="flex items-center justify-between p-3 border rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     <img :src="participant.user?.avatar_url || 'https://placehold.co/400'" alt="User avatar" class="w-10 h-10 rounded-full object-cover" />
@@ -77,38 +77,14 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-medium">{{ formatCurrency(participant.amount) }}</p>
                                     <Badge :variant="participant.paid ? 'default' : 'secondary'" class="mt-1">
                                         {{ participant.paid ? 'Paid' : 'Unpaid' }}
                                     </Badge>
+                                    <Badge class="mt-1" v-if="participant.paid_via">
+                                        {{ participant.paid_via }}
+                                    </Badge>
                                 </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <!-- Payment Summary -->
-                <Card>
-                    <CardHeader class="p-4 pb-3">
-                        <CardTitle class="text-lg font-semibold">Payment Summary</CardTitle>
-                    </CardHeader>
-                    <CardContent class="p-4 pt-0 text-sm space-y-3">
-                        <div class="flex justify-between">
-                            <span class="text-muted-foreground">Total Paid:</span>
-                            <span class="font-medium text-green-600 dark:text-green-400">
-                                {{ formatCurrency(totalPaid) }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-muted-foreground">Total Unpaid:</span>
-                            <span class="font-medium text-red-600 dark:text-red-400">
-                                {{ formatCurrency(totalUnpaid) }}
-                            </span>
-                        </div>
-                        <Separator class="my-2" />
-                        <div class="flex justify-between font-semibold">
-                            <span>Remaining:</span>
-                            <span>{{ formatCurrency(remainingAmount) }}</span>
                         </div>
                     </CardContent>
                 </Card>
