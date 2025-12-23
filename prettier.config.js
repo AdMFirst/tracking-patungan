@@ -1,5 +1,5 @@
 // prettier.config.js
-module.exports = {
+export default {
   trailingComma: "es5", // Print trailing commas wherever possible in ES5 (objects, arrays, etc.) [1, 5]
   tabWidth: 4, // Specify the number of spaces per indentation level [1]
   semi: true, // Print semicolons at the ends of statements [1, 5]

@@ -41,40 +41,50 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { ref, watch } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const props = defineProps({
     open: Boolean,
     user: {
         type: Object,
         default: () => ({
-            username: ''
-        })
-    }
-})
+            username: '',
+        }),
+    },
+});
 
-const emit = defineEmits(['update:open', 'save'])
+const emit = defineEmits(['update:open', 'save']);
 
 // Internal state initialized with a copy of props
-const settingsForm = ref({ ...props.user })
+const settingsForm = ref({ ...props.user });
 
 // Sync internal state when modal opens or props change
-watch(() => props.open, (isOpen) => {
-    if (isOpen) {
-        settingsForm.value = { ...props.user }
+watch(
+    () => props.open,
+    (isOpen) => {
+        if (isOpen) {
+            settingsForm.value = { ...props.user };
+        }
     }
-})
+);
 
 const handleOpenChange = (val) => {
-    emit('update:open', val)
-}
+    emit('update:open', val);
+};
 
 const saveSettings = () => {
-    emit('save', settingsForm.value)
-    handleOpenChange(false)
-}
+    emit('save', settingsForm.value);
+    handleOpenChange(false);
+};
 </script>

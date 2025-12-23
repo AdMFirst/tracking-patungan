@@ -27,12 +27,22 @@
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="ALL">All Platforms</SelectItem>
-                                <SelectItem value="GrabFood">GrabFood</SelectItem>
+                                <SelectItem value="ALL"
+                                    >All Platforms</SelectItem
+                                >
+                                <SelectItem value="GrabFood"
+                                    >GrabFood</SelectItem
+                                >
                                 <SelectItem value="GoFood">GoFood</SelectItem>
-                                <SelectItem value="ShopeeFood">ShopeeFood</SelectItem>
-                                <SelectItem value="FoodPanda">FoodPanda</SelectItem>
-                                <SelectItem value="Lalafood">Lalafood</SelectItem>
+                                <SelectItem value="ShopeeFood"
+                                    >ShopeeFood</SelectItem
+                                >
+                                <SelectItem value="FoodPanda"
+                                    >FoodPanda</SelectItem
+                                >
+                                <SelectItem value="Lalafood"
+                                    >Lalafood</SelectItem
+                                >
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -88,12 +98,26 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ref, watch } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 const props = defineProps({
     open: Boolean,
@@ -104,39 +128,42 @@ const props = defineProps({
             platform: 'ALL',
             restaurant: '',
             dateFrom: '',
-            dateTo: ''
-        })
-    }
-})
+            dateTo: '',
+        }),
+    },
+});
 
-const emit = defineEmits(['update:open', 'apply',])
+const emit = defineEmits(['update:open', 'apply']);
 
 // Internal state initialized with a copy of props
-const filterForm = ref({ ...props.filters })
+const filterForm = ref({ ...props.filters });
 
 // Sync internal state when modal opens or props change
-watch(() => props.open, (isOpen) => {
-    if (isOpen) {
-        filterForm.value = { ...props.filters }
+watch(
+    () => props.open,
+    (isOpen) => {
+        if (isOpen) {
+            filterForm.value = { ...props.filters };
+        }
     }
-})
+);
 
 const handleOpenChange = (val) => {
-    emit('update:open', val)
-}
+    emit('update:open', val);
+};
 
 const applyFilters = () => {
     // We create a shallow copy to manipulate the data before emitting
-    const payload = { ...filterForm.value }
+    const payload = { ...filterForm.value };
 
     // If the platform is 'ALL', we set it to an empty string so it isn't used as a filter
     if (payload.platform === 'ALL') {
-        payload.platform = ''
+        payload.platform = '';
     }
 
-    emit('apply', payload)
-    handleOpenChange(false)
-}
+    emit('apply', payload);
+    handleOpenChange(false);
+};
 
 const clearFilters = () => {
     const clearedState = {
@@ -144,8 +171,8 @@ const clearFilters = () => {
         platform: 'ALL',
         restaurant: '',
         dateFrom: '',
-        dateTo: ''
-    }
-    filterForm.value = { ...clearedState }
-}
+        dateTo: '',
+    };
+    filterForm.value = { ...clearedState };
+};
 </script>

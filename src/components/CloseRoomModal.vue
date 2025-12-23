@@ -38,34 +38,44 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { ref, watch } from 'vue';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const props = defineProps({
     showModal: Boolean,
-    roomId: String
-})
+    roomId: String,
+});
 
-const emit = defineEmits(['update:open', 'submit'])
+const emit = defineEmits(['update:open', 'submit']);
 
-const finalTotal = ref('')
+const finalTotal = ref('');
 
 const handleSubmit = () => {
     if (finalTotal.value) {
         emit('submit', {
             roomId: props.roomId,
-            finalTotal: finalTotal.value
-        })
-        finalTotal.value = ''
+            finalTotal: finalTotal.value,
+        });
+        finalTotal.value = '';
     }
-}
+};
 
-watch(() => props.showModal, (isShowing) => {
-    if (!isShowing) {
-        finalTotal.value = ''
+watch(
+    () => props.showModal,
+    (isShowing) => {
+        if (!isShowing) {
+            finalTotal.value = '';
+        }
     }
-})
+);
 </script>

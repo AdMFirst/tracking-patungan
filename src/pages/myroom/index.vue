@@ -1,7 +1,6 @@
 <template>
     <div class="min-h-screen p-4 pb-20">
         <div class="max-w-md mx-auto">
-
             <div class="text-center py-0 mb-6">
                 <h1 class="text-2xl font-bold">My Rooms</h1>
             </div>
@@ -18,10 +17,7 @@
             </div>
 
             <div v-if="loading" class="text-center space-y-4">
-                <Card
-                    v-for="i in [1,2,3,4,5]"    
-                    :key="i"
-                >
+                <Card v-for="i in [1, 2, 3, 4, 5]" :key="i">
                     <CardHeader class="p-4 pb-3">
                         <div class="flex justify-between items-start">
                             <Skeleton class="h-4 w-[150px]" />
@@ -51,12 +47,18 @@
             </div>
 
             <div v-else-if="rooms.length === 0" class="text-center py-8">
-                <div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <div
+                    class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4"
+                >
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
                 <h3 class="text-lg font-semibold mb-2">No rooms found</h3>
                 <p class="text-sm text-muted-foreground">
-                    {{ hasActiveFilters ? 'No rooms match your current filters.' : 'You haven\'t created any rooms yet.' }}
+                    {{
+                        hasActiveFilters
+                            ? 'No rooms match your current filters.'
+                            : "You haven't created any rooms yet."
+                    }}
                 </p>
             </div>
 
@@ -68,42 +70,61 @@
                 >
                     <CardHeader class="p-4 pb-3">
                         <div class="flex justify-between items-start">
-                            <CardTitle class="text-lg font-semibold">{{ room.title || 'Untitled Room' }}</CardTitle>
-                            <Badge variant="secondary">{{ room.platform || 'Unknown' }}</Badge>
+                            <CardTitle class="text-lg font-semibold">{{
+                                room.title || 'Untitled Room'
+                            }}</CardTitle>
+                            <Badge variant="secondary">{{
+                                room.platform || 'Unknown'
+                            }}</Badge>
                         </div>
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">Restaurant:</span>
-                            <span>{{ room.restaurant || 'Not specified' }}</span>
+                            <span class="text-muted-foreground"
+                                >Restaurant:</span
+                            >
+                            <span>{{
+                                room.restaurant || 'Not specified'
+                            }}</span>
                         </div>
-                         
+
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">Order Time:</span>
+                            <span class="text-muted-foreground"
+                                >Order Time:</span
+                            >
                             <span>{{ formatDateTime(room.order_time) }}</span>
                         </div>
-                         
+
                         <div class="flex justify-between">
                             <span class="text-muted-foreground">Created:</span>
                             <span>{{ formatDateTime(room.created_at) }}</span>
                         </div>
-                         
+
                         <Separator class="my-2" />
-                        <div v-if="room.final_total" class="flex flex-col gap-2 pt-2">
+                        <div
+                            v-if="room.final_total"
+                            class="flex flex-col gap-2 pt-2"
+                        >
                             <div class="flex justify-between flex-row">
-                                <span class="text-muted-foreground">Final Total:</span>
-                                <span class="text-lg font-semibold text-green-600 dark:text-green-400">
+                                <span class="text-muted-foreground"
+                                    >Final Total:</span
+                                >
+                                <span
+                                    class="text-lg font-semibold text-green-600 dark:text-green-400"
+                                >
                                     {{ formatCurrency(room.final_total) }}
                                 </span>
                             </div>
-                            
+
                             <Button @click="openRoom(room)">
                                 Manage Room
                             </Button>
-                            
                         </div>
                         <div v-else class="flex flex-col pt-2">
-                            <span class="text-muted-foreground font-semibold">The room is still hopping! Jump in and add your order</span>
+                            <span class="text-muted-foreground font-semibold"
+                                >The room is still hopping! Jump in and add your
+                                order</span
+                            >
                             <div class="w-full flex flex-row gap-2 mt-2">
                                 <Button
                                     @click="openCloseRoomModal(room)"
@@ -125,7 +146,7 @@
                 </Card>
             </div>
         </div>
-        
+
         <FilterModal
             v-model:open="showFilters"
             :filters="filters"
@@ -143,120 +164,124 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, inject } from 'vue'
-import { useRouter } from 'vue-router'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Filter, Home } from 'lucide-vue-next'
-import { fetchUserRooms, updateRoom } from '../../lib/supabaseClient'
-import { formatCurrency, formatDateTime } from '@/lib/utils'
-import CloseRoomModal from '@/components/CloseRoomModal.vue'
-import FilterModal from '@/components/FilterModal.vue'
+import { ref, computed, onMounted, watch, inject } from 'vue';
+import { useRouter } from 'vue-router';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Filter, Home } from 'lucide-vue-next';
+import { fetchUserRooms, updateRoom } from '../../lib/supabaseClient';
+import { formatCurrency, formatDateTime } from '@/lib/utils';
+import CloseRoomModal from '@/components/CloseRoomModal.vue';
+import FilterModal from '@/components/FilterModal.vue';
 
 const debounce = (fn, delay) => {
-    let timeoutId
+    let timeoutId;
     return (...args) => {
-        clearTimeout(timeoutId)
-        timeoutId = setTimeout(() => fn(...args), delay)
-    }
-}
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn(...args), delay);
+    };
+};
 
-const user = inject('user')
-const router = useRouter()
+const user = inject('user');
+const router = useRouter();
 
-const rooms = ref([])
-const loading = ref(false)
-const showFilters = ref(false)
-const showCloseRoomModal = ref(false)
-const currentRoomId = ref(null)
+const rooms = ref([]);
+const loading = ref(false);
+const showFilters = ref(false);
+const showCloseRoomModal = ref(false);
+const currentRoomId = ref(null);
 
 const filters = ref({
     search: '',
     platform: '',
     restaurant: '',
     dateFrom: '',
-    dateTo: ''
-})
+    dateTo: '',
+});
 
 const hasActiveFilters = computed(() => {
-    return Object.values(filters.value).some(val => val !== '')
-})
+    return Object.values(filters.value).some((val) => val !== '');
+});
 
 const getEndOfDayISO = (dateString) => {
-    if (!dateString) return null
-    const date = new Date(dateString)
-    date.setHours(23, 59, 59, 999)
-    return date.toISOString()
-}
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    date.setHours(23, 59, 59, 999);
+    return date.toISOString();
+};
 
 const fetchRooms = async () => {
-    if (!user.value) return
-    loading.value = true
-    
+    if (!user.value) return;
+    loading.value = true;
+
     try {
         const data = await fetchUserRooms(user.value.id, filters.value);
-        rooms.value = data || []
+        rooms.value = data || [];
     } catch (error) {
-        console.error('Error fetching rooms:', error)
+        console.error('Error fetching rooms:', error);
     } finally {
-        loading.value = false
+        loading.value = false;
     }
-}
+};
 
-const debouncedFetchRooms = debounce(fetchRooms, 300)
+const debouncedFetchRooms = debounce(fetchRooms, 300);
 
 // This keeps your original live search logic intact
 const handleLiveFilterUpdate = (newFormState) => {
-    filters.value.search = newFormState.search
-    filters.value.restaurant = newFormState.restaurant
-    debouncedFetchRooms()
-}
+    filters.value.search = newFormState.search;
+    filters.value.restaurant = newFormState.restaurant;
+    debouncedFetchRooms();
+};
 
 const handleApplyFilters = (newFilters) => {
-    filters.value = { ...newFilters }
-    showFilters.value = false
-    fetchRooms()
-}
+    filters.value = { ...newFilters };
+    showFilters.value = false;
+    fetchRooms();
+};
 
 const handleClearFilters = (clearedState) => {
-    filters.value = { ...clearedState }
-    showFilters.value = false
-    fetchRooms()
-}
+    filters.value = { ...clearedState };
+    showFilters.value = false;
+    fetchRooms();
+};
 
-watch(() => user.value, (newUser) => {
-    if (newUser) fetchRooms()
-}, { immediate: true })
+watch(
+    () => user.value,
+    (newUser) => {
+        if (newUser) fetchRooms();
+    },
+    { immediate: true }
+);
 
 onMounted(() => {
-    if (user.value) fetchRooms()
-})
+    if (user.value) fetchRooms();
+});
 
-function openRoom({id, final_total}) {
-    const next = final_total? `/myroom/${id}` : `/active-room/${id}`
-    router.push(next)
+function openRoom({ id, final_total }) {
+    const next = final_total ? `/myroom/${id}` : `/active-room/${id}`;
+    router.push(next);
 }
 
-const openCloseRoomModal = ({id}) => {
-    currentRoomId.value = id
-    showCloseRoomModal.value = true
-}
+const openCloseRoomModal = ({ id }) => {
+    currentRoomId.value = id;
+    showCloseRoomModal.value = true;
+};
 
 const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
-    if (!roomId || !finalTotal) return
+    if (!roomId || !finalTotal) return;
     try {
         await updateRoom(roomId, {
             final_total: finalTotal,
-            order_time: new Date().toISOString()
+            order_time: new Date().toISOString(),
         });
-        showCloseRoomModal.value = false
-        await fetchRooms()
-        router.push(`/myroom/${roomId}`)
+        showCloseRoomModal.value = false;
+        await fetchRooms();
+        router.push(`/myroom/${roomId}`);
     } catch (error) {
-        console.error('Error closing room:', error)
+        console.error('Error closing room:', error);
     }
-}
+};
 </script>
