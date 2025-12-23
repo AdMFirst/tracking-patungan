@@ -29,6 +29,13 @@
             </div>
 
             <div class="flex justify-between">
+                <span class="text-muted-foreground">Created at:</span>
+                <span>{{
+                    formatDate(room.room_created_at) || room.room_created_at || 'Not specified'
+                }}</span>
+            </div>
+
+            <div class="flex justify-between">
                 <span class="text-muted-foreground">Items Ordered:</span>
             </div>
 
@@ -141,6 +148,18 @@ const router = useRouter();
 const props = defineProps({
     rooms: Object, // <- this is rooms.value exactly as fetched
 });
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+    return date.toLocaleDateString('id-ID', options);
+}
 
 function totalOriginalPay(items) {
     return items.reduce(

@@ -61,36 +61,47 @@ const fetchRooms = async () => {
     try {
         const data = await fetchJoinedRooms(user.value.id);
 
-        // The result will be an array of objects like:
-        // Deduplicate rooms by room_id - keep only the first occurrence
-        const uniqueRooms = [];
-        const seenRoomIds = new Set();
-
-        if (data && Array.isArray(data)) {
-            for (const room of data) {
-                if (!seenRoomIds.has(room.room_id)) {
-                    seenRoomIds.add(room.room_id);
-                    uniqueRooms.push(room);
-                }
+        // Group data by room_id
+        const roomsMap = new Map();
+        
+        data.forEach(item => {
+            if (!roomsMap.has(item.room_id)) {
+                roomsMap.set(item.room_id, {
+                    room_id: item.room_id,
+                    title: item.room_title,
+                    room_created_at: item.room_created_at,
+                    platform: item.platform,
+                    runner_name: item.runner_name,
+                    restaurant: item.restaurant,
+                    status: item.room_status,
+                    user_items: [],
+                    total_room_price: 0,
+                    final_total: null
+                });
             }
-        }
-
-        // Sort rooms: active rooms (with final_total) on top, then by date (newest first)
-        const sortedRooms = uniqueRooms.sort((a, b) => {
-            // Active rooms (final_total is not null) should come first
-            const aIsActive = a.final_total !== null;
-            const bIsActive = b.final_total !== null;
-
-            if (aIsActive && !bIsActive) return 1;
-            if (!aIsActive && bIsActive) return -1;
-
-            // For rooms in the same group, sort by created_at (newest first)
-            return new Date(b.created_at) - new Date(a.created_at);
+            
+            const room = roomsMap.get(item.room_id);
+            room.user_items.push({
+                id: item.item_id,
+                item_name: item.item_name,
+                quantity: item.quantity,
+                unit_price: item.unit_price,
+                notes: item.notes,
+                raw_item_total: item.raw_item_total,
+                proportional_item_total: item.proportional_item_total
+            });
+            
+            room.total_room_price += item.raw_item_total;
+            
+            // Set final_total if room is closed (use proportional_item_total)
+            if (item.room_status === 'closed' && item.proportional_item_total !== null) {
+                room.final_total = item.proportional_item_total;
+            }
         });
 
-        rooms.value = sortedRooms;
-        console.log('raw result', data);
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Convert Map values to array
+        rooms.value = Array.from(roomsMap.values());
+        console.log('processed rooms', rooms.value);
     } catch (error) {
         console.error('Error fetching joined rooms:', error);
     } finally {
@@ -98,7 +109,6 @@ const fetchRooms = async () => {
     }
 };
 
-// --- Watchers and Lifecycle Hooks (Simplified) ---
 
 // Watch the user to trigger the initial fetch
 watch(

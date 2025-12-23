@@ -57,8 +57,15 @@ export async function fetchUserRooms(userID, filters = {}) {
 
 // Fetch joined rooms for a user
 export async function fetchJoinedRooms(userID) {
-    // This function will be replaced with the new database logic
-    return [];
+    const { data, error } = await supabase
+        .rpc("get_my_room_order_details");
+
+    if (error) {
+        console.error("Failed to fetch monthly spending:", error);
+        throw error;
+    }
+
+    return data;
 }
 
 // Fetch participants for a room
