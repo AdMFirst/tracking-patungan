@@ -3,16 +3,14 @@
 
 CREATE TABLE public.order_items (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
-  room_id uuid,
-  user_id uuid,
+  participant_id uuid,
   item_name text NOT NULL,
   quantity integer DEFAULT 1 CHECK (quantity > 0),
   unit_price numeric NOT NULL CHECK (unit_price >= 0::numeric),
   notes text,
   created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT order_items_pkey PRIMARY KEY (id),
-  CONSTRAINT order_items_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.rooms(id),
-  CONSTRAINT order_items_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+  CONSTRAINT order_items_user_id_fkey FOREIGN KEY (participant_id) REFERENCES auth.users(id)
 );
 CREATE TABLE public.payment_methods (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

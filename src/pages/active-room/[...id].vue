@@ -55,7 +55,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { supabase } from '@/lib/supabaseClient';
+import { fetchRoomDetails, fetchOrderItems, fetchUserProfiles } from '@/lib/supabaseClient';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
 import { formatCurrency } from '@/lib/utils';
@@ -88,13 +88,7 @@ const groupedOrderItems = computed(() => {
 
 const fetchRoomDetails = async () => {
     try {
-        const { data, error } = await supabase
-            .from('rooms')
-            .select('*')
-            .eq('id', roomID)
-            .single();
-
-        if (error) throw error;
+        const data = await fetchRoomDetails(roomID);
 
         // Check if the room is active (no order_time or final_total yet)
         if (data.order_time || data.final_total) {
@@ -110,12 +104,7 @@ const fetchRoomDetails = async () => {
 
 const fetchOrderItems = async () => {
     try {
-        const { data, error } = await supabase
-            .from('order_items')
-            .select('*')
-            .eq('room_id', roomID);
-
-        if (error) throw error;
+        const data = await fetchOrderItems(roomID);
         orderItems.value = data;
     } catch (error) {
         console.error('Error fetching order items:', error);
@@ -129,10 +118,7 @@ const fetchUserProfiles = async (userIds) => {
     if (!needsFetch) return;
 
     try {
-        const { data, error } = await supabase
-            .rpc('get_user_profiles', { user_ids: userIds });
-
-        if (error) throw error;
+        const data = await fetchUserProfiles(userIds);
 
         data.forEach(user => {
             if (!userCache.value[user.id] ||
@@ -146,36 +132,8 @@ const fetchUserProfiles = async (userIds) => {
 };
 
 const subscribeToOrderItems = () => {
-    const channel = supabase
-        .channel('order_items_changes')
-        .on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'order_items',
-                filter: `room_id=eq.${roomID}`
-            },
-            (payload) => {
-                // Update the orderItems array directly based on the payload
-                if (payload.eventType === 'INSERT') {
-                    orderItems.value = [...orderItems.value, payload.new];
-                } else if (payload.eventType === 'UPDATE') {
-                    orderItems.value = orderItems.value.map(item =>
-                        item.id === payload.new.id ? payload.new : item
-                    );
-                } else if (payload.eventType === 'DELETE') {
-                    orderItems.value = orderItems.value.filter(item => item.id !== payload.old.id);
-                }
-
-                // Fetch user profiles for any new users
-                const userIds = [...new Set(orderItems.value.map(item => item.user_id))];
-                fetchUserProfiles(userIds);
-            }
-        )
-        .subscribe();
-
-    return channel;
+    // This function will be replaced with the new database logic
+    return null;
 };
 
 onMounted(async () => {
@@ -189,9 +147,9 @@ onMounted(async () => {
 
         const channel = subscribeToOrderItems();
 
-        onUnmounted(() => {
-            supabase.removeChannel(channel);
-        });
+        // onUnmounted(() => {
+        //     supabase.removeChannel(channel);
+        // });
     }
 
     loading.value = false;

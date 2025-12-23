@@ -36,7 +36,7 @@ import { ref, onMounted, watch, inject } from 'vue'
 import { Home } from 'lucide-vue-next'
 
 // Assume this is imported from your project setup
-import { supabase } from '../../lib/supabaseClient'
+import { fetchJoinedRooms } from '../../lib/supabaseClient'
 import OrderRooms from '@/components/OrderRooms.vue'
 import OrderRoomSkeleton from '@/components/OrderRoomSkeleton.vue'
 
@@ -58,19 +58,10 @@ const fetchRooms = async () => {
     }
     
     loading.value = true
-    let query = supabase
-        .rpc('get_histori_rooms')
     
-
     try {
-        const { data, error } = await query
-
-        if (error) {
-            console.error('Error fetching joined rooms:', error)
-            rooms.value = []
-            return
-        }
-
+        const data = await fetchJoinedRooms(user.value.id);
+        
         // The result will be an array of objects like:
         // Deduplicate rooms by room_id - keep only the first occurrence
         const uniqueRooms = []

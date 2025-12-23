@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { supabase } from '@/lib/supabaseClient'
+import { createRoom } from '@/lib/supabaseClient'
 import { useRouter } from 'vue-router'
 
 // Daftar layanan pesan makanan online di Indonesia
@@ -58,20 +58,11 @@ const handleSubmit = async (e) => {
 
     try {
         isLoading.value = true;
-        const { data, error } = await supabase
-            .from('rooms') // Nama tabel di Supabase
-            .insert([payload]) // Masukkan objek data
-            .select() // Gunakan .select() untuk mendapatkan kembali data yang dimasukkan (optional)
-
-        if (error) {
-            console.error('Supabase Insert Error:', error)
-            alert('Gagal membuat ruangan: ' + error.message)
-            return
-        }
+        const data = await createRoom(payload);
 
         // 4. Sukses
         console.log('Data berhasil dimasukkan:', data)
-        router.push(`/active-room/${data[0].id}`)
+        router.push(`/active-room/${data.id}`)
         
     } catch (err) {
         console.error('General Submission Error:', err)

@@ -108,7 +108,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Home, ArrowLeft } from 'lucide-vue-next'
 
 // Assume this is imported from your project setup
-import { supabase } from '../../lib/supabaseClient'
+import { fetchRoomDetails, fetchRoomParticipants } from '../../lib/supabaseClient'
 import { formatCurrency, formatDateTime } from '@/lib/utils'
 
 // Custom Components
@@ -147,44 +147,18 @@ const fetchRoomDetails = async () => {
 
     try {
         // Fetch room details
-        const { data: roomData, error: roomError } = await supabase
-            .from('rooms')
-            .select('*')
-            .eq('id', route.params.roomID)
-            .single()
-
-        if (roomError) {
-            console.error('Error fetching room:', roomError)
-            room.value = null
-            return
-        }
+        const roomData = await fetchRoomDetails(route.params.roomID);
 
         room.value = roomData
 
         // Fetch participants for this room
-        const { data: participantsData, error: participantsError } = await supabase
-            .from('room_participants')
-            .select('*')
-            .eq('room_id', route.params.roomID)
-
-        if (participantsError) {
-            console.error('Error fetching participants:', participantsError)
-            participants.value = []
-            return
-        }
+        const participantsData = await fetchRoomParticipants(route.params.roomID);
 
         // Get user IDs from participants
         const userIds = participantsData.map(p => p.user_id)
 
         // Fetch user profiles using the existing RPC function
-        const { data: userProfiles, error: profilesError } = await supabase
-            .rpc('get_user_profiles', {
-                user_ids: userIds
-            })
-
-        if (profilesError) {
-            console.error('Error fetching user profiles:', profilesError)
-        }
+        const userProfiles = await fetchUserProfiles(userIds);
 
         // Create user profile lookup object for direct access
         const userProfileLookup = {}

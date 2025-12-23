@@ -151,7 +151,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Filter, Home } from 'lucide-vue-next'
-import { supabase } from '../../lib/supabaseClient'
+import { fetchUserRooms, updateRoom } from '../../lib/supabaseClient'
 import { formatCurrency, formatDateTime } from '@/lib/utils'
 import CloseRoomModal from '@/components/CloseRoomModal.vue'
 import FilterModal from '@/components/FilterModal.vue'
@@ -196,41 +196,8 @@ const fetchRooms = async () => {
     if (!user.value) return
     loading.value = true
     
-    let query = supabase
-        .from('rooms')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-    if (filters.value.platform) {
-        query = query.eq('platform', filters.value.platform)
-    }
-
-    let searchClauses = []
-    const searchLower = filters.value.search.trim().toLowerCase()
-    const restaurantLower = filters.value.restaurant.trim().toLowerCase()
-
-    if (searchLower) {
-        searchClauses.push(`title.ilike.%${searchLower}%`)
-        searchClauses.push(`restaurant.ilike.%${searchLower}%`)
-    } else if (restaurantLower) {
-        searchClauses.push(`restaurant.ilike.%${restaurantLower}%`)
-    }
-    
-    if (searchClauses.length > 0) {
-        query = query.or(searchClauses.join(','))
-    }
-    
-    if (filters.value.dateFrom) {
-        query = query.gte('order_time', filters.value.dateFrom + 'T00:00:00Z')
-    }
-
-    if (filters.value.dateTo) {
-        query = query.lte('order_time', getEndOfDayISO(filters.value.dateTo))
-    }
-
     try {
-        const { data, error } = await query
-        if (error) throw error
+        const data = await fetchUserRooms(user.value.id, filters.value);
         rooms.value = data || []
     } catch (error) {
         console.error('Error fetching rooms:', error)
@@ -281,15 +248,10 @@ const openCloseRoomModal = ({id}) => {
 const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
     if (!roomId || !finalTotal) return
     try {
-        const { error } = await supabase
-            .from('rooms')
-            .update({
-                final_total: finalTotal,
-                order_time: new Date().toISOString()
-            })
-            .eq('id', roomId)
-
-        if (error) throw error
+        await updateRoom(roomId, {
+            final_total: finalTotal,
+            order_time: new Date().toISOString()
+        });
         showCloseRoomModal.value = false
         await fetchRooms()
         router.push(`/myroom/${roomId}`)
