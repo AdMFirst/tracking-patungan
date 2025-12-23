@@ -79,7 +79,7 @@
                     Open Room
                 </Button>
             </div>
-            <div v-else-if="room.user_items.length > 0 && !room.paid_via" class="pt-4">
+            <div v-else-if="room.user_items.length > 0 && !room.paid_at" class="pt-4">
                 <Button 
                     variant="default" 
                     class="w-full"
@@ -88,7 +88,7 @@
                     Pay Now
                 </Button>
             </div>
-            <div v-else-if="room.user_items.length > 0 && room.paid_via" class="pt-4">
+            <div v-else-if="room.user_items.length > 0 && room.paid_at" class="pt-4">
                 <Button variant="outline" class="w-full" disabled>
                     Paid
                 </Button>

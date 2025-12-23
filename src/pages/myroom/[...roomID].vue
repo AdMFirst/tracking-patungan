@@ -76,12 +76,12 @@
                                         <p class="font-medium">{{ participant.user?.name || 'Unknown User' }}</p>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <Badge :variant="participant.paid ? 'default' : 'secondary'" class="mt-1">
-                                        {{ participant.paid ? 'Paid' : 'Unpaid' }}
+                                <div class="text-right space-x-1">
+                                    <Badge :variant="participant.paid_at ? 'default' : 'secondary'" class="mt-1">
+                                        {{ participant.paid_at ? 'Paid' : 'Unpaid' }}
                                     </Badge>
-                                    <Badge class="mt-1" v-if="participant.paid_via">
-                                        {{ participant.paid_via }}
+                                    <Badge class="mt-1" v-if="participant.paid_at">
+                                        {{ participant.paid_via || 'Runner' }}
                                     </Badge>
                                 </div>
                             </div>

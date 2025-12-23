@@ -22,3 +22,13 @@ export async function signOut() {
   const { error } = await supabase.auth.signOut({ scope: 'local' })
   return error
 }
+
+export async function updateUser(userData) {
+  const { data, error } = await supabase.auth.updateUser({
+    data: userData
+  })
+  if (error) {
+    throw error
+  }
+  return data
+}

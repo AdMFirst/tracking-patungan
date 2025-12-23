@@ -42,6 +42,13 @@
       </Card>
 
       <Button
+        @click="openSettingsModal"
+        class="w-full mb-4"
+      >
+        Change Username
+      </Button>
+
+      <Button
         @click="handleSignOut"
         :disabled="loading"
         variant="destructive"
@@ -51,6 +58,13 @@
         <template v-else>Sign Out</template>
       </Button>
     </div>
+
+    <SettingsModal
+      :open="isSettingsModalOpen"
+      @update:open="isSettingsModalOpen = $event"
+      :user="userData"
+      @save="handleSaveSettings"
+    />
   </div>
 </template>
 
@@ -63,11 +77,19 @@ import { Badge } from '@/components/ui/badge'
 
 import { ref, inject, computed } from 'vue'
 import UserAvatar from '@/components/UserAvatar.vue'
+import SettingsModal from '@/components/SettingsModal.vue'
 import { signOut } from '@/lib/auth'
+import { updateUser } from '@/lib/auth'
 
 const user = inject('user')
 
 const loading = ref(false)
+const isSettingsModalOpen = ref(false)
+
+// User data for the settings modal
+const userData = computed(() => ({
+  username: user.value?.user_metadata?.full_name || ''
+}))
 
 // Provider from Supabase
 const provider = computed(() => user.value?.app_metadata?.provider ?? null)
@@ -82,6 +104,19 @@ const providerLabel = computed(() => {
 console.log(user.value)
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString() : '—'
+
+const openSettingsModal = () => {
+  isSettingsModalOpen.value = true
+}
+
+const handleSaveSettings = async (updatedUser) => {
+  try {
+    await updateUser({ full_name: updatedUser.username })
+    // Refresh user data or show success message
+  } catch (error) {
+    console.error('Failed to update user:', error)
+  }
+}
 
 const handleSignOut = async () => {
   loading.value = true
