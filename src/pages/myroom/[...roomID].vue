@@ -96,47 +96,98 @@
                             </p>
                         </div>
 
-                        <div v-else class="space-y-1">
+                        <div v-else class="space-y-4">
+                            <!-- Participant Cards -->
                             <div
-                                v-for="participant in participants"
+                                v-for="participant in sortedParticipants"
                                 :key="participant.id"
-                                class="flex items-center justify-between p-3 border rounded-lg"
+                                class="p-4 border rounded-lg hover:bg-accent transition-colors"
                             >
-                                <div class="flex items-center space-x-3">
+                                <div class="flex items-start justify-between gap-4">
+                                    <!-- Participant Info -->
+                                    <div class="flex items-start gap-3">
                                         <img
                                             :src="
                                                 participant.user_profile?.picture ||
                                                 'https://placehold.co/400'
                                             "
                                             alt="User avatar"
-                                            class="w-10 h-10 rounded-full object-cover"
+                                            class="w-12 h-12 rounded-full object-cover"
                                         />
-                                        <div>
-                                            <p class="font-medium">
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="font-medium truncate">
                                                 {{
                                                     participant.user_profile?.display_name ||
                                                     'Unknown User'
                                                 }}
-                                            </p>
+                                            </h4>
+                                            <div class="mt-1 flex items-center gap-2">
+                                                <span
+                                                    class="text-sm font-medium {{ participant.paid_at ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}"
+                                                >
+                                                    {{ formatCurrency(participant.total_after_discount) }}
+                                                </span>
+                                                <span
+                                                    class="text-xs"
+                                                >
+                                                    {{ participant.paid_at ? 'Paid' : 'Pending' }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                <div class="text-right space-x-1">
-                                    <Badge
-                                        :variant="!participant.paid_at ? 'secondary' : 'default'"
-                                        class="mt-1"
-                                    >
-                                        <template v-if="!participant.paid_at">
-                                            Unpaid
-                                        </template>
-                                        <template v-else-if="participant.paid_at && !participant.paid_via">
-                                            <span>You</span>
-                                        </template>
-                                        <template v-else>
-                                            Paid via {{ participant.paid_via.tipe }}
-                                        </template>
-                                    </Badge>
+                                    
+                                    <!-- Payment Method -->
+                                    <div class="text-right">
+                                        <Badge
+                                            :variant="!participant.paid_at ? 'secondary' : (!participant.paid_via? 'default': 'outline') "
+                                            class="text-xs"
+                                        >
+                                            <template v-if="!participant.paid_at">
+                                                Unpaid
+                                            </template>
+                                            <template v-else-if="participant.paid_at && !participant.paid_via">
+                                                You
+                                            </template>
+                                            <template v-else>
+                                                via {{ participant.paid_via.tipe }}
+                                            </template>
+                                        </Badge>
+                                    </div>
                                 </div>
                             </div>
+                            
+                            <!-- Summary Card -->
+                            <Card>
+                                <CardHeader class="pb-3">
+                                    <CardTitle class="text-base">Payment Summary</CardTitle>
+                                </CardHeader>
+                                <CardContent class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-muted-foreground">Total Paid</span>
+                                        <span class="font-medium text-green-600 dark:text-green-400">
+                                            {{ formatCurrency(totalPaid) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-muted-foreground">Total Unpaid</span>
+                                        <span class="font-medium text-red-600 dark:text-red-400">
+                                            {{ formatCurrency(totalUnpaid) }}
+                                        </span>
+                                    </div>
+                                    <Separator />
+                                    <div class="flex justify-between items-center font-medium">
+                                        <span class="text-sm text-muted-foreground">Remaining</span>
+                                        <span
+                                            :class="{
+                                                'text-green-600 dark:text-green-400': remainingAmount <= 0,
+                                                'text-orange-600 dark:text-orange-400': remainingAmount > 0
+                                            }"
+                                        >
+                                            {{ formatCurrency(remainingAmount) }}
+                                        </span>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </div>
                     </CardContent>
                 </Card>
@@ -175,15 +226,21 @@ const participants = ref([]);
 const loading = ref(false);
 
 // Computed properties
+const sortedParticipants = computed(() => {
+    return [...participants.value].sort((a, b) =>
+        (a.user_profile?.display_name || '').localeCompare(b.user_profile?.display_name || '')
+    );
+});
+
 const totalPaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return participant.paid_at ? sum + participant.amount : sum;
+        return participant.paid_at ? sum + (participant.total_after_discount || 0) : sum;
     }, 0);
 });
 
 const totalUnpaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return !participant.paid_at ? sum + participant.amount : sum;
+        return !participant.paid_at ? sum + (participant.total_after_discount || 0) : sum;
     }, 0);
 });
 

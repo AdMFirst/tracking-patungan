@@ -135,16 +135,7 @@ export async function fetchRoomWithParticipants(roomID) {
     try {
         // Step 1: Fetch room and participants data using joins
         const { data: roomData, error: roomError } = await supabase
-            .from('rooms')
-            .select(`
-                *,
-                room_participants:room_participants(
-                    *,
-                    paid_via:payment_methods (*)
-                )
-            `)
-            .eq('id', roomID)
-            .single();
+            .rpc('get_room_with_participants', { p_room_id: roomID });
 
         if (roomError) {
             console.error('Error fetching room with participants:', roomError);
