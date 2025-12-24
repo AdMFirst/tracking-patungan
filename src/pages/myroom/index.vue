@@ -159,6 +159,7 @@
             v-model:open="showCloseRoomModal"
             :roomId="currentRoomId"
             @submit="handleCloseRoomSubmit"
+            @delete="handleDeleteRoomConfirm"
         />
     </div>
 </template>
@@ -172,7 +173,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Filter, Home } from 'lucide-vue-next';
-import { fetchUserRooms, updateRoom } from '../../lib/supabaseClient';
+import { fetchUserRooms, updateRoom, deleteRoom, queryClient } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import CloseRoomModal from '@/components/CloseRoomModal.vue';
 import FilterModal from '@/components/FilterModal.vue';
@@ -206,12 +207,6 @@ const hasActiveFilters = computed(() => {
     return Object.values(filters.value).some((val) => val !== '');
 });
 
-const getEndOfDayISO = (dateString) => {
-    if (!dateString) return null;
-    const date = new Date(dateString);
-    date.setHours(23, 59, 59, 999);
-    return date.toISOString();
-};
 
 const fetchRooms = async () => {
     if (!user.value) return;
@@ -271,12 +266,13 @@ const openCloseRoomModal = ({ id }) => {
 };
 
 const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
-    if (!roomId || !finalTotal) return;
+    if (!roomId ) return;
     try {
-        await updateRoom(roomId, {
+        await updateRoom(roomId, 
+        {
             final_total: finalTotal,
-            order_time: new Date().toISOString(),
         });
+
         showCloseRoomModal.value = false;
         await fetchRooms();
         router.push(`/myroom/${roomId}`);
@@ -284,4 +280,18 @@ const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
         console.error('Error closing room:', error);
     }
 };
+
+const handleDeleteRoomConfirm = async ({roomId}, userID = user.value?.id) => {
+    if (!roomId) return;
+    
+    try {
+        await deleteRoom(roomId, userID);
+        showCloseRoomModal.value = false;
+        // Refetch rooms to ensure UI updates with fresh data
+        // Refetch rooms to ensure UI updates with fresh data
+        window.location.reload();
+    } catch (error) {
+        console.error('Error deleting room:', error);
+    }
+}
 </script>
