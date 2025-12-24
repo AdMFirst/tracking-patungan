@@ -103,43 +103,37 @@
                                 class="flex items-center justify-between p-3 border rounded-lg"
                             >
                                 <div class="flex items-center space-x-3">
-                                    <img
-                                        :src="
-                                            participant.user?.avatar_url ||
-                                            'https://placehold.co/400'
-                                        "
-                                        alt="User avatar"
-                                        class="w-10 h-10 rounded-full object-cover"
-                                    />
-                                    <div>
-                                        <p class="font-medium">
-                                            {{
-                                                participant.user?.name ||
-                                                'Unknown User'
-                                            }}
-                                        </p>
+                                        <img
+                                            :src="
+                                                participant.user_profile?.picture ||
+                                                'https://placehold.co/400'
+                                            "
+                                            alt="User avatar"
+                                            class="w-10 h-10 rounded-full object-cover"
+                                        />
+                                        <div>
+                                            <p class="font-medium">
+                                                {{
+                                                    participant.user_profile?.display_name ||
+                                                    'Unknown User'
+                                                }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
                                 <div class="text-right space-x-1">
                                     <Badge
-                                        :variant="
-                                            participant.paid_at
-                                                ? 'default'
-                                                : 'secondary'
-                                        "
+                                        :variant="!participant.paid_at ? 'secondary' : 'default'"
                                         class="mt-1"
                                     >
-                                        {{
-                                            participant.paid_at
-                                                ? 'Paid'
-                                                : 'Unpaid'
-                                        }}
-                                    </Badge>
-                                    <Badge
-                                        class="mt-1"
-                                        v-if="participant.paid_at"
-                                    >
-                                        {{ participant.paid_via || 'Runner' }}
+                                        <template v-if="!participant.paid_at">
+                                            Unpaid
+                                        </template>
+                                        <template v-else-if="participant.paid_at && !participant.paid_via">
+                                            <span>You</span>
+                                        </template>
+                                        <template v-else>
+                                            Paid via {{ participant.paid_via.tipe }}
+                                        </template>
                                     </Badge>
                                 </div>
                             </div>
@@ -167,9 +161,7 @@ import { Home, ArrowLeft } from 'lucide-vue-next';
 
 // Import from supabaseClient
 import {
-    fetchRoomDetails,
-    fetchRoomParticipants,
-    fetchUserProfiles
+    fetchRoomWithParticipants
 } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 
@@ -208,39 +200,19 @@ const fetchData = async () => {
     loading.value = true;
 
     try {
-        // Fetch room details
-        const roomData = await fetchRoomDetails(route.params.roomID);
-        room.value = roomData;
+        // Fetch room details with participants and user profiles in a single query
+        const rawData = await fetchRoomWithParticipants(route.params.roomID);
 
-        // Fetch participants for this room
-        const participantsData = await fetchRoomParticipants(route.params.roomID);
+        if (rawData) {
+            // Use raw data directly
+            room.value = rawData;
+            participants.value = rawData.room_participants || [];
+            console.log('Raw room data:', rawData);
+        } else {
+            room.value = null;
+            participants.value = [];
+        }
 
-        // Get user IDs from participants
-        const userIds = participantsData.map((p) => p.user_id);
-
-        // Fetch user profiles
-        const userProfiles = await fetchUserProfiles(userIds);
-
-        // Create user profile lookup object
-        const userProfileLookup = {};
-        userProfiles?.forEach((profile) => {
-            userProfileLookup[profile.id] = profile;
-        });
-
-        // Map participant data with user profiles
-        participants.value = participantsData.map((participant) => {
-            const userProfile = userProfileLookup[participant.user_id];
-            return {
-                ...participant,
-                user: {
-                    id: participant.user_id,
-                    name: userProfile?.display_name || 'Unknown User',
-                    avatar_url: userProfile?.picture,
-                },
-            };
-        });
-
-        console.log('Participants with user data:', participants.value);
     } catch (error) {
         console.error('Error fetching room details:', error);
     } finally {

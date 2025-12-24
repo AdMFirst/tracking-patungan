@@ -129,3 +129,68 @@ export async function fetchMonthlySpending() {
 
     return data;
 }
+
+// Fetch room details with participants and user profiles
+export async function fetchRoomWithParticipants(roomID) {
+    try {
+        // Step 1: Fetch room and participants data using joins
+        const { data: roomData, error: roomError } = await supabase
+            .from('rooms')
+            .select(`
+                *,
+                room_participants:room_participants(
+                    *,
+                    paid_via:payment_methods (*)
+                )
+            `)
+            .eq('id', roomID)
+            .single();
+
+        if (roomError) {
+            console.error('Error fetching room with participants:', roomError);
+            throw roomError;
+        }
+
+        if (!roomData) {
+            return null;
+        }
+
+        // Step 2: Get user IDs from participants
+        const userIds = roomData.room_participants.map(p => p.user_id);
+
+        // Step 3: Fetch user profiles using RPC
+        const { data: userProfiles, error: profilesError } = await supabase
+            .rpc('get_user_profiles', {
+                user_ids: userIds
+            });
+
+        if (profilesError) {
+            console.error('Error fetching user profiles:', profilesError);
+            throw profilesError;
+        }
+
+        // Step 4: Create a lookup for user profiles
+        const userProfileLookup = {};
+        userProfiles.forEach(profile => {
+            userProfileLookup[profile.id] = profile;
+        });
+
+        // Step 5: Enhance participants with user profile data
+        const enhancedParticipants = roomData.room_participants.map(participant => ({
+            ...participant,
+            user_profile: userProfileLookup[participant.user_id] || {
+                display_name: null,
+                picture: null
+            }
+        }));
+
+        // Return enhanced data structure
+        return {
+            ...roomData,
+            room_participants: enhancedParticipants
+        };
+    } catch (error) {
+        console.error('Error in fetchRoomWithParticipants:', error);
+        return null;
+    }
+}
