@@ -63,8 +63,8 @@ const fetchRooms = async () => {
 
         // Group data by room_id
         const roomsMap = new Map();
-        
-        data.forEach(item => {
+
+        data.forEach((item) => {
             if (!roomsMap.has(item.room_id)) {
                 roomsMap.set(item.room_id, {
                     room_id: item.room_id,
@@ -76,10 +76,10 @@ const fetchRooms = async () => {
                     status: item.room_status,
                     user_items: [],
                     total_room_price: 0,
-                    final_total: null
+                    final_total: null,
                 });
             }
-            
+
             const room = roomsMap.get(item.room_id);
             room.user_items.push({
                 id: item.item_id,
@@ -88,13 +88,16 @@ const fetchRooms = async () => {
                 unit_price: item.unit_price,
                 notes: item.notes,
                 raw_item_total: item.raw_item_total,
-                proportional_item_total: item.proportional_item_total
+                proportional_item_total: item.proportional_item_total,
             });
-            
+
             room.total_room_price += item.raw_item_total;
-            
+
             // Set final_total if room is closed (use proportional_item_total)
-            if (item.room_status === 'closed' && item.proportional_item_total !== null) {
+            if (
+                item.room_status === 'closed' &&
+                item.proportional_item_total !== null
+            ) {
                 room.final_total = item.proportional_item_total;
             }
         });
@@ -108,7 +111,6 @@ const fetchRooms = async () => {
         loading.value = false;
     }
 };
-
 
 // Watch the user to trigger the initial fetch
 watch(

@@ -165,14 +165,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 // ICON IMPORTS (Requires 'lucide-vue-next' or similar icon library)
 import { Home, ArrowLeft } from 'lucide-vue-next';
 
-// Assume this is imported from your project setup
+// Import from supabaseClient
 import {
     fetchRoomDetails,
     fetchRoomParticipants,
+    fetchUserProfiles
 } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
-
-// Custom Components
 
 const user = inject('user');
 const route = useRoute();
@@ -186,13 +185,13 @@ const loading = ref(false);
 // Computed properties
 const totalPaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return participant.paid ? sum + participant.amount : sum;
+        return participant.paid_at ? sum + participant.amount : sum;
     }, 0);
 });
 
 const totalUnpaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return !participant.paid ? sum + participant.amount : sum;
+        return !participant.paid_at ? sum + participant.amount : sum;
     }, 0);
 });
 
@@ -203,7 +202,7 @@ const remainingAmount = computed(() => {
 });
 
 // Fetch room details and participants
-const fetchRoomDetails = async () => {
+const fetchData = async () => {
     if (!user.value) return;
 
     loading.value = true;
@@ -211,27 +210,24 @@ const fetchRoomDetails = async () => {
     try {
         // Fetch room details
         const roomData = await fetchRoomDetails(route.params.roomID);
-
         room.value = roomData;
 
         // Fetch participants for this room
-        const participantsData = await fetchRoomParticipants(
-            route.params.roomID
-        );
+        const participantsData = await fetchRoomParticipants(route.params.roomID);
 
         // Get user IDs from participants
         const userIds = participantsData.map((p) => p.user_id);
 
-        // Fetch user profiles using the existing RPC function
+        // Fetch user profiles
         const userProfiles = await fetchUserProfiles(userIds);
 
-        // Create user profile lookup object for direct access
+        // Create user profile lookup object
         const userProfileLookup = {};
         userProfiles?.forEach((profile) => {
             userProfileLookup[profile.id] = profile;
         });
 
-        // Map participant data with user profiles using direct lookup
+        // Map participant data with user profiles
         participants.value = participantsData.map((participant) => {
             const userProfile = userProfileLookup[participant.user_id];
             return {
@@ -255,7 +251,7 @@ const fetchRoomDetails = async () => {
 // Fetch data on mount
 onMounted(() => {
     if (user.value) {
-        fetchRoomDetails();
+        fetchData();
     }
 });
 
@@ -264,7 +260,7 @@ watch(
     () => user.value,
     (newUser) => {
         if (newUser) {
-            fetchRoomDetails();
+            fetchData();
         }
     },
     { immediate: true }

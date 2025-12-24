@@ -30,7 +30,10 @@
                                     formatMonthYear(month.month)
                                 }}</span>
                                 <span class="text-sm font-bold"
-                                    >Rp {{ formatCurrency(month.total_spent) }}</span
+                                    >Rp
+                                    {{
+                                        formatCurrency(month.total_spent)
+                                    }}</span
                                 >
                             </div>
                             <div

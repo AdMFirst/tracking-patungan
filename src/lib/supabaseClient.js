@@ -51,17 +51,61 @@ export async function updateRoom(roomID, updates) {
 
 // Fetch rooms for a user
 export async function fetchUserRooms(userID, filters = {}) {
-    // This function will be replaced with the new database logic
-    return [];
+    try {
+        // Start with base query for rooms where user is the runner
+        let query = supabase
+            .from('rooms')
+            .select('*')
+            .eq('runner_id', userID)
+            .order('created_at', { ascending: false });
+
+        // Apply filters if provided
+        if (filters.search) {
+            const searchTerm = `%${filters.search.toLowerCase()}%`;
+            query = query.or(
+                `title.ilike.${searchTerm},restaurant.ilike.${searchTerm},platform.ilike.${searchTerm}`
+            );
+        }
+
+        if (filters.platform) {
+            query = query.eq('platform', filters.platform);
+        }
+
+        if (filters.restaurant) {
+            query = query.eq('restaurant', filters.restaurant);
+        }
+
+        if (filters.dateFrom) {
+            query = query.gte('created_at', filters.dateFrom);
+        }
+
+        if (filters.dateTo) {
+            // Add 23:59:59 to include entire end date
+            const endOfDay = new Date(filters.dateTo);
+            endOfDay.setHours(23, 59, 59, 999);
+            query = query.lte('created_at', endOfDay.toISOString());
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error('Error fetching user rooms:', error);
+            throw error;
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error('Error in fetchUserRooms:', error);
+        return [];
+    }
 }
 
 // Fetch joined rooms for a user
 export async function fetchJoinedRooms(userID) {
-    const { data, error } = await supabase
-        .rpc("get_my_room_order_details");
+    const { data, error } = await supabase.rpc('get_my_room_order_details');
 
     if (error) {
-        console.error("Failed to fetch monthly spending:", error);
+        console.error('Failed to fetch monthly spending:', error);
         throw error;
     }
 
@@ -76,11 +120,10 @@ export async function fetchRoomParticipants(roomID) {
 
 // Fetch monthly spending for a user
 export async function fetchMonthlySpending() {
-    const { data, error } = await supabase
-        .rpc("get_my_monthly_spending");
+    const { data, error } = await supabase.rpc('get_my_monthly_spending');
 
     if (error) {
-        console.error("Failed to fetch monthly spending:", error);
+        console.error('Failed to fetch monthly spending:', error);
         throw error;
     }
 
