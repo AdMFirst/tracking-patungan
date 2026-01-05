@@ -329,6 +329,76 @@ export async function fetchMonthlySpending() {
 }
 
 /**
+ * Check if a user is a participant in a room
+ *
+ * @param {string} roomID - The ID of the room to check
+ * @param {string} userID - The ID of the user to check
+ * @returns {Promise<boolean>} True if user is a participant, false otherwise
+ *
+ * @example
+ * const isParticipant = await checkUserParticipation('room-123', 'user-123');
+ *
+ * @usedIn
+ * - src/pages/active-room/[...id].vue - Check user participation before showing room details
+ */
+export async function checkUserParticipation(roomID, userID) {
+    try {
+        const { data, error } = await supabase
+            .from('room_participants')
+            .select('id')
+            .eq('room_id', roomID)
+            .eq('user_id', userID)
+            .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+            console.error('Error checking user participation:', error);
+            throw error;
+        }
+
+        return !!data; // Return true if data exists, false otherwise
+    } catch (error) {
+        console.error('Error in checkUserParticipation:', error);
+        return false;
+    }
+}
+
+/**
+ * Join a room as a participant
+ *
+ * @param {string} roomID - The ID of the room to join
+ * @param {string} userID - The ID of the user joining
+ * @returns {Promise<Object>} The created participant record
+ *
+ * @example
+ * const participant = await joinRoom('room-123', 'user-123');
+ *
+ * @usedIn
+ * - src/pages/active-room/[...id].vue - Allow users to join rooms they're not yet participating in
+ */
+export async function joinRoom(roomID, userID) {
+    try {
+        const { data, error } = await supabase
+            .from('room_participants')
+            .insert([{
+                room_id: roomID,
+                user_id: userID
+            }])
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Error joining room:', error);
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error in joinRoom:', error);
+        throw error;
+    }
+}
+
+/**
  * Fetch complete room details including participants and user profiles
  *
  * @param {string} roomID - The ID of the room to fetch complete details for
