@@ -58,20 +58,20 @@
                 <h2 class="text-xl font-semibold mb-4">Cart</h2>
                 <div v-if="Object.keys(groupedOrderItems).length > 0" class="space-y-6">
                     <div
-                        v-for="(userGroup, userId) in groupedOrderItems"
-                        :key="userId"
+                        v-for="(userGroup, participantId) in groupedOrderItems"
+                        :key="participantId"
                         class="border rounded-lg p-4"
                     >
                         <div class="flex items-center space-x-3 mb-4">
                             <img
-                                v-if="userCache[userId]?.picture"
-                                :src="userCache[userId]?.picture"
+                                v-if="userCache[userGroup[0]?.user_id]?.picture"
+                                :src="userCache[userGroup[0]?.user_id]?.picture"
                                 alt="User Avatar"
                                 class="w-10 h-10 rounded-full"
                             />
                             <h3 class="font-semibold">
                                 {{
-                                    userCache[userId]?.display_name ||
+                                    userCache[userGroup[0]?.user_id]?.display_name ||
                                     'Unknown User'
                                 }}
                             </h3>
@@ -111,6 +111,17 @@
             </div>
         </div>
     </div>
+    
+    <!-- Add Order Item Modal -->
+    <AddOrderItemModal
+        :isOpen="showAddItemModal"
+        :roomId="roomID"
+        @update:open="showAddItemModal = $event"
+        @itemAdded="handleAddOrderItem"
+    />
+    
+    <!-- Floating Action Button -->
+    <FloatingButton v-if="room && isParticipant" @click="showAddItemModal = true" />
 </template>
 
 <script setup>
@@ -128,11 +139,13 @@ import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
 import { ArrowLeft } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/JoinRoomPrompt.vue';
+import FloatingButton from '@/components/FloatingButton.vue';
+import AddOrderItemModal from '@/components/AddOrderItemModal.vue';
 
 // State management
 const route = useRoute();
 const router = useRouter();
-const roomID = route.params.id; 
+const roomID = route.params.id;
 const room = ref(null);
 const orderItems = ref([]);
 const loading = ref(true);
@@ -141,6 +154,7 @@ const userCache = ref({});
 const isParticipant = ref(false);
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
+const showAddItemModal = ref(false);
 
 // Navigation
 const goBack = () => {
@@ -178,14 +192,77 @@ const handleCancelJoin = () => {
     goBack();
 };
 
+// Add order item handler
+const handleAddOrderItem = async (itemData) => {
+    try {
+        if (!currentUser.value || !isParticipant.value) {
+            error.value = 'You need to be a participant to add items';
+            return;
+        }
+
+        loading.value = true;
+        error.value = null;
+
+        // First, get the participant ID for this user in this room
+        const { data: participantData, error: participantError } = await supabase
+            .from('room_participants')
+            .select('id')
+            .eq('room_id', roomID)
+            .eq('user_id', currentUser.value.id)
+            .single();
+
+        if (participantError) {
+            console.error('Error fetching participant ID:', participantError);
+            error.value = 'Failed to add order item. Please try again.';
+            return;
+        }
+
+        if (!participantData) {
+            console.error('Participant record not found');
+            error.value = 'You are not a participant in this room.';
+            return;
+        }
+
+        // Insert the new order item into the database
+        const { data, error: insertError } = await supabase
+            .from('order_items')
+            .insert([{
+                participant_id: participantData.id,
+                item_name: itemData.itemName,
+                quantity: itemData.quantity,
+                unit_price: itemData.unitPrice,
+                notes: itemData.notes || null
+            }])
+            .select();
+
+        if (insertError) {
+            console.error('Error adding order item:', insertError);
+            error.value = 'Failed to add order item. Please try again.';
+            return;
+        }
+
+        // Refresh the order items list
+        await loadOrderItems();
+
+        // Show success message or notification could be added here
+        console.log('Order item added successfully:', data);
+
+    } catch (err) {
+        console.error('Error adding order item:', err);
+        error.value = err.message || 'Failed to add order item.';
+    } finally {
+        loading.value = false;
+    }
+};
+
 // Data processing
 const groupedOrderItems = computed(() => {
     const grouped = {};
     orderItems.value.forEach((item) => {
-        if (!grouped[item.user_id]) {
-            grouped[item.user_id] = [];
+        if (!grouped[item.participant_id]) {
+            grouped[item.participant_id] = [];
         }
-        grouped[item.user_id].push(item);
+        grouped[item.participant_id].push(item);
     });
     return grouped;
 });
@@ -223,17 +300,45 @@ const loadRoomDetails = async () => {
 
 const loadOrderItems = async () => {
     try {
+        // Get all participants in this room first
+        const { data: participants, error: participantsError } = await supabase
+            .from('room_participants')
+            .select('id, user_id')
+            .eq('room_id', roomID);
+        
+        if (participantsError) {
+            console.error('Error fetching participants:', participantsError);
+            error.value = 'Failed to load participants.';
+            orderItems.value = [];
+            return;
+        }
+        
+        // Get participant IDs
+        const participantIds = participants.map(p => p.id);
+        
+        // Build user cache from participants
+        participants.forEach(p => {
+            if (!userCache.value[p.user_id]) {
+                userCache.value[p.user_id] = { id: p.user_id };
+            }
+        });
+        
+        // Now get all order items for these participants
         const { data, error } = await supabase
             .from('order_items')
-            .select('*')
-            .eq('participant_id', currentUser.value?.id);
+            .select('*, room_participants(user_id)')
+            .in('participant_id', participantIds);
         
         if (error) {
             console.error('Error fetching order items:', error);
             error.value = 'Failed to load order items.';
             orderItems.value = [];
         } else {
-            orderItems.value = data || [];
+            // Map the data to include user_id from the participant relationship
+            orderItems.value = data.map(item => ({
+                ...item,
+                user_id: item.room_participants?.user_id || item.user_id
+            })) || [];
         }
     } catch (err) {
         console.error('Error fetching order items:', err);
@@ -297,7 +402,7 @@ const setupRealtimeSubscription = () => {
             event: '*',
             schema: 'public',
             table: 'order_items',
-            filter: `participant_id=eq.${currentUser.value.id}`
+            filter: `room_id=eq.${roomID}`
         }, async (payload) => {
             console.log('Order item change detected:', payload);
             await loadRoomData();
@@ -330,8 +435,8 @@ const loadRoomData = async () => {
         // Load order data
         await loadOrderItems();
         
-        // Only load user profiles if we have order items
-        const userIds = [...new Set(orderItems.value.map((item) => item.user_id))];
+        // Load user profiles for all participants
+        const userIds = Object.keys(userCache.value);
         if (userIds.length > 0) {
             await loadUserProfiles(userIds);
         }
