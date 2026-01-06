@@ -399,6 +399,159 @@ export async function joinRoom(roomID, userID) {
 }
 
 /**
+ * Update an order item
+ *
+ * @param {string} itemID - The ID of the order item to update
+ * @param {Object} updates - Order item data to update
+ * @param {string} userID - The ID of the user requesting the update (for security)
+ * @returns {Promise<Object>} Updated order item object
+ *
+ * @example
+ * const updatedItem = await updateOrderItem('item-123', {
+ *     item_name: 'Updated Item',
+ *     quantity: 2,
+ *     unit_price: 15000
+ * }, 'user-123');
+ *
+ * @usedIn
+ * - src/pages/active-room/[...id].vue - Runner editing order items
+ *
+ * @security Only allows update if user is the room runner
+ */
+export async function updateOrderItem(itemID, updates) {
+    const {
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        throw new Error('Not authenticated');
+    }
+
+    const userID = user.id;
+
+    // Fetch item + participant + room
+    const { data: itemData, error: itemError } = await supabase
+        .from('order_items')
+        .select(`
+        id,
+        room_participants (
+            room_id,
+            user_id
+        )
+        `)
+        .eq('id', itemID)
+        .single();
+
+    if (itemError || !itemData) {
+        throw new Error('Order item not found');
+    }
+
+    const { room_id, user_id: ownerID } = itemData.room_participants;
+
+    // Fetch runner
+    const { data: roomData, error: roomError } = await supabase
+        .from('rooms')
+        .select('runner_id')
+        .eq('id', room_id)
+        .single();
+
+    if (roomError || !roomData) {
+        throw new Error('Room not found');
+    }
+
+    if (ownerID !== userID && roomData.runner_id !== userID) {
+        throw new Error('Unauthorized');
+    }
+
+    // Update (RLS enforces final authority)
+    const { data, error } = await supabase
+        .from('order_items')
+        .update(updates)
+        .eq('id', itemID)
+        .select()
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
+/**
+ * Delete an order item
+ *
+ * @param {string} itemID - The ID of the order item to delete
+ * @param {string} userID - The ID of the user requesting deletion (for security)
+ * @returns {Promise<void>} Resolves when order item is successfully deleted
+ *
+ * @example
+ * await deleteOrderItem('item-123', 'user-123');
+ *
+ * @usedIn
+ * - src/pages/active-room/[...id].vue - Runner deleting order items
+ *
+ * @security Only allows deletion if user is the room runner
+ */
+export async function deleteOrderItem(itemID) {
+    const {
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        throw new Error('Not authenticated');
+    }
+
+    const userID = user.id;
+
+    // Fetch item + participant + room
+    const { data: itemData, error: itemError } = await supabase
+        .from('order_items')
+        .select(`
+        id,
+        room_participants (
+            room_id,
+            user_id
+        )
+        `)
+        .eq('id', itemID)
+        .single();
+
+    if (itemError || !itemData) {
+        throw new Error('Order item not found');
+    }
+
+    const { room_id, user_id: ownerID } = itemData.room_participants;
+
+    // Fetch runner
+    const { data: roomData, error: roomError } = await supabase
+        .from('rooms')
+        .select('runner_id')
+        .eq('id', room_id)
+        .single();
+
+    if (roomError || !roomData) {
+        throw new Error('Room not found');
+    }
+
+    if (ownerID !== userID && roomData.runner_id !== userID) {
+        throw new Error('Unauthorized');
+    }
+
+    // Delete (RLS enforces final authority)
+    const { error } = await supabase
+        .from('order_items')
+        .delete()
+        .eq('id', itemID);
+
+    if (error) {
+        throw error;
+    }
+}
+
+/**
  * Fetch complete room details including participants and user profiles
  *
  * @param {string} roomID - The ID of the room to fetch complete details for

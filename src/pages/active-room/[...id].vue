@@ -89,29 +89,51 @@
                         </div>
                         <div class="text-sm">
                             <template v-for="item in userGroup" :key="item.id">
-                                <div class="flex justify-between">
-                                    <span>
-                                        {{ item.item_name }} x
-                                        {{ item.quantity }}
-                                        <span class="text-muted-foreground"
-                                            >@
-                                            {{
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center">
+                                            <span>
+                                                {{ item.item_name }} x
+                                                {{ item.quantity }}
+                                                <span class="text-muted-foreground"
+                                                    >@
+                                                    {{
+                                                        formatCurrency(
+                                                            item.unit_price
+                                                        )
+                                                    }}
+                                                    each</span
+                                                >
+                                            </span>
+                                            <span>{{
                                                 formatCurrency(
-                                                    item.unit_price
+                                                    item.unit_price * item.quantity
                                                 )
-                                            }}
-                                            each</span
+                                            }}</span>
+                                        </div>
+                                        <p v-if="item.notes" class="text-muted-foreground">
+                                            *{{ item.notes }}
+                                        </p>
+                                    </div>
+                                    <div v-if="canEditItem(item)" class="flex space-x-2 ml-4">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            class="h-8 w-8"
+                                            @click="handleEditOrderItem(item)"
                                         >
-                                    </span>
-                                    <span>{{
-                                        formatCurrency(
-                                            item.unit_price * item.quantity
-                                        )
-                                    }}</span>
+                                            <Edit2 class="h-3 w-3" />
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            class="h-8 w-8"
+                                            @click="handleDeleteOrderItem(item.id, item.user_id)"
+                                        >
+                                            <Trash2 class="h-3 w-3" />
+                                        </Button>
+                                    </div>
                                 </div>
-                                <p v-if="item.notes" class="text-muted-foreground">
-                                    *{{ item.notes }}
-                                </p>
                             </template>
                         </div>
                     </div>
@@ -129,6 +151,14 @@
         :roomId="roomID"
         @update:open="showAddItemModal = $event"
         @itemAdded="handleAddOrderItem"
+    />
+    
+    <!-- Edit Order Item Modal -->
+    <EditOrderItemModal
+        :isOpen="showEditItemModal"
+        :item="editingItem"
+        @update:open="showEditItemModal = $event"
+        @itemUpdated="handleUpdateOrderItem"
     />
     
     <!-- Floating Action Button -->
@@ -163,15 +193,18 @@ import {
     supabase,
     checkUserParticipation,
     joinRoom,
+    updateOrderItem,
+    deleteOrderItem,
 } from '@/lib/supabaseClient';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
-import { ArrowLeft, Share2 } from 'lucide-vue-next';
+import { ArrowLeft, Share2, Edit2, Trash2 } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/JoinRoomPrompt.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import AddOrderItemModal from '@/components/AddOrderItemModal.vue';
+import EditOrderItemModal from '@/components/EditOrderItemModal.vue';
 import QRCode from 'qrcode';
 import {
     Dialog,
@@ -192,10 +225,13 @@ const loading = ref(true);
 const error = ref(null);
 const userCache = ref({});
 const isParticipant = ref(false);
+const isRunner = ref(false);
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
 const showAddItemModal = ref(false);
 const showShareModal = ref(false);
+const showEditItemModal = ref(false);
+const editingItem = ref(null);
 const qrCodeUrl = ref('');
 const participantIds = ref([]);
 
@@ -258,11 +294,11 @@ const handleAddOrderItem = async (itemData) => {
             error.value = 'You need to be a participant to add items';
             return;
         }
-
+        
         loading.value = true;
         error.value = null;
         console.log('this is the room id',roomID)
-
+        
         // First, get the participant ID for this user in this room
         const { data: participantData, error: participantError } = await supabase
             .from('room_participants')
@@ -270,19 +306,19 @@ const handleAddOrderItem = async (itemData) => {
             .eq('room_id', roomID)
             .eq('user_id', currentUser.value.id)
             .maybeSingle();
-
+        
         if (participantError) {
             console.error('Error fetching participant ID:', participantError);
             error.value = 'Failed to add order item. Please try again.';
             return;
         }
-
+        
         if (!participantData) {
             console.error('Participant record not found');
             error.value = 'You are not a participant in this room.';
             return;
         }
-
+        
         // Insert the new order item into the database
         const { data, error: insertError } = await supabase
             .from('order_items')
@@ -294,22 +330,117 @@ const handleAddOrderItem = async (itemData) => {
                 notes: itemData.notes || null
             }])
             .select();
-
+        
         if (insertError) {
             console.error('Error adding order item:', insertError);
             error.value = 'Failed to add order item. Please try again.';
             return;
         }
-
+        
         // Refresh the order items list
         await loadOrderItems();
-
+        
         // Show success message or notification could be added here
         console.log('Order item added successfully:', data);
-
+        
     } catch (err) {
         console.error('Error adding order item:', err);
         error.value = err.message || 'Failed to add order item.';
+    } finally {
+        loading.value = false;
+    }
+};
+
+// Check if current user can edit an item (either owner or runner)
+const canEditItem = (item) => {
+    if (!currentUser.value) return false;
+    
+    // Check if user is the owner of this item
+    const isOwner = item.user_id === currentUser.value.id;
+    
+    // Check if user is the runner
+    const isRunnerUser = isRunner.value;
+    
+    return isOwner || isRunnerUser;
+};
+
+// Edit order item handler
+const handleEditOrderItem = (item) => {
+    if (!canEditItem(item)) {
+        error.value = 'You can only edit your own items';
+        return;
+    }
+    editingItem.value = { ...item };
+    showEditItemModal.value = true;
+};
+
+// Update order item handler
+const handleUpdateOrderItem = async (updatedData) => {
+    try {
+        if (!currentUser.value) {
+            error.value = 'You need to be logged in to update order items';
+            return;
+        }
+        
+        loading.value = true;
+        error.value = null;
+        
+        const updates = {
+            item_name: updatedData.itemName,
+            quantity: updatedData.quantity,
+            unit_price: updatedData.unitPrice,
+            notes: updatedData.notes || null
+        };
+        
+        await updateOrderItem(editingItem.value.id, updates, currentUser.value.id);
+        
+        // Refresh the order items list
+        await loadOrderItems();
+        
+        // Close the modal
+        showEditItemModal.value = false;
+        editingItem.value = null;
+        
+    } catch (err) {
+        console.error('Error updating order item:', err);
+        error.value = err.message || 'Failed to update order item.';
+    } finally {
+        loading.value = false;
+    }
+};
+
+// Delete order item handler
+const handleDeleteOrderItem = async (itemId, itemUserId) => {
+    try {
+        if (!currentUser.value) {
+            error.value = 'You need to be logged in to delete order items';
+            return;
+        }
+        
+        // Check if user can delete this item
+        const isOwner = itemUserId === currentUser.value.id;
+        const isRunnerUser = isRunner.value;
+        
+        if (!isOwner && !isRunnerUser) {
+            error.value = 'You can only delete your own items';
+            return;
+        }
+        
+        if (!confirm('Are you sure you want to delete this order item?')) {
+            return;
+        }
+        
+        loading.value = true;
+        error.value = null;
+        
+        await deleteOrderItem(itemId, currentUser.value.id);
+        
+        // Refresh the order items list
+        await loadOrderItems();
+        
+    } catch (err) {
+        console.error('Error deleting order item:', err);
+        error.value = err.message || 'Failed to delete order item.';
     } finally {
         loading.value = false;
     }
@@ -448,6 +579,24 @@ const checkParticipation = async () => {
     }
 };
 
+const checkRunnerStatus = async () => {
+    if (!currentUser.value || !room.value) {
+        isRunner.value = false;
+        return false;
+    }
+    
+    try {
+        // Check if current user is the runner of this room
+        const runner = room.value.runner_id === currentUser.value.id;
+        isRunner.value = runner;
+        return runner;
+    } catch (err) {
+        console.error('Error checking runner status:', err);
+        isRunner.value = false;
+        return false;
+    }
+};
+
 const setupRealtimeSubscription = () => {
     if (!currentUser.value) return null;
 
@@ -506,6 +655,9 @@ const loadRoomData = async () => {
             return;
         }
         
+        // Check if current user is the runner
+        await checkRunnerStatus();
+        
         // Load order data
         await loadOrderItems();
         
@@ -518,7 +670,7 @@ const loadRoomData = async () => {
         if (!realtimeChannel.value) {
             realtimeChannel.value = setupRealtimeSubscription();
         }
-
+        
         
     } catch (err) {
         console.error('Error loading room data:', err);
