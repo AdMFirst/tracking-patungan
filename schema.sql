@@ -10,7 +10,7 @@ CREATE TABLE public.order_items (
   notes text,
   created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT order_items_pkey PRIMARY KEY (id),
-  CONSTRAINT order_items_user_id_fkey FOREIGN KEY (participant_id) REFERENCES auth.users(id)
+  CONSTRAINT order_items_participant_id_fkey FOREIGN KEY (participant_id) REFERENCES public.room_participants(id)
 );
 CREATE TABLE public.payment_methods (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

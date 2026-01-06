@@ -197,6 +197,7 @@ const realtimeChannel = ref(null);
 const showAddItemModal = ref(false);
 const showShareModal = ref(false);
 const qrCodeUrl = ref('');
+const participantIds = ref([]);
 
 // Navigation
 const goBack = () => {
@@ -260,6 +261,7 @@ const handleAddOrderItem = async (itemData) => {
 
         loading.value = true;
         error.value = null;
+        console.log('this is the room id',roomID)
 
         // First, get the participant ID for this user in this room
         const { data: participantData, error: participantError } = await supabase
@@ -267,7 +269,7 @@ const handleAddOrderItem = async (itemData) => {
             .select('id')
             .eq('room_id', roomID)
             .eq('user_id', currentUser.value.id)
-            .single();
+            .maybeSingle();
 
         if (participantError) {
             console.error('Error fetching participant ID:', participantError);
@@ -332,7 +334,9 @@ const loadRoomDetails = async () => {
             .from('rooms')
             .select('*')
             .eq('id', roomID)
-            .single();
+            .maybeSingle();
+
+        console.log('this is the room id', roomID, data)
         
         if (error) {
             console.error('Error fetching room details:', error);
@@ -371,8 +375,8 @@ const loadOrderItems = async () => {
             return;
         }
         
-        // Get participant IDs
-        const participantIds = participants.map(p => p.id);
+        // Get participant IDs and update reactive state
+        participantIds.value = participants.map(p => p.id);
         
         // Build user cache from participants
         participants.forEach(p => {
@@ -385,7 +389,7 @@ const loadOrderItems = async () => {
         const { data, error } = await supabase
             .from('order_items')
             .select('*, room_participants(user_id)')
-            .in('participant_id', participantIds);
+            .in('participant_id', participantIds.value);
         
         if (error) {
             console.error('Error fetching order items:', error);
@@ -444,35 +448,47 @@ const checkParticipation = async () => {
     }
 };
 
-// Real-time subscription
 const setupRealtimeSubscription = () => {
-    if (!currentUser.value || !isParticipant.value) return null;
-    
+    if (!currentUser.value) return null;
+
     const channel = supabase
-        .channel(`room_${roomID}_order_items`, {
-            config: {
-                broadcast: {
-                    self: true
+        .channel(`room-${roomID}`)
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'room_participants',
+                filter: `room_id=eq.${roomID}`,
+            },
+            async (payload) => {
+                console.log('[Realtime] room_participants', payload);
+                await loadOrderItems();
+            }
+        )
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'order_items',
+            },
+            async (payload) => {
+                // Optional: cek apakah item ini milik room ini
+                if (participantIds.value.includes(payload.new.participant_id)) {
+                    await loadOrderItems();
                 }
             }
-        })
-        .on('postgres_changes', {
-            event: '*',
-            schema: 'public',
-            table: 'order_items',
-            filter: `room_id=eq.${roomID}`
-        }, async (payload) => {
-            console.log('Order item change detected:', payload);
-            await loadRoomData();
-        })
+            )
+
+
         .subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-                console.log('Realtime subscription active for room:', roomID);
-            }
+            console.log('[Realtime status]', status);
         });
-    
+
     return channel;
 };
+
 
 // Optimized data loading function
 const loadRoomData = async () => {
@@ -499,10 +515,10 @@ const loadRoomData = async () => {
             await loadUserProfiles(userIds);
         }
         
-        // Setup real-time subscription only if we have data
-        if (orderItems.value.length > 0) {
+        if (!realtimeChannel.value) {
             realtimeChannel.value = setupRealtimeSubscription();
         }
+
         
     } catch (err) {
         console.error('Error loading room data:', err);

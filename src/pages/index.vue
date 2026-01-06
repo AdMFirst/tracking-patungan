@@ -4,13 +4,13 @@
             <div class="max-w-md mx-auto">
                 <div class="text-center py-8">
                     <h1 class="text-3xl font-bold text-foreground mb-4">
-                        Welcome!
+                        Talangin
                     </h1>
                     <p class="text-lg text-muted-foreground">
-                        This is your dashboard
+                        bikin urusan patungan jadi transparan
                     </p>
                     <p class="text-sm text-muted-foreground mt-2">
-                        Track your expenses and join rooms
+                        Catat. Hitung. Beres.
                     </p>
                 </div>
 
