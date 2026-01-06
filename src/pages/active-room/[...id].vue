@@ -37,16 +37,27 @@
         
         <!-- Main room content for participants -->
         <div v-else>
-            <div class="flex items-center mb-4">
-                <Button
-                    variant="outline"
-                    size="icon"
-                    class="mr-2"
-                    @click="goBack"
-                >
-                    <ArrowLeft class="h-4 w-4" />
-                </Button>
-                <h1 class="text-2xl font-bold">{{ room.title }}</h1>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        class="mr-2"
+                        @click="goBack"
+                    >
+                        <ArrowLeft class="h-4 w-4" />
+                    </Button>
+                    <h1 class="text-2xl font-bold">{{ room.title }}</h1>
+                </div>
+                <div>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        @click="handleShareClick"
+                    >
+                        <Share2 class="h-4 w-4" />
+                    </Button>
+                </div>
             </div>
             <div class="mb-4">
                 <p class="text-muted-foreground">
@@ -122,6 +133,26 @@
     
     <!-- Floating Action Button -->
     <FloatingButton v-if="room && isParticipant" @click="showAddItemModal = true" />
+
+    <!-- Share Modal -->
+    <Dialog v-model:open="showShareModal">
+        <DialogContent class="sm:max-w-md">
+            <DialogHeader>
+                <DialogTitle>Share Room</DialogTitle>
+                <DialogDescription>
+                    Scan the QR code to share this room with others.
+                </DialogDescription>
+            </DialogHeader>
+            <div class="flex justify-center py-4">
+                <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR Code" class="w-64 h-64" />
+            </div>
+            <DialogFooter>
+                <Button variant="outline" @click="showShareModal = false">
+                    Close
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>
 
 <script setup>
@@ -137,10 +168,19 @@ import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, Share2 } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/JoinRoomPrompt.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import AddOrderItemModal from '@/components/AddOrderItemModal.vue';
+import QRCode from 'qrcode';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from '@/components/ui/dialog';
 
 // State management
 const route = useRoute();
@@ -155,10 +195,28 @@ const isParticipant = ref(false);
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
 const showAddItemModal = ref(false);
+const showShareModal = ref(false);
+const qrCodeUrl = ref('');
 
 // Navigation
 const goBack = () => {
     router.go(-1);
+};
+
+// Share functionality
+const generateQRCode = async () => {
+    try {
+        const currentUrl = window.location.href;
+        qrCodeUrl.value = await QRCode.toDataURL(currentUrl);
+    } catch (err) {
+        console.error('Error generating QR code:', err);
+        error.value = 'Failed to generate QR code.';
+    }
+};
+
+const handleShareClick = async () => {
+    await generateQRCode();
+    showShareModal.value = true;
 };
 
 // Join room handlers
