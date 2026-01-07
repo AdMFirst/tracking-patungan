@@ -14,6 +14,34 @@
                     </p>
                 </div>
 
+
+                <!-- Join Room Card -->
+                <Card class="mb-6">
+                    <CardHeader>
+                        <CardTitle>Join Room</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div class="flex gap-2">
+                            <Input
+                                v-model="roomCode"
+                                placeholder="Enter room code"
+                                class="flex-1"
+                                @keyup.enter="joinRoom"
+                            />
+                            <Button
+                                @click="joinRoom"
+                                :disabled="!roomCode || isLoading"
+                            >
+                                <span v-if="!isLoading">Go</span>
+                                <Spinner v-else class="w-4 h-4" />
+                            </Button>
+                        </div>
+                        <div class="mt-2">
+                            <QRScanDialog />
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <!-- Monthly Spending Tracker -->
                 <Card class="mb-6">
                     <CardHeader>
@@ -44,31 +72,6 @@
                                     No spending data available
                                 </p>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <!-- Join Room Card -->
-                <Card class="mb-6">
-                    <CardHeader>
-                        <CardTitle>Join Room</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div class="flex gap-2">
-                            <Input
-                                v-model="roomCode"
-                                placeholder="Enter room code"
-                                class="flex-1"
-                                @keyup.enter="joinRoom"
-                            />
-                            <Button
-                                @click="joinRoom"
-                                :disabled="!roomCode || isLoading"
-                            >
-                                <span v-if="!isLoading">Go</span>
-                                <Spinner v-else class="w-4 h-4" />
-                            </Button>
-                            <QRScanDialog />
                         </div>
                     </CardContent>
                 </Card>

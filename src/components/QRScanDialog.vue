@@ -16,7 +16,7 @@ import QRScanner from './QRScanner.vue';
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="outline">
+      <Button variant="outline" class="w-full">
         Scan QR
       </Button>
     </DialogTrigger>

@@ -651,10 +651,24 @@ const setupRealtimeSubscription = () => {
                 }
             }
             )
-
-
+        .on('channel_error', (err) => {
+            console.error('Realtime channel error:', err);
+            window.location.reload();
+        })
+        .on('presence', { event: 'sync' }, () => {
+            console.log('Realtime presence sync');
+        })
+        .on('broadcast', { event: 'custom_event' }, (payload) => {
+            console.log('Realtime broadcast:', payload);
+        })
         .subscribe((status) => {
             console.log('[Realtime status]', status);
+            if (status === 'SUBSCRIBED') {
+                console.log('Successfully subscribed to realtime updates');
+            } else if (status === 'CHANNEL_ERROR' || status === 'CLOSED' || status === 'TIMED_OUT') {
+                console.error('Realtime subscription failed or disconnected:', status);
+                window.location.reload();
+            }
         });
 
     return channel;
