@@ -25,7 +25,7 @@
         </div>
         
         <!-- Invalid room state -->
-        <div v-else-if="!room" class="text-center p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+        <div v-else-if="!room && !error" class="text-center p-6 bg-yellow-50 rounded-lg border border-yellow-200">
             <h2 class="text-xl font-semibold text-yellow-600 mb-2">Room Not Available</h2>
             <p class="text-gray-600 mb-4">
                 {{ roomID }} is invalid or not active
@@ -234,6 +234,9 @@ const showEditItemModal = ref(false);
 const editingItem = ref(null);
 const qrCodeUrl = ref('');
 const participantIds = ref([]);
+
+// UUID validation regex
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Navigation
 const goBack = () => {
@@ -461,6 +464,14 @@ const groupedOrderItems = computed(() => {
 // Data loading functions
 const loadRoomDetails = async () => {
     try {
+        // Validate UUID format
+        if (!uuidRegex.test(roomID)) {
+            console.error('Invalid room ID format:', roomID);
+            error.value = 'Invalid room ID format. Please use a valid UUID.';
+            room.value = null;
+            return false;
+        }
+
         const { data, error } = await supabase
             .from('rooms')
             .select('*')
@@ -468,21 +479,32 @@ const loadRoomDetails = async () => {
             .maybeSingle();
 
         console.log('this is the room id', roomID, data)
-        
+
         if (error) {
             console.error('Error fetching room details:', error);
             error.value = 'Failed to load room details.';
             room.value = null;
             return false;
         }
-        
+
+        // Check if the room exists
+        if (!data) {
+            console.error('Room not found:', roomID);
+            error.value = 'Room not found. Please check the room ID.';
+            room.value = null;
+            return false;
+        }
+
         // Check if the room is active (no order_time or final_total yet)
         if (data.order_time || data.final_total) {
+            console.error('Room is not active:', roomID);
+            error.value = 'This room is not active. Only active rooms can be accessed.';
             room.value = null;
-        } else {
-            room.value = data;
+            return false;
         }
-        return !!room.value;
+
+        room.value = data;
+        return true;
     } catch (err) {
         console.error('Error fetching room details:', err);
         error.value = 'Failed to load room details.';
