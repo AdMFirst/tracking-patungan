@@ -68,12 +68,7 @@
                                 <span v-if="!isLoading">Go</span>
                                 <Spinner v-else class="w-4 h-4" />
                             </Button>
-                            <Button
-                                @click="scanQRCode"
-                                variant="outline"
-                            >
-                                <span>Scan QR</span>
-                            </Button>
+                            <QRScanDialog />
                         </div>
                     </CardContent>
                 </Card>
@@ -124,6 +119,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input/Input.vue';
 import Button from '@/components/ui/button/Button.vue';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
+import QRScanDialog from '@/components/QRScanDialog.vue';
 
 const user = inject('user');
 const router = useRouter();
@@ -168,49 +164,6 @@ const joinRoom = async () => {
         console.error('Error joining room:', error);
     } finally {
         isLoading.value = false;
-    }
-};
-
-// Scan QR code functionality
-const scanQRCode = async () => {
-    try {
-        // Check if the browser supports the BarcodeDetector API
-        if ('BarcodeDetector' in window) {
-            const barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
-            
-            // Request camera access
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            const video = document.createElement('video');
-            video.srcObject = stream;
-            video.play();
-
-            // Create a canvas to capture frames
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-
-            // Set up a loop to scan frames
-            const scanFrame = async () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                const barcodes = await barcodeDetector.detect(canvas);
-                if (barcodes.length > 0) {
-                    const qrCodeValue = barcodes[0].rawValue;
-                    stream.getTracks().forEach(track => track.stop());
-                    router.push(`/active-room/${qrCodeValue}`);
-                } else {
-                    requestAnimationFrame(scanFrame);
-                }
-            };
-
-            scanFrame();
-        } else {
-            alert('QR code scanning is not supported in your browser.');
-        }
-    } catch (error) {
-        console.error('Error scanning QR code:', error);
-        alert('Failed to scan QR code. Please try again.');
     }
 };
 
