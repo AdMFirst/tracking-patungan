@@ -5,33 +5,59 @@
                 <h1 class="text-2xl font-bold">Joined Room History</h1>
             </div>
 
+            <!-- Tab Navigation -->
+            <div class="flex mb-4 bg-muted rounded-lg p-1">
+                <button
+                    @click="activeTab = 'active'"
+                    :class="[
+                        'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors',
+                        activeTab === 'active'
+                            ? 'bg-white text-black shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
+                    ]"
+                >
+                    Active ({{ activeRooms.length }})
+                </button>
+                <button
+                    @click="activeTab = 'closed'"
+                    :class="[
+                        'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors',
+                        activeTab === 'closed'
+                            ? 'bg-white text-black shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
+                    ]"
+                >
+                    Closed ({{ closedRooms.length }})
+                </button>
+            </div>
+
             <div v-if="loading" class="text-center space-y-4">
                 <OrderRoomSkeleton v-for="i in [1, 2, 3, 4, 5]" :key="i" />
             </div>
 
-            <div v-else-if="rooms.length === 0" class="text-center py-8">
+            <div v-else-if="filteredRooms.length === 0" class="text-center py-8">
                 <div
                     class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4"
                 >
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
                 <h3 class="text-lg font-semibold mb-2">
-                    No joined rooms found
+                    No {{ activeTab === 'active' ? 'active' : 'closed' }} rooms found
                 </h3>
                 <p class="text-sm text-muted-foreground">
-                    You haven't participated in any rooms yet.
+                    You haven't participated in any {{ activeTab === 'active' ? 'active' : 'closed' }} rooms yet.
                 </p>
             </div>
 
             <div v-else class="space-y-4">
-                <OrderRooms :rooms="rooms" />
+                <OrderRooms :rooms="filteredRooms" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, inject } from 'vue';
+import { ref, onMounted, watch, inject, computed } from 'vue';
 
 // ICON IMPORTS (Reduced list)
 import { Home } from 'lucide-vue-next';
@@ -46,6 +72,7 @@ const user = inject('user');
 // State
 const rooms = ref([]);
 const loading = ref(false);
+const activeTab = ref('active'); // 'active' or 'closed'
 
 // --- Fetching Logic (Simplified) ---
 
@@ -113,6 +140,23 @@ const fetchRooms = async () => {
         loading.value = false;
     }
 };
+
+// Computed properties for filtering
+const activeRooms = computed(() => {
+    return rooms.value.filter(room => !room.final_total);
+});
+
+const closedRooms = computed(() => {
+    return rooms.value.filter(room => room.final_total);
+});
+
+const filteredRooms = computed(() => {
+    if (activeTab.value === 'active') {
+        return activeRooms.value;
+    } else {
+        return closedRooms.value;
+    }
+});
 
 // Watch the user to trigger the initial fetch
 watch(
