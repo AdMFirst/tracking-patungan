@@ -1,5 +1,7 @@
 <script setup>
+import { Toaster } from './components/ui/sonner';
 import ProtectedRoute from './ProtectedRoute.vue';
+import 'vue-sonner/style.css'
 </script>
 
 <template>
@@ -7,5 +9,6 @@ import ProtectedRoute from './ProtectedRoute.vue';
         <protected-route>
             <router-view />
         </protected-route>
+        <Toaster position="top-center"/>
     </div>
 </template>

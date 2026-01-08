@@ -99,6 +99,7 @@ const fetchRooms = async () => {
                     room_created_at: item.room_created_at,
                     platform: item.platform,
                     runner_name: item.runner_name,
+                    runner_id: item.runner_id, // Include runner_id for payment methods lookup
                     restaurant: item.restaurant,
                     status: item.room_status,
                     paid_via: item.paid_via,

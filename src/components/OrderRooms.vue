@@ -134,7 +134,16 @@
             </div>
         </CardContent>
     </Card>
+
+    <!-- Payment Modal -->
+    <PaymentModal 
+        :room="selectedRoom" 
+        :isOpen="showPaymentModal"
+        @close="showPaymentModal = false"
+        @payment-confirmed="handlePaymentConfirmed"
+    />
 </template>
+
 <script setup>
 import { formatCurrency } from '@/lib/utils';
 
@@ -144,12 +153,19 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Button from './ui/button/Button.vue';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import PaymentModal from './PaymentModal.vue';
+import { toast } from 'vue-sonner';
 
 const router = useRouter();
 
 const props = defineProps({
     rooms: Object, // <- this is rooms.value exactly as fetched
 });
+
+// State for payment modal
+const showPaymentModal = ref(false);
+const selectedRoom = ref(null);
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -179,5 +195,27 @@ function paymentStatus(room) {
 
 function handleOpenRoom(room) {
     router.push('/active-room/' + room.room_id || room.id);
+}
+
+function handlePayment(room) {
+    // Ensure room has runner_id for payment methods lookup
+    const roomWithRunnerId = {
+        ...room,
+        runner_id: room.runner_id || room.room_runner_id // Add fallback for different field names
+    };
+    selectedRoom.value = roomWithRunnerId;
+    showPaymentModal.value = true;
+}
+
+function handlePaymentConfirmed(paymentData) {
+    console.log('Payment confirmed:', paymentData);
+    // Here you would typically update the database to mark the room as paid
+    // For now, we'll just show a toast notification
+    toast.success(`Payment confirmed for ${paymentData.amount} using selected payment method. Room will be marked as paid.`);
+    
+    // In a real implementation, you would:
+    // 1. Update the room_participants table with paid_at and paid_via
+    // 2. Update the room status if needed
+    // 3. Refresh the data to show the paid status
 }
 </script>

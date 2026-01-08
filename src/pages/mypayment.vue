@@ -247,6 +247,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Plus, Pencil, Trash2, CreditCard, ArrowLeft } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 
 const router = useRouter();
 const paymentMethods = ref([]);
@@ -390,7 +391,7 @@ async function handleSubmit() {
         isDialogOpen.value = false;
     } catch (error) {
         console.error('Error saving payment method:', error);
-        alert('Failed to save payment method: ' + error.message);
+        toast.error('Failed to save payment method: ' + error.message);
     }
 }
 
@@ -411,7 +412,7 @@ async function deletePaymentMethod() {
         isDeleteDialogOpen.value = false;
     } catch (error) {
         console.error('Error deleting payment method:', error);
-        alert('Failed to delete payment method: ' + error.message);
+        toast.error('Failed to delete payment method: ' + error.message);
     }
 }
 

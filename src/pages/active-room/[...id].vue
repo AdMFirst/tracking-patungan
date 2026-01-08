@@ -214,6 +214,7 @@ import {
     DialogDescription,
     DialogFooter,
 } from '@/components/ui/dialog';
+import { toast } from 'vue-sonner';
 
 // State management
 const route = useRoute();
@@ -429,9 +430,22 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
             return;
         }
         
-        if (!confirm('Are you sure you want to delete this order item?')) {
-            return;
-        }
+        const confirmed = await new Promise((resolve) => {
+            toast.warning('Delete this order item?', {
+                action: {
+                    label: 'Delete',
+                    onClick: () => resolve(true),
+                },
+                cancel: {
+                    label: 'Cancel',
+                    onClick: () => resolve(false),
+                },
+                onDismiss: () => resolve(false),
+            })
+        })
+
+        if (!confirmed) return
+
         
         loading.value = true;
         error.value = null;

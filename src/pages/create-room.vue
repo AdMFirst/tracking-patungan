@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/card';
 import { createRoom } from '@/lib/supabaseClient';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue-sonner';
 
 // Daftar layanan pesan makanan online di Indonesia
 const DeliveryTypes = [
@@ -79,7 +80,7 @@ const handleSubmit = async (e) => {
         router.push(`/active-room/${data.id}`);
     } catch (err) {
         console.error('General Submission Error:', err);
-        alert('Terjadi kesalahan saat koneksi ke server.');
+        toast.error('Terjadi kesalahan saat koneksi ke server.');
     } finally {
         isLoading.value = false;
     }
