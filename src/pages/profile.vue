@@ -63,6 +63,10 @@
                 Change Username
             </Button>
 
+            <Button @click="navigateToMyPayment" class="w-full mb-4">
+                Manage Payment Methods
+            </Button>
+
             <Button
                 @click="handleSignOut"
                 :disabled="loading"
@@ -87,6 +91,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'vue-router';
 
 import { ref, inject, computed } from 'vue';
 import UserAvatar from '@/components/UserAvatar.vue';
@@ -95,6 +100,7 @@ import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 
 const user = inject('user');
+const router = useRouter();
 
 const loading = ref(false);
 const isSettingsModalOpen = ref(false);
@@ -115,6 +121,10 @@ const providerLabel = computed(() => {
 
 console.log(user.value);
 const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : '—');
+
+const navigateToMyPayment = () => {
+    router.push('/mypayment');
+};
 
 const openSettingsModal = () => {
     isSettingsModalOpen.value = true;

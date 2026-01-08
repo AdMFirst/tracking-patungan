@@ -129,7 +129,7 @@
                 class="pt-4"
             >
                 <Button variant="outline" class="w-full" disabled>
-                    Paid
+                    {{ paymentStatus(room) }}
                 </Button>
             </div>
         </CardContent>
@@ -155,7 +155,7 @@ const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = {
         day: '2-digit',
-        month: 'long',
+        month: 'short',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
@@ -168,6 +168,13 @@ function totalOriginalPay(items) {
         (acc, item) => acc + item.quantity * item.unit_price,
         0
     );
+}
+
+function paymentStatus(room) {
+    const basic = `Paid at ${formatDate(room.paid_at)}`
+    return room.paid_via 
+        ? `${basic} via ${room.paid_via}` 
+        : basic;
 }
 
 function handleOpenRoom(room) {

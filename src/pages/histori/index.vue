@@ -74,6 +74,8 @@ const fetchRooms = async () => {
                     runner_name: item.runner_name,
                     restaurant: item.restaurant,
                     status: item.room_status,
+                    paid_via: item.paid_via,
+                    paid_at: item.paid_at,
                     user_items: [],
                     total_room_price: 0,
                     final_total: null,
@@ -88,7 +90,7 @@ const fetchRooms = async () => {
                 unit_price: item.unit_price,
                 notes: item.notes,
                 raw_item_total: item.raw_item_total,
-                proportional_item_total: item.proportional_item_total,
+                proportional_item_total: item.proportional_item_total
             });
 
             room.total_room_price += item.raw_item_total;
@@ -98,7 +100,7 @@ const fetchRooms = async () => {
                 item.room_status === 'closed' &&
                 item.proportional_item_total !== null
             ) {
-                room.final_total = item.proportional_item_total;
+                room.final_total += item.proportional_item_total;
             }
         });
 
