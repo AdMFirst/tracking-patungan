@@ -1,24 +1,13 @@
 <template>
-    <div class="container mx-auto px-4 py-6">
-        <div
-            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"
-        >
-            <div class="flex items-center gap-4">
-                <Button
-                    variant="outline"
-                    size="icon"
-                    class="mr-2"
-                    @click="goBack" 
-                >
-                    <ArrowLeft class="h-4 w-4" />
+    <div class="container mx-auto p-4">
+        <PageHeader title="My Payment Methods">
+            <template #actions>
+                <Button class="w-full sm:w-auto" @click="openAddDialog">
+                    <Plus class="w-4 h-4 mr-2" />
+                    Add Payment Method
                 </Button>
-                <h1 class="text-xl sm:text-2xl font-bold">My Payment Methods</h1>
-            </div>
-            <Button class="w-full sm:w-auto" @click="openAddDialog">
-                <Plus class="w-4 h-4 mr-2" />
-                Add Payment Method
-            </Button>
-        </div>
+            </template>
+        </PageHeader>
 
         <!-- Loading State -->
         <div v-if="loading" class="flex flex-col items-center justify-center py-12">
@@ -246,8 +235,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Plus, Pencil, Trash2, CreditCard, ArrowLeft } from 'lucide-vue-next';
+import { Plus, Pencil, Trash2, CreditCard } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
+import PageHeader from '@/components/PageHeader.vue';
 
 const router = useRouter();
 const paymentMethods = ref([]);
@@ -322,10 +312,6 @@ function badgeClassByType(tipe) {
 
 }
 
-// Navigation
-const goBack = () => {
-    router.go(-1);
-};
 
 // Open edit dialog
 function openEditDialog(method) {

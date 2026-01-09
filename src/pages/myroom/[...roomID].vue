@@ -1,16 +1,7 @@
 <template>
     <div class="min-h-screen p-4 pb-20">
         <div class="max-w-md mx-auto">
-            <div class="flex items-center justify-between py-0 mb-6">
-                <button
-                    @click="router.back()"
-                    class="flex items-center space-x-2 text-sm text-muted-foreground hover:text-primary"
-                >
-                    <ArrowLeft class="w-5 h-5" />
-                    <span>Back</span>
-                </button>
-                <h1 class="text-2xl font-bold">Room Details</h1>
-            </div>
+            <PageHeader title="Room Details" />
 
             <div v-if="loading" class="text-center space-y-4">
                 <Skeleton class="h-6 w-[200px] mx-auto" />
@@ -198,7 +189,7 @@
 
 <script setup>
 import { ref, computed, onMounted, inject, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 // SHADCN/UI COMPONENTS IMPORTS
 import { Button } from '@/components/ui/button';
@@ -208,17 +199,17 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
 // ICON IMPORTS (Requires 'lucide-vue-next' or similar icon library)
-import { Home, ArrowLeft } from 'lucide-vue-next';
+import { Home } from 'lucide-vue-next';
 
 // Import from supabaseClient
 import {
     fetchRoomWithParticipants
 } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
+import PageHeader from '@/components/PageHeader.vue';
 
 const user = inject('user');
 const route = useRoute();
-const router = useRouter();
 
 // State
 const room = ref(null);

@@ -37,19 +37,8 @@
         
         <!-- Main room content for participants -->
         <div v-else>
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        class="mr-2"
-                        @click="goBack"
-                    >
-                        <ArrowLeft class="h-4 w-4" />
-                    </Button>
-                    <h1 class="text-2xl font-bold">{{ room.title }}</h1>
-                </div>
-                <div>
+            <PageHeader :title="room.title">
+                <template #actions>
                     <Button
                         variant="outline"
                         size="icon"
@@ -57,8 +46,8 @@
                     >
                         <Share2 class="h-4 w-4" />
                     </Button>
-                </div>
-            </div>
+                </template>
+            </PageHeader>
             <div class="mb-4">
                 <p class="text-muted-foreground">
                     {{ room.restaurant }} via {{ room.platform }}
@@ -200,8 +189,9 @@ import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
-import { ArrowLeft, Share2, Edit2, Trash2 } from 'lucide-vue-next';
+import { Share2, Edit2, Trash2 } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/JoinRoomPrompt.vue';
+import PageHeader from '@/components/PageHeader.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import AddOrderItemModal from '@/components/AddOrderItemModal.vue';
 import EditOrderItemModal from '@/components/EditOrderItemModal.vue';
@@ -239,10 +229,6 @@ const participantIds = ref([]);
 // UUID validation regex
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// Navigation
-const goBack = () => {
-    router.go(-1);
-};
 
 // Share functionality
 const generateQRCode = async () => {

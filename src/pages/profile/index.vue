@@ -123,7 +123,7 @@ console.log(user.value);
 const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const navigateToMyPayment = () => {
-    router.push('/mypayment');
+    router.push('/profile/mypayment');
 };
 
 const openSettingsModal = () => {
