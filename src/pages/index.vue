@@ -122,7 +122,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input/Input.vue';
 import Button from '@/components/ui/button/Button.vue';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
-import QRScanDialog from '@/components/QRScanDialog.vue';
+import QRScanDialog from '@/components/room/QRScanDialog.vue';
 
 const user = inject('user');
 const router = useRouter();

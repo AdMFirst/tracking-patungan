@@ -94,8 +94,8 @@ import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'vue-router';
 
 import { ref, inject, computed } from 'vue';
-import UserAvatar from '@/components/UserAvatar.vue';
-import SettingsModal from '@/components/SettingsModal.vue';
+import UserAvatar from '@/components/common/UserAvatar.vue';
+import SettingsModal from '@/components/modals/SettingsModal.vue';
 import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 

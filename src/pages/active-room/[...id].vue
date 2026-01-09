@@ -230,11 +230,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
 import { Share2, Edit2, Trash2 } from 'lucide-vue-next';
-import JoinRoomPrompt from '@/components/JoinRoomPrompt.vue';
-import PageHeader from '@/components/PageHeader.vue';
-import FloatingButton from '@/components/FloatingButton.vue';
-import AddOrderItemModal from '@/components/AddOrderItemModal.vue';
-import EditOrderItemModal from '@/components/EditOrderItemModal.vue';
+import JoinRoomPrompt from '@/components/room/JoinRoomPrompt.vue';
+import PageHeader from '@/components/common/PageHeader.vue';
+import FloatingButton from '@/components/common/FloatingButton.vue';
+import AddOrderItemModal from '@/components/modals/AddOrderItemModal.vue';
+import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
 import QRCode from 'qrcode';
 import {
     Dialog,

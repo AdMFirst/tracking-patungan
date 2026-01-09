@@ -161,7 +161,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 
 const isLogin = ref(true);
 const loading = ref(false);

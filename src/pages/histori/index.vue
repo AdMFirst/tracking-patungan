@@ -64,8 +64,8 @@ import { Home } from 'lucide-vue-next';
 
 // Assume this is imported from your project setup
 import { fetchJoinedRooms } from '../../lib/supabaseClient';
-import OrderRooms from '@/components/OrderRooms.vue';
-import OrderRoomSkeleton from '@/components/OrderRoomSkeleton.vue';
+import OrderRooms from '@/components/room/OrderRooms.vue';
+import OrderRoomSkeleton from '@/components/room/OrderRoomSkeleton.vue';
 
 const user = inject('user');
 

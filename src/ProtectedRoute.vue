@@ -16,9 +16,9 @@
 <script setup>
 import { inject, computed } from 'vue';
 import { authReady } from '@/lib/auth'; // Import readiness state
-import BottomNav from './components/BottomNav.vue';
-import AuthForm from './components/AuthForm.vue';
-import LoadingScreen from './components/LoadingScreen.vue';
+import BottomNav from '@/components/common/BottomNav.vue';
+import AuthForm from '@/components/auth/AuthForm.vue';
+import LoadingScreen from '@/components/common/LoadingScreen.vue';
 
 const user = inject('user');
 

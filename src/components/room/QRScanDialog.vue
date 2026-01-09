@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import QRScanner from './QRScanner.vue';
+import QRScanner from '@/components/qr/QRScanner.vue';
 </script>
 
 <template>

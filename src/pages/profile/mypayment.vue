@@ -267,7 +267,7 @@ import {
 } from '@/components/ui/select';
 import { Plus, Pencil, Trash2, CreditCard } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
-import PageHeader from '@/components/PageHeader.vue';
+import PageHeader from '@/components/common/PageHeader.vue';
 
 const router = useRouter();
 const paymentMethods = ref([]);

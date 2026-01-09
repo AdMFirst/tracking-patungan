@@ -175,8 +175,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Filter, Home } from 'lucide-vue-next';
 import { fetchUserRooms, updateRoom, deleteRoom, queryClient } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
-import CloseRoomModal from '@/components/CloseRoomModal.vue';
-import FilterModal from '@/components/FilterModal.vue';
+import CloseRoomModal from '@/components/modals/CloseRoomModal.vue';
+import FilterModal from '@/components/modals/FilterModal.vue';
 
 const debounce = (fn, delay) => {
     let timeoutId;

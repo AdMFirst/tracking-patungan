@@ -296,7 +296,7 @@ import {
     fetchRoomWithParticipants
 } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
-import PageHeader from '@/components/PageHeader.vue';
+import PageHeader from '@/components/common/PageHeader.vue';
 
 const user = inject('user');
 const route = useRoute();

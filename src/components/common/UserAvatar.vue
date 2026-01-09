@@ -1,12 +1,12 @@
 <script setup>
 import { computed } from 'vue';
-import Avatar from './ui/avatar/Avatar.vue';
-import AvatarFallback from './ui/avatar/AvatarFallback.vue';
-import AvatarImage from './ui/avatar/AvatarImage.vue';
-import Badge from './ui/badge/Badge.vue';
-import CardDescription from './ui/card/CardDescription.vue';
-import CardHeader from './ui/card/CardHeader.vue';
-import CardTitle from './ui/card/CardTitle.vue';
+import Avatar from '@/components/ui/avatar/Avatar.vue';
+import AvatarFallback from '@/components/ui/avatar/AvatarFallback.vue';
+import AvatarImage from '@/components/ui/avatar/AvatarImage.vue';
+import Badge from '@/components/ui/badge/Badge.vue';
+import CardDescription from '@/components/ui/card/CardDescription.vue';
+import CardHeader from '@/components/ui/card/CardHeader.vue';
+import CardTitle from '@/components/ui/card/CardTitle.vue';
 
 const props = defineProps({
     userMetadata: Object,

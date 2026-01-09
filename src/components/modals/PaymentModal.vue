@@ -94,7 +94,7 @@ import {
     DialogTitle
 } from '@/components/ui/dialog'
 import Button from '@/components/ui/button/Button.vue'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 import { toast } from 'vue-sonner'
 
 const props = defineProps({

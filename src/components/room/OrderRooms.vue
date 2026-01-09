@@ -151,10 +151,10 @@ import { formatCurrency } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import Button from './ui/button/Button.vue';
+import Button from '@/components/ui/button/Button.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import PaymentModal from './PaymentModal.vue';
+import PaymentModal from '@/components/modals/PaymentModal.vue';
 import { toast } from 'vue-sonner';
 
 const router = useRouter();
