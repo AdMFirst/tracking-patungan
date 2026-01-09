@@ -10,9 +10,39 @@
         </PageHeader>
 
         <!-- Loading State -->
-        <div v-if="loading" class="flex flex-col items-center justify-center py-12">
-            <Spinner class="h-8 w-8 mb-4" />
-            <p class="text-gray-500">Loading payment methods...</p>
+        <div v-if="loading" class="space-y-4">
+            <!-- Payment Method Card Skeletons -->
+            <Card class="p-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center justify-between w-full">
+                            <Skeleton class="h-5 w-[80px]" />
+                            <Skeleton class="h-4 w-[120px]" />
+                        </div>
+                    </div>
+                    <Skeleton class="h-6 w-[200px] mx-auto" />
+                    <div class="flex gap-2 pt-2">
+                        <Skeleton class="h-8 flex-1" />
+                        <Skeleton class="h-8 flex-1" />
+                    </div>
+                </div>
+            </Card>
+
+            <Card class="p-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center justify-between w-full">
+                            <Skeleton class="h-5 w-[80px]" />
+                            <Skeleton class="h-4 w-[120px]" />
+                        </div>
+                    </div>
+                    <Skeleton class="h-6 w-[200px] mx-auto" />
+                    <div class="flex gap-2 pt-2">
+                        <Skeleton class="h-8 flex-1" />
+                        <Skeleton class="h-8 flex-1" />
+                    </div>
+                </div>
+            </Card>
         </div>
 
         <!-- Empty State -->
@@ -216,7 +246,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import Spinner from '@/components/ui/spinner/Spinner.vue';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
     Dialog,
     DialogContent,

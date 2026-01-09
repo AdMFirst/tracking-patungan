@@ -5,6 +5,7 @@ import router from '@/lib/router';
 import { user } from '@/lib/auth';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { queryClient } from './lib/supabaseClient';
+import Vue3Lottie from 'vue3-lottie'
 
 const app = createApp(App);
 
@@ -14,4 +15,5 @@ app.provide('user', user);
 
 app.use(router);
 app.use(VueQueryPlugin, { queryClient });
+app.use(Vue3Lottie);
 app.mount('#app');

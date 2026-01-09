@@ -3,10 +3,100 @@
         <div class="max-w-md mx-auto">
             <PageHeader title="Room Details" />
 
-            <div v-if="loading" class="text-center space-y-4">
-                <Skeleton class="h-6 w-[200px] mx-auto" />
-                <Skeleton class="h-4 w-[150px] mx-auto" />
-                <Skeleton class="h-4 w-[100px] mx-auto" />
+            <div v-if="loading" class="space-y-6">
+                <!-- Room Information Skeleton -->
+                <Card>
+                    <CardHeader class="p-4 pb-3">
+                        <div class="flex justify-between items-start">
+                            <Skeleton class="h-6 w-[200px]" />
+                            <Skeleton class="h-5 w-[80px]" />
+                        </div>
+                    </CardHeader>
+                    <CardContent class="p-4 pt-0 text-sm space-y-2">
+                        <div class="flex justify-between">
+                            <Skeleton class="h-4 w-[100px]" />
+                            <Skeleton class="h-4 w-[150px]" />
+                        </div>
+                        <div class="flex justify-between">
+                            <Skeleton class="h-4 w-[100px]" />
+                            <Skeleton class="h-4 w-[150px]" />
+                        </div>
+                        <div class="flex justify-between">
+                            <Skeleton class="h-4 w-[100px]" />
+                            <Skeleton class="h-4 w-[150px]" />
+                        </div>
+                        <Separator class="my-2" />
+                        <div class="flex justify-between pt-2">
+                            <Skeleton class="h-4 w-[100px]" />
+                            <Skeleton class="h-6 w-[120px]" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <!-- Participants List Skeleton -->
+                <Card>
+                    <CardHeader class="p-4">
+                        <Skeleton class="h-6 w-[150px]" />
+                    </CardHeader>
+                    <CardContent class="p-4 pt-0 text-sm space-y-4">
+                        <!-- Participant Card Skeletons -->
+                        <div class="space-y-3">
+                            <div class="p-4 border rounded-lg">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <Skeleton class="h-12 w-12 rounded-full" />
+                                        <div class="flex-1 min-w-0 space-y-2">
+                                            <Skeleton class="h-4 w-[150px]" />
+                                            <div class="flex items-center gap-2">
+                                                <Skeleton class="h-4 w-[80px]" />
+                                                <Skeleton class="h-3 w-[50px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Skeleton class="h-6 w-[60px]" />
+                                </div>
+                            </div>
+
+                            <div class="p-4 border rounded-lg">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <Skeleton class="h-12 w-12 rounded-full" />
+                                        <div class="flex-1 min-w-0 space-y-2">
+                                            <Skeleton class="h-4 w-[150px]" />
+                                            <div class="flex items-center gap-2">
+                                                <Skeleton class="h-4 w-[80px]" />
+                                                <Skeleton class="h-3 w-[50px]" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Skeleton class="h-6 w-[60px]" />
+                                </div>
+                            </div>
+
+                            <!-- Summary Card Skeleton -->
+                            <Card>
+                                <CardHeader class="pb-3">
+                                    <Skeleton class="h-5 w-[150px]" />
+                                </CardHeader>
+                                <CardContent class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <Skeleton class="h-4 w-[100px]" />
+                                        <Skeleton class="h-4 w-[80px]" />
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <Skeleton class="h-4 w-[100px]" />
+                                        <Skeleton class="h-4 w-[80px]" />
+                                    </div>
+                                    <Separator />
+                                    <div class="flex justify-between items-center">
+                                        <Skeleton class="h-4 w-[100px]" />
+                                        <Skeleton class="h-4 w-[80px]" />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
 
             <div v-else-if="!room" class="text-center py-8">

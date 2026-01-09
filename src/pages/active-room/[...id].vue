@@ -1,10 +1,49 @@
 <template>
     <div class="container mx-auto p-4">
         <!-- Loading state -->
-        <div v-if="loading" class="flex justify-center items-center h-screen">
-            <Spinner />
+        <div v-if="loading" class="space-y-6">
+            <!-- Skeleton Header -->
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex flex-row gap-2">
+                    <Skeleton class="h-8 w-8" />
+                    <Skeleton class="h-8 w-48" />
+                </div>
+                <Skeleton class="h-8 w-8" />
+            </div>
+            
+            <!-- Skeleton Restaurant Info -->
+            <Skeleton class="h-4 w-1/4" />
+            
+            <!-- Skeleton Separator -->
+            <Separator class="my-6" />
+            
+            <!-- Skeleton Cart Section -->
+            <div class="mb-6">
+                <Skeleton class="h-6 w-24 mb-4" />
+                
+                <!-- Skeleton Order Items -->
+                <div class="space-y-6">
+                    <div v-for="i in 2" :key="i" class="border rounded-lg p-4">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <Skeleton class="w-10 h-10 rounded-full" />
+                            <Skeleton class="h-4 w-32" />
+                        </div>
+                        <div class="text-sm space-y-3">
+                            <div v-for="j in 2" :key="j" class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <Skeleton class="h-4 w-48" />
+                                        <Skeleton class="h-4 w-16" />
+                                    </div>
+                                    <Skeleton class="h-3 w-32" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+         
         <!-- Error state -->
         <div v-else-if="error" class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
             <h2 class="text-xl font-semibold text-red-600 mb-2">Error</h2>
@@ -151,7 +190,7 @@
     />
     
     <!-- Floating Action Button -->
-    <FloatingButton v-if="room && isParticipant" @click="showAddItemModal = true" />
+    <FloatingButton v-if="room && isParticipant" v-show="!loading" @click="showAddItemModal = true" />
 
     <!-- Share Modal -->
     <Dialog v-model:open="showShareModal">
@@ -187,6 +226,7 @@ import {
 } from '@/lib/supabaseClient';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
+import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
 import { Share2, Edit2, Trash2 } from 'lucide-vue-next';
