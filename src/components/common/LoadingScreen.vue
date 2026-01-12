@@ -11,8 +11,11 @@
 import { ref, onMounted } from 'vue';
 import LoadingApplication from '@/assets/LoadingApplication.json';
 import { Vue3Lottie } from 'vue3-lottie';
+import { useI18n } from 'vue-i18n';
 
-const messages = Array.from({ length: 16 }, (_, i) => $t(`components.common.LoadingScreen.${i}`));
+const { t } = useI18n();
+
+const messages = Array.from({ length: 16 }, (_, i) => t(`components.common.LoadingScreen.${i}`));
 
 const loadingMessage = ref(messages[0]);
 

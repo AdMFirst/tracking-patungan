@@ -1,6 +1,6 @@
 /**
  * Instructions for AI machine:
- * Rule 1: Always use $t instead of importing useI18n
+ * Rule 1: prioritize the use $t in <template> and useI18n in <script setup>
  * Rule 2: Use the file path as prefix for i18n key (e.g., files in @/components/room/OrderRooms.vue is components.room.OrderRooms.whateverYouWantAfterwards)
  * Rule 3: Also use i18n on error messages and placeholder text
  * Rule 4: when the text is combined with date or currency, do it last then ask on how to proceed
@@ -37,7 +37,7 @@ const en = {
                 "home": "Home",
                 "histori": "Histori",
                 "create": "Create",
-                "myRoom": "My Room",
+                "my room": "My Room",
                 "profile": "Profile"
             },
             "LoadingScreen": {
@@ -63,6 +63,81 @@ const en = {
                 "connectedViaLinkedIn": "Connected via LinkedIn",
                 "emailPassword": "Email/Password",
                 "unknown": "Unknown"
+            }
+        },
+        "modals": {
+            "AddOrderItemModal": {
+                "title": "Add New Order Item",
+                "description": "Add a new item to your order for this room.",
+                "itemNameLabel": "Item Name",
+                "itemNamePlaceholder": "Enter item name",
+                "quantityLabel": "Quantity",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Unit Price",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Notes (optional)",
+                "notesPlaceholder": "Any special instructions",
+                "cancelButton": "Cancel",
+                "addItemButton": "Add Item"
+            },
+            "CloseRoomModal": {
+                "title": "Close Room",
+                "description": "Enter the final total for this room.",
+                "finalTotalLabel": "Final Total",
+                "finalTotalPlaceholder": "Enter final total...",
+                "cancelButton": "Cancel",
+                "deleteRoomButton": "Delete Room",
+                "submitButton": "Submit",
+                "deleteConfirmTitle": "Are you sure?",
+                "deleteConfirmDescription": "This action cannot be undone. All room data will be permanently deleted.",
+                "deleteCancelButton": "Cancel",
+                "deleteConfirmButton": "Delete"
+            },
+            "EditOrderItemModal": {
+                "title": "Edit Order Item",
+                "description": "Edit this order item.",
+                "itemNameLabel": "Item Name",
+                "itemNamePlaceholder": "Enter item name",
+                "quantityLabel": "Quantity",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Unit Price",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Notes (optional)",
+                "notesPlaceholder": "Any special instructions",
+                "cancelButton": "Cancel",
+                "updateItemButton": "Update Item"
+            },
+            "FilterModal": {
+                "title": "Filters",
+                "description": "Adjust your room search criteria.",
+                "searchLabel": "Search by title/name",
+                "searchPlaceholder": "Search rooms...",
+                "platformLabel": "Platform",
+                "platformPlaceholder": "All Platforms",
+                "restaurantLabel": "Restaurant (Specific)",
+                "restaurantPlaceholder": "Filter by specific restaurant...",
+                "dateFromLabel": "From Date",
+                "dateToLabel": "To Date",
+                "clearFiltersButton": "Clear Filters",
+                "applyFiltersButton": "Apply Filters"
+            },
+            "PaymentModal": {
+                "title": "Payment Method",
+                "description": "Select your payment method and confirm payment",
+                "availablePaymentMethods": "Available Payment Methods:",
+                "loadingPaymentMethods": "Loading payment methods...",
+                "noPaymentMethods": "No payment methods found for this runner.",
+                "confirmPaymentCheckbox": "I confirm that I have already paid for this order using the selected payment method",
+                "cancelButton": "Cancel",
+                "confirmPaymentButton": "Confirm Payment"
+            },
+            "SettingsModal": {
+                "title": "Settings",
+                "description": "Update your profile settings.",
+                "usernameLabel": "Username",
+                "usernamePlaceholder": "Enter your username...",
+                "cancelButton": "Cancel",
+                "saveChangesButton": "Save Changes"
             }
         }
     }

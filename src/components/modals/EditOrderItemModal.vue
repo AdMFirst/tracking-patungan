@@ -2,57 +2,57 @@
   <Dialog :open="isOpen" @update:open="handleDialogUpdate">
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Edit Order Item</DialogTitle>
+        <DialogTitle>{{ $t('components.modals.EditOrderItemModal.title') }}</DialogTitle>
         <DialogDescription>
-          Edit this order item.
+          {{ $t('components.modals.EditOrderItemModal.description') }}
         </DialogDescription>
       </DialogHeader>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="space-y-2">
-          <Label for="itemName">Item Name</Label>
+          <Label for="itemName">{{ $t('components.modals.EditOrderItemModal.itemNameLabel') }}</Label>
           <Input
             id="itemName"
             v-model="formData.itemName"
-            placeholder="Enter item name"
+            :placeholder="$t('components.modals.EditOrderItemModal.itemNamePlaceholder')"
             required
           />
         </div>
         <div class="space-y-2">
-          <Label for="quantity">Quantity</Label>
+          <Label for="quantity">{{ $t('components.modals.EditOrderItemModal.quantityLabel') }}</Label>
           <Input
             id="quantity"
             v-model.number="formData.quantity"
             type="number"
-            placeholder="1"
+            :placeholder="$t('components.modals.EditOrderItemModal.quantityPlaceholder')"
             min="1"
             required
           />
         </div>
         <div class="space-y-2">
-          <Label for="unitPrice">Unit Price</Label>
+          <Label for="unitPrice">{{ $t('components.modals.EditOrderItemModal.unitPriceLabel') }}</Label>
           <Input
             id="unitPrice"
             v-model.number="formData.unitPrice"
             type="number"
             step="0.01"
-            placeholder="0.00"
+            :placeholder="$t('components.modals.EditOrderItemModal.unitPricePlaceholder')"
             required
           />
         </div>
         <div class="space-y-2">
-          <Label for="notes">Notes (optional)</Label>
+          <Label for="notes">{{ $t('components.modals.EditOrderItemModal.notesLabel') }}</Label>
           <Input
             id="notes"
             v-model="formData.notes"
-            placeholder="Any special instructions"
+            :placeholder="$t('components.modals.EditOrderItemModal.notesPlaceholder')"
           />
         </div>
         <DialogFooter>
           <Button type="button" variant="outline" @click="handleCancel">
-            Cancel
+            {{ $t('components.modals.EditOrderItemModal.cancelButton') }}
           </Button>
           <Button type="submit">
-            Update Item
+            {{ $t('components.modals.EditOrderItemModal.updateItemButton') }}
           </Button>
         </DialogFooter>
       </form>
@@ -66,6 +66,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   isOpen: {

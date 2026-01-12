@@ -162,6 +162,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { supabase } from '../../lib/supabaseClient';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const isLogin = ref(true);
 const loading = ref(false);
@@ -211,7 +214,7 @@ const handleSubmit = async () => {
             console.log('Sign up successful:', data);
         }
     } catch (err) {
-        error.value = err.message || $t('components.auth.AuthForm.genericError');
+        error.value = err.message || t('components.auth.AuthForm.genericError');
     } finally {
         loading.value = false;
     }
@@ -236,7 +239,7 @@ const handleDiscordLogin = async () => {
     } catch (err) {
         error.value =
             err.message ||
-            $t('components.auth.AuthForm.discordLoginError');
+            t('components.auth.AuthForm.discordLoginError');
     } finally {
         loading.value = false;
     }
@@ -261,7 +264,7 @@ const handleLinkedInLogin = async () => {
     } catch (err) {
         error.value =
             err.message ||
-            $t('components.auth.AuthForm.linkedInLoginError');
+            t('components.auth.AuthForm.linkedInLoginError');
     } finally {
         loading.value = false;
     }

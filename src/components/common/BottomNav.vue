@@ -3,9 +3,11 @@ import { useRouter, useRoute } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import { navItems } from '@/lib/router'; // { icon: lucide icon, label: 'Page Name', route: '/route' },
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 function navigateTo(route) {
     router.push(route);
@@ -32,7 +34,7 @@ const shouldShowNav = computed(() => {
 const i18nNavItems = computed(() => {
     return navItems.map((item) => ({
         ...item,
-        label: $t(`components.common.BottomNav.${item.label.toLowerCase()}`)
+        label: t(`components.common.BottomNav.${item.label.toLowerCase()}`)
     }))
 });
 </script>

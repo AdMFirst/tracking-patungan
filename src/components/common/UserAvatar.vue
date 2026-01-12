@@ -7,6 +7,9 @@ import Badge from '@/components/ui/badge/Badge.vue';
 import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
     userMetadata: Object,
@@ -50,7 +53,7 @@ const fallbackInitial = computed(() => {
                     {{ props.userMetadata.email }}
                 </CardDescription>
                 <Badge variant="secondary" class="mt-1"
-                    >{{ $t('components.common.UserAvatar.connectedViaDiscord') }}</Badge
+                    >{{ t('components.common.UserAvatar.connectedViaDiscord') }}</Badge
                 >
             </div>
         </div>
@@ -75,7 +78,7 @@ const fallbackInitial = computed(() => {
                     {{ props.userMetadata.email }}
                 </CardDescription>
                 <Badge variant="secondary" class="mt-1"
-                    >{{ $t('components.common.UserAvatar.connectedViaLinkedIn') }}</Badge
+                    >{{ t('components.common.UserAvatar.connectedViaLinkedIn') }}</Badge
                 >
             </div>
         </div>
@@ -95,13 +98,13 @@ const fallbackInitial = computed(() => {
                     {{
                         props.userMetadata?.full_name ||
                         props.userMetadata?.name ||
-                        $t('components.common.UserAvatar.unknown')
+                        t('components.common.UserAvatar.unknown')
                     }}
                 </CardTitle>
                 <CardDescription class="text-sm text-muted-foreground">
                     {{ props.userMetadata.email }}
                 </CardDescription>
-                <Badge variant="secondary" class="mt-1">{{ $t('components.common.UserAvatar.emailPassword') }}</Badge>
+                <Badge variant="secondary" class="mt-1">{{ t('components.common.UserAvatar.emailPassword') }}</Badge>
             </div>
         </div>
     </CardHeader>
