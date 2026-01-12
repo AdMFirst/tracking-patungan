@@ -17,12 +17,12 @@ import QRScanner from '@/components/qr/QRScanner.vue';
   <Dialog>
     <DialogTrigger as-child>
       <Button variant="outline" class="w-full">
-        Scan QR
+        {{ $t('components.room.QRScanDialog.scanQRButton') }}
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-md">
       <DialogHeader>
-        <DialogTitle>Join a room by scanning qr code</DialogTitle>
+        <DialogTitle>{{ $t('components.room.QRScanDialog.title') }}</DialogTitle>
       </DialogHeader>
       <div class="flex items-center gap-2">
         <QRScanner />
@@ -30,7 +30,7 @@ import QRScanner from '@/components/qr/QRScanner.vue';
       <DialogFooter class="sm:justify-start">
         <DialogClose as-child>
           <Button type="button" variant="secondary">
-            Close
+            {{ $t('components.room.QRScanDialog.closeButton') }}
           </Button>
         </DialogClose>
       </DialogFooter>

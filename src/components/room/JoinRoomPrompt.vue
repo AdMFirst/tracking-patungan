@@ -1,19 +1,19 @@
 <template>
     <div class="text-center p-6 bg-gray-50 rounded-lg border">
-        <h2 class="text-xl font-semibold mb-4">You're not participating in this room</h2>
+        <h2 class="text-xl font-semibold mb-4">{{ $t('components.room.JoinRoomPrompt.title') }}</h2>
         <p class="text-gray-600 mb-6">
-            This room exists but you haven't joined it yet. Would you like to join and participate in the order?
+            {{ $t('components.room.JoinRoomPrompt.description') }}
         </p>
         <div class="flex justify-center gap-4">
             <Button variant="outline" @click="cancel">
-                No, go back
+                {{ $t('components.room.JoinRoomPrompt.noButton') }}
             </Button>
             <Button @click="joinRoom" :disabled="loading">
                 <span v-if="loading" class="flex items-center">
                     <Spinner class="mr-2 h-4 w-4" />
-                    Joining...
+                    {{ $t('components.room.JoinRoomPrompt.joining') }}
                 </span>
-                <span v-else>Yes, join room</span>
+                <span v-else>{{ $t('components.room.JoinRoomPrompt.yesButton') }}</span>
             </Button>
         </div>
     </div>

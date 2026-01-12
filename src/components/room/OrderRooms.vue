@@ -7,38 +7,38 @@
         <CardHeader class="p-4 pb-1">
             <div class="flex justify-between items-start">
                 <CardTitle class="font-semibold text-lg">
-                    {{ room.title || 'Untitled Room' }}
+                    {{ room.title || $t('components.room.OrderRooms.untitledRoom') }}
                 </CardTitle>
                 <Badge variant="secondary">
-                    {{ room.platform || 'Unknown' }}
+                    {{ room.platform || $t('components.room.OrderRooms.unknown') }}
                 </Badge>
             </div>
         </CardHeader>
 
         <CardContent class="p-4 pt-0 text-sm space-y-2">
             <div class="flex justify-between">
-                <span class="text-muted-foreground">Runner:</span>
+                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.runnerLabel') }}</span>
                 <span>{{
-                    room.runner_name || room.runner_full_name || 'Not specified'
+                    room.runner_name || room.runner_full_name || $t('components.room.OrderRooms.notSpecified')
                 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">Restaurant:</span>
-                <span>{{ room.restaurant || 'Not specified' }}</span>
+                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.restaurantLabel') }}</span>
+                <span>{{ room.restaurant || $t('components.room.OrderRooms.notSpecified') }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">Created at:</span>
+                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.createdAtLabel') }}</span>
                 <span>{{
                     formatDate(room.room_created_at) ||
                     room.room_created_at ||
-                    'Not specified'
+                    $t('components.room.OrderRooms.notSpecified')
                 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">Items Ordered:</span>
+                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.itemsOrderedLabel') }}</span>
             </div>
 
             <Separator class="my-2" />
@@ -70,7 +70,7 @@
                 v-if="!!room.final_total"
             >
                 <span class="text-muted-foreground font-medium"
-                    >Your total:</span
+                    >{{ $t('components.room.OrderRooms.yourTotal') }}</span
                 >
 
                 <div class="text-right">
@@ -101,7 +101,7 @@
                     <span
                         class="text-lg font-bold text-green-600 dark:text-green-400"
                     >
-                        Room is still open!
+                        {{ $t('components.room.OrderRooms.roomStillOpen') }}
                     </span>
                 </div>
                 <Button
@@ -109,7 +109,7 @@
                     class="w-full"
                     @click.stop="handleOpenRoom(room)"
                 >
-                    Open Room
+                    {{ $t('components.room.OrderRooms.openRoomButton') }}
                 </Button>
             </div>
             <div
@@ -121,14 +121,14 @@
                     class="w-full"
                     @click.stop="handlePayment(room)"
                 >
-                    Pay Now
+                    {{ $t('components.room.OrderRooms.payNowButton') }}
                 </Button>
             </div>
             <div
                 v-else-if="room.user_items.length > 0 && room.paid_at"
                 class="pt-4"
             >
-                <Button variant="outline" class="w-full" disabled>
+                <Button variant="outline" class="w-full h-auto whitespace-normal" disabled>
                     {{ paymentStatus(room) }}
                 </Button>
             </div>
@@ -157,8 +157,10 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import PaymentModal from '@/components/modals/PaymentModal.vue';
 import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
+const { t } = useI18n();
 
 const props = defineProps({
     rooms: Object, // <- this is rooms.value exactly as fetched
@@ -188,10 +190,11 @@ function totalOriginalPay(items) {
 }
 
 function paymentStatus(room) {
-    const basic = `Paid at ${formatDate(room.paid_at)}`
-    return room.paid_via 
-        ? `${basic} via ${room.paid_via}` 
-        : basic;
+    const date = formatDate(room.paid_at);
+    if (room.paid_via) {
+        return t('components.room.OrderRooms.paidAtVia', { date, method: room.paid_via });
+    }
+    return t('components.room.OrderRooms.paidAt', { date });
 }
 
 function handleOpenRoom(room) {
@@ -225,7 +228,7 @@ async function handlePaymentConfirmed(paymentData) {
         );
 
         console.log('Payment confirmed:', paymentData);
-        toast.success(`Payment confirmed for ${formatCurrency(paymentData.amount)} using selected payment method. Room has been marked as paid.`);
+        toast.success(t('components.room.OrderRooms.paymentConfirmed', { amount: formatCurrency(paymentData.amount) }));
         
         // Close the payment modal
         showPaymentModal.value = false;
@@ -233,7 +236,7 @@ async function handlePaymentConfirmed(paymentData) {
         
     } catch (error) {
         console.error('Error confirming payment:', error);
-        toast.error(`Failed to confirm payment: ${error.message}`);
+        toast.error(t('components.room.OrderRooms.paymentFailed', { error: error.message }));
     }
 }
 </script>

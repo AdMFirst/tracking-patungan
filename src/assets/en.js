@@ -65,6 +65,47 @@ const en = {
                 "unknown": "Unknown"
             }
         },
+        "qr": {
+            "QRScanner": {
+                "alignQRCode": "Align QR code within frame",
+                "statusLabel": "Status",
+                "activeStatus": "Active",
+                "pausedStatus": "Paused",
+                "startButton": "Start",
+                "stopButton": "Stop"
+            }
+        },
+        "room": {
+            "JoinRoomPrompt": {
+                "title": "You're not participating in this room",
+                "description": "This room exists but you haven't joined it yet. Would you like to join and participate in the order?",
+                "noButton": "No, go back",
+                "yesButton": "Yes, join room",
+                "joining": "Joining..."
+            },
+            "OrderRooms": {
+                "untitledRoom": "Untitled Room",
+                "unknown": "Unknown",
+                "notSpecified": "Not specified",
+                "roomStillOpen": "Room is still open!",
+                "openRoomButton": "Open Room",
+                "payNowButton": "Pay Now",
+                "yourTotal": "Your total:",
+                "runnerLabel": "Runner:",
+                "restaurantLabel": "Restaurant:",
+                "createdAtLabel": "Created at:",
+                "itemsOrderedLabel": "Items Ordered:",
+                "paidAt": "Paid at {date}",
+                "paidAtVia": "Paid at {date} via {method}",
+                "paymentConfirmed": "Payment confirmed for {amount} using selected payment method. Room has been marked as paid.",
+                "paymentFailed": "Failed to confirm payment: {error}"
+            },
+            "QRScanDialog": {
+                "scanQRButton": "Scan QR",
+                "title": "Join a room by scanning qr code",
+                "closeButton": "Close"
+            }
+        },
         "modals": {
             "AddOrderItemModal": {
                 "title": "Add New Order Item",
