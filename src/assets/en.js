@@ -180,6 +180,23 @@ const en = {
                 "cancelButton": "Cancel",
                 "saveChangesButton": "Save Changes"
             }
+        },
+        "UserInfo": {
+            "welcomeBack": "Welcome back!",
+            "accountInfo": "Your account information",
+            "connectedViaDiscord": "Connected via Discord",
+            "connectedViaLinkedIn": "Connected via LinkedIn",
+            "defaultUser": "User",
+            "memberSince": "Member since",
+            "lastSignIn": "Last sign in",
+            "accountStatus": "Account status",
+            "activeStatus": "Active",
+            "provider": "Provider",
+            "discord": "Discord",
+            "linkedIn": "LinkedIn",
+            "noUserInfo": "No user information available",
+            "signingOut": "Signing out...",
+            "signOut": "Sign Out"
         }
     }
 };

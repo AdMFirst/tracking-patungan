@@ -160,7 +160,7 @@ import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, d } = useI18n();
 
 const props = defineProps({
     rooms: Object, // <- this is rooms.value exactly as fetched
@@ -171,15 +171,13 @@ const showPaymentModal = ref(false);
 const selectedRoom = ref(null);
 
 const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = {
+    return d(new Date(dateString), {
         day: '2-digit',
         month: 'short',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-    };
-    return date.toLocaleDateString('id-ID', options);
+    });
 };
 
 function totalOriginalPay(items) {
