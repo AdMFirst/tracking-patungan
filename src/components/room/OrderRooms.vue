@@ -51,7 +51,7 @@
                 <div class="flex justify-between">
                     <span class="text-muted-foreground">
                         {{ item.item_name }} x {{ item.quantity }} @
-                        {{ formatCurrency(item.unit_price) }} each
+                        {{ formatCurrency(item.unit_price) }} {{ $t('components.room.OrderRooms.each') }}
                     </span>
                     <span>{{
                         formatCurrency(item.unit_price * item.quantity)

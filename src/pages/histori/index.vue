@@ -2,7 +2,7 @@
     <div class="min-h-screen p-4 pb-20">
         <div class="max-w-md mx-auto">
             <div class="text-center py-0 mb-6">
-                <h1 class="text-2xl font-bold">Joined Room History</h1>
+                <h1 class="text-2xl font-bold">{{ t('pages.histori.title') }}</h1>
             </div>
 
             <!-- Tab Navigation -->
@@ -16,7 +16,7 @@
                             : 'text-muted-foreground hover:text-foreground'
                     ]"
                 >
-                    Active ({{ activeRooms.length }})
+                    {{ t('pages.histori.tabs.active') }} ({{ activeRooms.length }})
                 </button>
                 <button
                     @click="activeTab = 'closed'"
@@ -27,7 +27,7 @@
                             : 'text-muted-foreground hover:text-foreground'
                     ]"
                 >
-                    Closed ({{ closedRooms.length }})
+                    {{ t('pages.histori.tabs.closed') }} ({{ closedRooms.length }})
                 </button>
             </div>
 
@@ -42,10 +42,10 @@
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
                 <h3 class="text-lg font-semibold mb-2">
-                    No {{ activeTab === 'active' ? 'active' : 'closed' }} rooms found
+                    {{ activeTab === 'active' ? t('pages.histori.emptyState.activeTitle') : t('pages.histori.emptyState.closedTitle') }}
                 </h3>
                 <p class="text-sm text-muted-foreground">
-                    You haven't participated in any {{ activeTab === 'active' ? 'active' : 'closed' }} rooms yet.
+                    {{ activeTab === 'active' ? t('pages.histori.emptyState.activeDescription') : t('pages.histori.emptyState.closedDescription') }}
                 </p>
             </div>
 
@@ -58,6 +58,7 @@
 
 <script setup>
 import { ref, onMounted, watch, inject, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 // ICON IMPORTS (Reduced list)
 import { Home } from 'lucide-vue-next';
@@ -67,6 +68,7 @@ import { fetchJoinedRooms } from '../../lib/supabaseClient';
 import OrderRooms from '@/components/room/OrderRooms.vue';
 import OrderRoomSkeleton from '@/components/room/OrderRoomSkeleton.vue';
 
+const { t } = useI18n();
 const user = inject('user');
 
 // State

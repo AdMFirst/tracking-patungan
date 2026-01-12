@@ -95,6 +95,7 @@ const en = {
                 "restaurantLabel": "Restaurant:",
                 "createdAtLabel": "Created at:",
                 "itemsOrderedLabel": "Items Ordered:",
+                "each": "each",
                 "paidAt": "Paid at {date}",
                 "paidAtVia": "Paid at {date} via {method}",
                 "paymentConfirmed": "Payment confirmed for {amount} using selected payment method. Room has been marked as paid.",
@@ -197,6 +198,63 @@ const en = {
             "noUserInfo": "No user information available",
             "signingOut": "Signing out...",
             "signOut": "Sign Out"
+        }
+    },
+    "pages": {
+        "activeRoom": {
+            "errorTitle": "Error",
+            "goBack": "Go Back",
+            "roomNotAvailableTitle": "Room Not Available",
+            "roomNotAvailableDescription": "{roomId} is invalid or not active",
+            "thisRoom": "This Room",
+            "restaurantInfo": "{restaurant} via {platform}",
+            "cartTitle": "Cart",
+            "unknownUser": "Unknown User",
+            "each": "each",
+            "noOrderItems": "No order items yet.",
+            "shareRoomTitle": "Share Room",
+            "shareRoomDescription": "Scan the QR code to share this room with others.",
+            "close": "Close",
+            "errors": {
+                "loginToJoin": "You need to be logged in to join this room",
+                "joinFailed": "Failed to join room. Please try again.",
+                "participantRequired": "You need to be a participant to add items",
+                "addFailed": "Failed to add order item. Please try again.",
+                "notParticipant": "You are not a participant in this room.",
+                "editOwnItems": "You can only edit your own items",
+                "loginToUpdate": "You need to be logged in to update order items",
+                "updateFailed": "Failed to update order item.",
+                "loginToDelete": "You need to be logged in to delete order items",
+                "deleteOwnItems": "You can only delete your own items",
+                "deleteFailed": "Failed to delete order item.",
+                "invalidUuid": "Invalid room ID format. Please use a valid UUID.",
+                "loadDetailsFailed": "Failed to load room details.",
+                "roomNotFound": "Room not found. Please check the room ID.",
+                "roomClosed": "This room is closed. Only active rooms can be accessed.",
+                "loadParticipantsFailed": "Failed to load participants.",
+                "loadItemsFailed": "Failed to load order items.",
+                "checkParticipationFailed": "Failed to check your participation status.",
+                "loadDataFailed": "Failed to load room data.",
+                "generateQrFailed": "Failed to generate QR code."
+            },
+            "toast": {
+                "deleteConfirm": "Delete this order item?",
+                "delete": "Delete",
+                "cancel": "Cancel"
+            }
+        },
+        "histori": {
+            "title": "Joined Room History",
+            "tabs": {
+                "active": "Active",
+                "closed": "Closed"
+            },
+            "emptyState": {
+                "activeTitle": "No active rooms found",
+                "closedTitle": "No closed rooms found",
+                "activeDescription": "You haven't participated in any active rooms yet.",
+                "closedDescription": "You haven't participated in any closed rooms yet."
+            }
         }
     }
 };
