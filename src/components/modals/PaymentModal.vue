@@ -153,7 +153,6 @@ const handleConfirmPayment = () => {
         amount: props.room.final_total
     })
 
-    handleClose()
 }
 
 const handleClose = () => {

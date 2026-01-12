@@ -171,17 +171,6 @@
                         />
                     </div>
 
-                    <div class="grid gap-2">
-                        <Label for="accountName"
-                            >Account Holder Name (Optional)</Label
-                        >
-                        <Input
-                            id="accountName"
-                            v-model="formData.account_name"
-                            placeholder="Enter account holder name"
-                        />
-                    </div>
-
                     <DialogFooter>
                         <Button
                             type="button"
@@ -281,7 +270,6 @@ const formData = ref({
     tipe: '',
     norek: '',
     bank_name: '',
-    account_name: '',
 });
 
 // Fetch payment methods
@@ -318,14 +306,12 @@ function openAddDialog() {
         tipe: '',
         norek: '',
         bank_name: '',
-        account_name: '',
     };
     isDialogOpen.value = true;
 }
 
 function badgeClassByType(tipe) {
     const badgeMap = {
-        'bank transfer': 'bg-blue-100 text-blue-700 border border-blue-200',
         'gopay': 'bg-green-100 text-green-700 border border-green-200',
         'ovo': 'bg-purple-100 text-purple-700 border border-purple-200',
         'dana': 'bg-sky-100 text-sky-700 border border-sky-200',
@@ -346,11 +332,15 @@ function badgeClassByType(tipe) {
 // Open edit dialog
 function openEditDialog(method) {
     editingMethod.value = method;
+    
+    // Determine if this is a bank transfer (any value not in our predefined list)
+    const predefinedTypes = ['GoPay', 'OVO', 'Dana', 'ShopeePay'];
+    const isBankTransfer = !predefinedTypes.includes(method.tipe);
+    
     formData.value = {
-        tipe: method.tipe,
+        tipe: isBankTransfer ? 'Bank Transfer' : method.tipe,
         norek: method.norek,
-        bank_name: method.bank_name || '',
-        account_name: method.account_name || '',
+        bank_name: isBankTransfer ? method.tipe : '',
     };
     isDialogOpen.value = true;
 }
@@ -369,20 +359,10 @@ async function handleSubmit() {
     if (!user) return;
 
     const payload = {
-        tipe: formData.value.tipe,
+        tipe: formData.value.tipe === 'Bank Transfer' ? formData.value.bank_name : formData.value.tipe,
         norek: formData.value.norek,
         user_id: user.id,
     };
-
-    // Add bank_name if it's a bank transfer
-    if (formData.value.tipe === 'Bank Transfer') {
-        payload.bank_name = formData.value.bank_name;
-    }
-
-    // Add account_name if provided
-    if (formData.value.account_name) {
-        payload.account_name = formData.value.account_name;
-    }
 
     try {
         if (editingMethod.value) {

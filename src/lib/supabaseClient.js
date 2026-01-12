@@ -635,3 +635,62 @@ export async function fetchRoomWithParticipants(roomID) {
         return null;
     }
 }
+
+/**
+ * Handle payment confirmation for a room participant
+ *
+ * @param {string} roomID - The ID of the room
+ * @param {string} paymentMethodID - The ID of the payment method used
+ * @param {string} userID - The ID of the user confirming payment
+ * @returns {Promise<Object>} Updated participant record with payment information
+ *
+ * @example
+ * const updatedParticipant = await handlePaymentConfirmed('room-123', 'payment-method-456', 'user-789');
+ *
+ * @usedIn
+ * - src/components/room/OrderRooms.vue - Payment confirmation handling
+ *
+ * @cacheInvalidation ['joinedRooms', 'roomDetails'] - Clears relevant caches after payment confirmation
+ * @mutationBenefit Ensures paid status is reflected immediately across the app
+ */
+export async function setParticipantAsPaid(roomID, paymentMethodID, userID) {
+    try {
+        // First, verify the user is a participant in this room
+        const { data: participant, error: participantError } = await supabase
+            .from('room_participants')
+            .select('id')
+            .eq('room_id', roomID)
+            .eq('user_id', userID)
+            .single();
+
+        if (participantError) {
+            console.error('Error finding participant:', participantError);
+            throw new Error('Participant not found in this room');
+        }
+
+        // Update the participant record with payment information
+        const { data: updatedParticipant, error: updateError } = await supabase
+            .from('room_participants')
+            .update({
+                paid_at: new Date().toISOString(),
+                paid_via: paymentMethodID
+            })
+            .eq('id', participant.id)
+            .select()
+            .single();
+
+        if (updateError) {
+            console.error('Error updating payment status:', updateError);
+            throw updateError;
+        }
+
+        // Invalidate relevant caches after payment confirmation
+        queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
+        queryClient.invalidateQueries({ queryKey: ['roomDetails', roomID] });
+
+        return updatedParticipant;
+    } catch (error) {
+        console.error('Error in handlePaymentConfirmed:', error);
+        throw error;
+    }
+}

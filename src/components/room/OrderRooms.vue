@@ -146,6 +146,7 @@
 
 <script setup>
 import { formatCurrency } from '@/lib/utils';
+import { supabase, setParticipantAsPaid } from '@/lib/supabaseClient';
 
 // SHADCN/UI COMPONENTS IMPORTS (Reduced list)
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -207,15 +208,32 @@ function handlePayment(room) {
     showPaymentModal.value = true;
 }
 
-function handlePaymentConfirmed(paymentData) {
-    console.log('Payment confirmed:', paymentData);
-    // Here you would typically update the database to mark the room as paid
-    // For now, we'll just show a toast notification
-    toast.success(`Payment confirmed for ${paymentData.amount} using selected payment method. Room will be marked as paid.`);
-    
-    // In a real implementation, you would:
-    // 1. Update the room_participants table with paid_at and paid_via
-    // 2. Update the room status if needed
-    // 3. Refresh the data to show the paid status
+async function handlePaymentConfirmed(paymentData) {
+    try {
+        // Get the current user's ID
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        
+        if (authError || !user) {
+            throw new Error('User not authenticated');
+        }
+
+        // Call the handlePaymentConfirmed function from supabaseClient
+        await setParticipantAsPaid(
+            paymentData.roomId,
+            paymentData.paymentMethodId,
+            user.id
+        );
+
+        console.log('Payment confirmed:', paymentData);
+        toast.success(`Payment confirmed for ${formatCurrency(paymentData.amount)} using selected payment method. Room has been marked as paid.`);
+        
+        // Close the payment modal
+        showPaymentModal.value = false;
+        selectedRoom.value = null;
+        
+    } catch (error) {
+        console.error('Error confirming payment:', error);
+        toast.error(`Failed to confirm payment: ${error.message}`);
+    }
 }
 </script>
