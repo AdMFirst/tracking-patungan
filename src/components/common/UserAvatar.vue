@@ -50,7 +50,7 @@ const fallbackInitial = computed(() => {
                     {{ props.userMetadata.email }}
                 </CardDescription>
                 <Badge variant="secondary" class="mt-1"
-                    >Connected via Discord</Badge
+                    >{{ $t('components.common.UserAvatar.connectedViaDiscord') }}</Badge
                 >
             </div>
         </div>
@@ -75,7 +75,7 @@ const fallbackInitial = computed(() => {
                     {{ props.userMetadata.email }}
                 </CardDescription>
                 <Badge variant="secondary" class="mt-1"
-                    >Connected via LinkedIn</Badge
+                    >{{ $t('components.common.UserAvatar.connectedViaLinkedIn') }}</Badge
                 >
             </div>
         </div>
@@ -95,13 +95,13 @@ const fallbackInitial = computed(() => {
                     {{
                         props.userMetadata?.full_name ||
                         props.userMetadata?.name ||
-                        'Unknown'
+                        $t('components.common.UserAvatar.unknown')
                     }}
                 </CardTitle>
                 <CardDescription class="text-sm text-muted-foreground">
                     {{ props.userMetadata.email }}
                 </CardDescription>
-                <Badge variant="secondary" class="mt-1">Email/Password</Badge>
+                <Badge variant="secondary" class="mt-1">{{ $t('components.common.UserAvatar.emailPassword') }}</Badge>
             </div>
         </div>
     </CardHeader>

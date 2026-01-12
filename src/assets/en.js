@@ -31,6 +31,39 @@ const en = {
                 "discordLoginError": "Failed to initiate Discord login. Please try again.",
                 "linkedInLoginError": "Failed to initiate LinkedIn login. Please try again."
             }
+        },
+        "common": {
+            "BottomNav": {
+                "home": "Home",
+                "histori": "Histori",
+                "create": "Create",
+                "myRoom": "My Room",
+                "profile": "Profile"
+            },
+            "LoadingScreen": {
+                "0": "Delivering your dashboard...",
+                "1": "Preparing your workspace...",
+                "2": "Scanning your transactions...",
+                "3": "Balancing the books securely...",
+                "4": "Verifying payment details...",
+                "5": "Tracking your funds flow...",
+                "6": "Calculating your totals...",
+                "7": "Securing your financial data...",
+                "8": "Updating your balance...",
+                "9": "Confirming recent payments...",
+                "10": "Analyzing spending patterns...",
+                "11": "Syncing bank connections...",
+                "12": "Generating your reports...",
+                "13": "Locking down your ledger...",
+                "14": "Forecasting your cash flow...",
+                "15": "Finalizing transaction history...",
+            },
+            "UserAvatar": {
+                "connectedViaDiscord": "Connected via Discord",
+                "connectedViaLinkedIn": "Connected via LinkedIn",
+                "emailPassword": "Email/Password",
+                "unknown": "Unknown"
+            }
         }
     }
 };
