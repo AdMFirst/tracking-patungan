@@ -1,0 +1,6 @@
+# Talangin
+
+> Group Food Delivery Made Easy
+
+- [Docs](https://talangin.web.id/)
+- [App](https://app.talangin.web.id/)
