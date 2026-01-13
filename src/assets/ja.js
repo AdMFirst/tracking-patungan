@@ -353,6 +353,12 @@ const ja = {
                 "noUserInfo": "ユーザー情報がありません",
                 "changeUsername": "ユーザー名を変更",
                 "managePaymentMethods": "支払い方法を管理",
+                "changeLanguage": "言語を変更",
+                "selectPreferredLanguage": "希望の言語を選択してください",
+                "language": "言語",
+                "selectLanguage": "言語を選択",
+                "save": "保存",
+                "cancel": "キャンセル",
                 "signingOut": "サインアウト中...",
                 "signOut": "サインアウト"
             },

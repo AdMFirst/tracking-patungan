@@ -353,6 +353,12 @@ const jv = {
                 "noUserInfo": "Mboten wonten informasi pangguna",
                 "changeUsername": "Gantos Jeneng Pangguna",
                 "managePaymentMethods": "Atur Metode Pambayaran",
+                "changeLanguage": "Gantos Basa",
+                "selectPreferredLanguage": "Pilih basa ingkang panjenengan ingkang",
+                "language": "Basa",
+                "selectLanguage": "Pilih Basa",
+                "save": "Simpen",
+                "cancel": "Batal",
                 "signingOut": "Metu...",
                 "signOut": "Metu"
             },

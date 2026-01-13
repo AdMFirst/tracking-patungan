@@ -60,11 +60,18 @@
             </Card>
 
             <Button @click="openSettingsModal" class="w-full mb-4">
+                <User class="mr-2 h-4 w-4" />
                 {{ $t('pages.profile.index.changeUsername') }}
             </Button>
 
             <Button @click="navigateToMyPayment" class="w-full mb-4">
+                <CreditCard class="mr-2 h-4 w-4" />
                 {{ $t('pages.profile.index.managePaymentMethods') }}
+            </Button>
+
+            <Button @click="openLanguageModal" class="w-full mb-4">
+                <Languages class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeLanguage') }}
             </Button>
 
             <Button
@@ -73,8 +80,14 @@
                 variant="destructive"
                 class="w-full"
             >
-                <template v-if="loading">{{ $t('pages.profile.index.signingOut') }}</template>
-                <template v-else>{{ $t('pages.profile.index.signOut') }}</template>
+                <template v-if="loading">
+                    <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+                    {{ $t('pages.profile.index.signingOut') }}
+                </template>
+                <template v-else>
+                    <LogOut class="mr-2 h-4 w-4" />
+                    {{ $t('pages.profile.index.signOut') }}
+                </template>
             </Button>
         </div>
 
@@ -83,6 +96,11 @@
             @update:open="isSettingsModalOpen = $event"
             :user="userData"
             @save="handleSaveSettings"
+        />
+
+        <LanguageModal
+            :open="isLanguageModalOpen"
+            @update:open="isLanguageModalOpen = $event"
         />
     </div>
 </template>
@@ -97,8 +115,12 @@ import { useI18n } from 'vue-i18n';
 import { ref, inject, computed } from 'vue';
 import UserAvatar from '@/components/common/UserAvatar.vue';
 import SettingsModal from '@/components/modals/SettingsModal.vue';
+import LanguageModal from '@/components/modals/LanguageModal.vue';
 import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
+
+// Import icons from lucide-vue-next
+import { User, CreditCard, Languages, LogOut, Loader2 } from 'lucide-vue-next';
 
 const { t } = useI18n();
 const user = inject('user');
@@ -106,6 +128,7 @@ const router = useRouter();
 
 const loading = ref(false);
 const isSettingsModalOpen = ref(false);
+const isLanguageModalOpen = ref(false);
 
 // User data for the settings modal
 const userData = computed(() => ({
@@ -130,6 +153,10 @@ const navigateToMyPayment = () => {
 
 const openSettingsModal = () => {
     isSettingsModalOpen.value = true;
+};
+
+const openLanguageModal = () => {
+    isLanguageModalOpen.value = true;
 };
 
 const handleSaveSettings = async (updatedUser) => {

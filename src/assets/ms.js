@@ -353,6 +353,12 @@ const ms = {
                 "noUserInfo": "Tiada maklumat pengguna",
                 "changeUsername": "Tukar Nama Pengguna",
                 "managePaymentMethods": "Urus Kaedah Pembayaran",
+                "changeLanguage": "Tukar Bahasa",
+                "selectPreferredLanguage": "Pilih bahasa kegemaran anda",
+                "language": "Bahasa",
+                "selectLanguage": "Pilih Bahasa",
+                "save": "Simpan",
+                "cancel": "Batal",
                 "signingOut": "Log keluar...",
                 "signOut": "Log Keluar"
             },

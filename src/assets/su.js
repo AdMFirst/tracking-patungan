@@ -353,6 +353,12 @@ const su = {
                 "noUserInfo": "Teu aya informasi pamake",
                 "changeUsername": "Gantos Nami Pamake",
                 "managePaymentMethods": "Atur Metode Pamayaran",
+                "changeLanguage": "Ganti Basa",
+                "selectPreferredLanguage": "Pilih basa nu anjeun suka",
+                "language": "Basa",
+                "selectLanguage": "Pilih Basa",
+                "save": "Simpen",
+                "cancel": "Batal",
                 "signingOut": "Kaluar...",
                 "signOut": "Kaluar"
             },

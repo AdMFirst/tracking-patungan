@@ -353,6 +353,12 @@ const min = {
                 "noUserInfo": "Indak ado informasi pangguno",
                 "changeUsername": "Ganti Namo Pangguno",
                 "managePaymentMethods": "Atur Metode Pambayaran",
+                "changeLanguage": "Ganti Basa",
+                "selectPreferredLanguage": "Pilih baso nan Sanak suka",
+                "language": "Baso",
+                "selectLanguage": "Pilih Basa",
+                "save": "Simpan",
+                "cancel": "Batal",
                 "signingOut": "Kaluar...",
                 "signOut": "Kaluar"
             },

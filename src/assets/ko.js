@@ -353,6 +353,12 @@ const ko = {
                 "noUserInfo": "사용자 정보 없음",
                 "changeUsername": "사용자 이름 변경",
                 "managePaymentMethods": "결제 수단 관리",
+                "changeLanguage": "언어 변경",
+                "selectPreferredLanguage": "선호하는 언어를 선택하세요",
+                "language": "언어",
+                "selectLanguage": "언어 선택",
+                "save": "저장",
+                "cancel": "취소",
                 "signingOut": "로그아웃 중...",
                 "signOut": "로그아웃"
             },

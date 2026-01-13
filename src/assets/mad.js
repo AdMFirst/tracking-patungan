@@ -353,6 +353,12 @@ const mad = {
                 "noUserInfo": "Ta' adha' informasi pangguna",
                 "changeUsername": "Gante Nyama Pangguna",
                 "managePaymentMethods": "Atur Metode Pambayaran",
+                "changeLanguage": "Gante Basa",
+                "selectPreferredLanguage": "Pile basa se sampeyan suka",
+                "language": "Basa",
+                "selectLanguage": "Pile Basa",
+                "save": "Simpen",
+                "cancel": "Batal",
                 "signingOut": "Kaluar...",
                 "signOut": "Kaluar"
             },

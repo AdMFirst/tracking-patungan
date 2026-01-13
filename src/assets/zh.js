@@ -353,6 +353,12 @@ const zh = {
                 "noUserInfo": "无用户信息",
                 "changeUsername": "更改用户名",
                 "managePaymentMethods": "管理支付方式",
+                "changeLanguage": "更改语言",
+                "selectPreferredLanguage": "选择您喜欢的语言",
+                "language": "语言",
+                "selectLanguage": "选择语言",
+                "save": "保存",
+                "cancel": "取消",
                 "signingOut": "正在退出...",
                 "signOut": "退出"
             },

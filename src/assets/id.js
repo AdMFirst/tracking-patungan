@@ -353,6 +353,12 @@ const id = {
                 "noUserInfo": "Tidak ada informasi pengguna",
                 "changeUsername": "Ubah Username",
                 "managePaymentMethods": "Kelola Metode Pembayaran",
+                "changeLanguage": "Ubah Bahasa",
+                "selectPreferredLanguage": "Pilih bahasa yang Anda inginkan",
+                "language": "Bahasa",
+                "selectLanguage": "Pilih Bahasa",
+                "save": "Simpan",
+                "cancel": "Batal",
                 "signingOut": "Keluar...",
                 "signOut": "Keluar"
             },

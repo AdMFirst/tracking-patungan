@@ -353,6 +353,12 @@ const ar = {
                 "noUserInfo": "لا توجد معلومات مستخدم",
                 "changeUsername": "تغيير اسم المستخدم",
                 "managePaymentMethods": "إدارة طرق الدفع",
+                "changeLanguage": "تغيير اللغة",
+                "selectPreferredLanguage": "اختر لغتك المفضلة",
+                "language": "اللغة",
+                "selectLanguage": "اختر اللغة",
+                "save": "حفظ",
+                "cancel": "إلغاء",
                 "signingOut": "جاري تسجيل الخروج...",
                 "signOut": "تسجيل الخروج"
             },

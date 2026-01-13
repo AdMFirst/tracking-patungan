@@ -353,6 +353,12 @@ const en = {
                 "noUserInfo": "No user information available",
                 "changeUsername": "Change Username",
                 "managePaymentMethods": "Manage Payment Methods",
+                "changeLanguage": "Change Language",
+                "selectPreferredLanguage": "Select your preferred language",
+                "language": "Language",
+                "selectLanguage": "Select Language",
+                "save": "Save",
+                "cancel": "Cancel",
                 "signingOut": "Signing out...",
                 "signOut": "Sign Out"
             },

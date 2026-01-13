@@ -24,7 +24,7 @@ const i18n = createI18n({
     // something vue-i18n options here ...
     legacy: false,
     globalInjection: true,
-    locale: 'id',
+    locale: localStorage.getItem('user-locale') || 'id',
     fallbackLocale: 'en',
     messages: {
         en,
