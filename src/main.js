@@ -9,15 +9,35 @@ import Vue3Lottie from 'vue3-lottie'
 import { createI18n } from 'vue-i18n'
 
 import en from "@/assets/en.js"
+import ja from "@/assets/ja.js"
+import ko from "@/assets/ko.js"
+import ar from "@/assets/ar.js"
+import jv from "@/assets/jv.js"
+import min from "@/assets/min.js"
+import su from "@/assets/su.js"
+import id from "@/assets/id.js"
+import ms from "@/assets/ms.js"
+import zh from "@/assets/zh.js"
+import mad from "@/assets/mad.js"
 
 const i18n = createI18n({
     // something vue-i18n options here ...
     legacy: false,
     globalInjection: true,
-    locale: 'en',
+    locale: 'id',
     fallbackLocale: 'en',
     messages: {
-        en: en
+        en,
+        ja,
+        ko,
+        ar,
+        jv,
+        min,
+        su,
+        id,
+        ms,
+        zh,
+        mad
     }
 })
 

@@ -1,0 +1,394 @@
+/**
+ * Instructions for AI machine:
+ * Rule 1: prioritize the use of t from useI18n rather than $t
+ * Rule 2: Use the file path as prefix for i18n key (e.g., files in @/components/room/OrderRooms.vue is components.room.OrderRooms.whateverYouWantAfterwards)
+ * Rule 3: Also use i18n on error messages and placeholder text
+ * Rule 4: when the text is combined with date or currency, do it last then ask on how to proceed
+ */
+const mad = {
+    "components": {
+        "auth": {
+            "AuthForm": {
+                "signInTitle": "Masok ka akunna sampeyan",
+                "createAccountTitle": "Agabay akunna sampeyan",
+                "noAccount": "Gita' andi' akun?",
+                "haveAccount": "Ampon andi' akun?",
+                "signUp": "Daftar",
+                "signIn": "Masok",
+                "orContinueWith": "Otaba terrosaghi kalaban",
+                "emailLabel": "Email",
+                "passwordLabel": "Kaca Sandi",
+                "hidePassword": "Nyetak kaca sandi",
+                "showPassword": "Nuduhaghi kaca sandi",
+                "fullNameLabel": "Nyama Lengkap",
+                "emailPlaceholder": "Masokaghi email sampeyan",
+                "passwordPlaceholder": "Masokaghi kaca sandi sampeyan",
+                "fullNamePlaceholder": "Masokaghi nyama lengkap sampeyan",
+                "loading": "Ngamuat...",
+                "signInButton": "Masok",
+                "signUpButton": "Daftar",
+                "genericError": "Badha kasalaan. Coba pole.",
+                "discordLoginError": "Gagal masok kalaban Discord. Coba pole.",
+                "linkedInLoginError": "Gagal masok kalaban LinkedIn. Coba pole."
+            }
+        },
+        "common": {
+            "BottomNav": {
+                "home": "Beranda",
+                "histori": "Riwayat",
+                "create": "Agabay",
+                "my room": "Kamar Kule",
+                "profile": "Profil"
+            },
+            "LoadingScreen": {
+                "0": "Ngerem dasbor sampeyan...",
+                "1": "Nyiyapaghi ruang laku...",
+                "2": "Mindai transaksi...",
+                "3": "Nyeimbangaghi buku...",
+                "4": "Verifikasi rincian pambayaran...",
+                "5": "Nglacak arus dana...",
+                "6": "Ngitung total...",
+                "7": "Ngamanaghi data keuangan...",
+                "8": "Nganyari saldo...",
+                "9": "Konfirmasi pambayaran...",
+                "10": "Analisis pengeluaran...",
+                "11": "Nyinkronaghi koneksi bank...",
+                "12": "Agabay laporan...",
+                "13": "Ngunci buku besar...",
+                "14": "Perkiraan arus kas...",
+                "15": "Ngrampungaghi riwayat transaksi...",
+            },
+            "UserAvatar": {
+                "connectedViaDiscord": "Nyambung kalaban Discord",
+                "connectedViaLinkedIn": "Nyambung kalaban LinkedIn",
+                "emailPassword": "Email/Sandi",
+                "unknown": "Ta' Ditemmu"
+            }
+        },
+        "qr": {
+            "QRScanner": {
+                "alignQRCode": "Pas-aghi kode QR e dhalem bingkai",
+                "statusLabel": "Status",
+                "activeStatus": "Aktif",
+                "pausedStatus": "Jeda",
+                "startButton": "Mulai",
+                "stopButton": "Ambu"
+            }
+        },
+        "room": {
+            "JoinRoomPrompt": {
+                "title": "Sampeyan ta' masok e kamar reya",
+                "description": "Kamar reya badha tape sampeyan gita' gabung. Apa terro gabung ban noro' pesen?",
+                "noButton": "Bunten, abali",
+                "yesButton": "Engghi, gabung",
+                "joining": "Gabung..."
+            },
+            "OrderRooms": {
+                "untitledRoom": "Kamar Tanpa Judul",
+                "unknown": "Ta' Ditemmu",
+                "notSpecified": "Ta' ditentuwaghi",
+                "roomStillOpen": "Kamar gi' bukak!",
+                "openRoomButton": "Bukak Kamar",
+                "payNowButton": "Majar Sateya",
+                "yourTotal": "Total sampeyan:",
+                "runnerLabel": "Pelari:",
+                "restaurantLabel": "Restoran:",
+                "createdAtLabel": "Digabay:",
+                "itemsOrderedLabel": "Item Dipesen:",
+                "each": "sabbhan",
+                "paidAt": "Dimajar tanggal {date}",
+                "paidAtVia": "Dimajar tanggal {date} kalaban {method}",
+                "paymentConfirmed": "Pambayaran dikonfirmasi {amount} ngangghuy metode se epile. Kamar ampon lunas.",
+                "paymentFailed": "Gagal konfirmasi pambayaran: {error}"
+            },
+            "QRScanDialog": {
+                "scanQRButton": "Pindai QR",
+                "title": "Gabung kamar kalaban mindai QR",
+                "closeButton": "Totop"
+            }
+        },
+        "modals": {
+            "AddOrderItemModal": {
+                "title": "Tamba Pesenen Anyar",
+                "description": "Tamba item anyar ka pesenen sampeyan.",
+                "itemNameLabel": "Nyama Item",
+                "itemNamePlaceholder": "Masokaghi nyama item",
+                "quantityLabel": "Jumlah",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Arga Satuan",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Catetan (opsional)",
+                "notesPlaceholder": "Instruksi khusus",
+                "cancelButton": "Batal",
+                "addItemButton": "Tamba Item"
+            },
+            "CloseRoomModal": {
+                "title": "Totop Kamar",
+                "description": "Masokaghi total akhir kaangguy kamar reya.",
+                "finalTotalLabel": "Total Akhir",
+                "finalTotalPlaceholder": "Masokaghi total akhir...",
+                "cancelButton": "Batal",
+                "deleteRoomButton": "Hapus Kamar",
+                "submitButton": "Kirim",
+                "deleteConfirmTitle": "Yakin terro ngaposa?",
+                "deleteConfirmDescription": "Tindakan reya ta' bisa dibatalaghi. Sadaja data kamar bakal elang.",
+                "deleteCancelButton": "Batal",
+                "deleteConfirmButton": "Hapus"
+            },
+            "EditOrderItemModal": {
+                "title": "Uba Item Pesenen",
+                "description": "Uba item pesenen reya.",
+                "itemNameLabel": "Nyama Item",
+                "itemNamePlaceholder": "Masokaghi nyama item",
+                "quantityLabel": "Jumlah",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Arga Satuan",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Catetan (opsional)",
+                "notesPlaceholder": "Instruksi khusus",
+                "cancelButton": "Batal",
+                "updateItemButton": "Perbarui Item"
+            },
+            "FilterModal": {
+                "title": "Saringan",
+                "description": "Atur kriteria nyare kamar.",
+                "searchLabel": "Nyare miturut judul/nyama",
+                "searchPlaceholder": "Nyare kamar...",
+                "platformLabel": "Platform",
+                "platformPlaceholder": "Sadaja Platform",
+                "restaurantLabel": "Restoran (Khusus)",
+                "restaurantPlaceholder": "Saring miturut restoran...",
+                "dateFromLabel": "Dari Tanggal",
+                "dateToLabel": "Sampe Tanggal",
+                "clearFiltersButton": "Hapus Saringan",
+                "applyFiltersButton": "Terapaghi Saringan"
+            },
+            "PaymentModal": {
+                "title": "Metode Pambayaran",
+                "description": "Pile metode pambayaran ban konfirmasi",
+                "availablePaymentMethods": "Metode Pambayaran:",
+                "loadingPaymentMethods": "Ngamuat metode pambayaran...",
+                "noPaymentMethods": "Ta' adha' metode pambayaran.",
+                "confirmPaymentCheckbox": "Kule konfirmasi ja' kule ampon majar",
+                "cancelButton": "Batal",
+                "confirmPaymentButton": "Konfirmasi Pambayaran"
+            },
+            "SettingsModal": {
+                "title": "Pengaturan",
+                "description": "Perbarui pengaturan profil sampeyan.",
+                "usernameLabel": "Nyama Pangguna",
+                "usernamePlaceholder": "Masokaghi nyama pangguna...",
+                "cancelButton": "Batal",
+                "saveChangesButton": "Simpen Obaan"
+            }
+        },
+        "UserInfo": {
+            "welcomeBack": "Salamet dhateng pole!",
+            "accountInfo": "Informasi akun sampeyan",
+            "connectedViaDiscord": "Nyambung kalaban Discord",
+            "connectedViaLinkedIn": "Nyambung kalaban LinkedIn",
+            "defaultUser": "Pangguna",
+            "memberSince": "Anggota molae",
+            "lastSignIn": "Masok pungkasan",
+            "accountStatus": "Status akun",
+            "activeStatus": "Aktif",
+            "provider": "Penyedia",
+            "discord": "Discord",
+            "linkedIn": "LinkedIn",
+            "noUserInfo": "Ta' adha' informasi pangguna",
+            "signingOut": "Kaluar...",
+            "signOut": "Kaluar"
+        }
+    },
+    "pages": {
+        "404": {
+            "pageNotFound": "Kaca Ta' Ditemmu",
+            "description": "Alamat se sampeyan ketik ta' adha'. Ja' kuwatir, ayo abali.",
+            "goToHomepage": "Ka Beranda"
+        },
+        "index": {
+            "appName": "Talangin",
+            "heroSubtitle": "Agabay patungan daddi transparan",
+            "heroDescription": "Catet. Etong. Mare.",
+            "joinRoom": "Gabung Kamar",
+            "enterRoomCode": "Masokaghi kode kamar",
+            "go": "Lanjut",
+            "monthlySpending": "Pengeluaran Bulanan",
+            "noSpendingData": "Ta' adha' data pengeluaran",
+            "dashboardFeatures": "Fitur Dasbor",
+            "trackExpenses": "Lacak pengeluaran",
+            "viewAnalytics": "Tingali analitik",
+            "manageBudgets": "Atur anggaran"
+        },
+        "createRoom": {
+            "title": "Agabay Kamar Anyar",
+            "description": "Masokaghi rincian kaangguy pesenen dhahar.",
+            "form": {
+                "titleLabel": "Judul",
+                "titlePlaceholder": "Dhahar malem kalaban oreng towa",
+                "restaurantLabel": "Nyama Restoran",
+                "restaurantPlaceholder": "KFC, McDonalds, dll",
+                "deliveryTypeLabel": "Tipe Pangiriman",
+                "deliveryTypePlaceholder": "Pile Aplikasi",
+                "customPlatformLabel": "Nyama Platform Khusus",
+                "customPlatformPlaceholder": "Cth., Jasa Kirim Lokal",
+                "createButton": "Agabay",
+                "loading": "Ngamuat..."
+            },
+            "deliveryTypes": {
+                "goFood": "GoFood",
+                "grabFood": "GrabFood",
+                "shopeeFood": "Shopee Food",
+                "travelokaEats": "Traveloka Eats",
+                "maxim": "Maxim Food & Goods Delivery",
+                "tokopediaNow": "Tokopedia NOW!",
+                "custom": "Khusus"
+            },
+            "errors": {
+                "connectionError": "Gagal nyambung ka server."
+            }
+        },
+        "myroom": {
+            "roomDetails": {
+                "title": "Rincian Kamar",
+                "restaurant": "Restoran",
+                "orderTime": "Waktu Pesen",
+                "created": "Digabay",
+                "finalTotal": "Total Akhir",
+                "participants": "Peserta",
+                "paymentSummary": "Ringkesan Pambayaran",
+                "totalPaid": "Total Dimajar",
+                "totalUnpaid": "Total Gita' Dimajar",
+                "remaining": "Sisa",
+                "roomNotFound": "Kamar ta' ditemmu",
+                "roomNotFoundDescription": "Kamar se sampeyan sare ta' adha'.",
+                "notSpecified": "Ta' ditentuwaghi",
+                "unknownUser": "Pangguna Ta' Ditemmu",
+                "paid": "Lunas",
+                "pending": "Nenggu",
+                "unpaid": "Gita' Lunas",
+                "you": "Sampeyan",
+                "via": "via",
+                "noParticipants": "Ta' adha' peserta."
+            },
+            "index": {
+                "title": "Kamar Kule",
+                "openFilters": "Bukak Saringan",
+                "noRoomsFound": "Ta' adha' kamar",
+                "noRoomsMatchFilters": "Ta' adha' kamar se cocog.",
+                "noRoomsCreated": "Sampeyan gita' agabay kamar.",
+                "untitledRoom": "Kamar Tanpa Judul",
+                "unknown": "Ta' Ditemmu",
+                "notSpecified": "Ta' ditentuwaghi",
+                "restaurantLabel": "Restoran:",
+                "orderTimeLabel": "Waktu Pesen:",
+                "createdLabel": "Digabay:",
+                "finalTotalLabel": "Total Akhir:",
+                "manageRoom": "Atur Kamar",
+                "roomStillOpen": "Kamar gi' rame! Ayo masok ban tamba pesenen",
+                "closeRoom": "Totop Kamar",
+                "openRoom": "Bukak Kamar"
+            }
+        },
+        "activeRoom": {
+            "errorTitle": "Kasalaan",
+            "goBack": "Abali",
+            "roomNotAvailableTitle": "Kamar Ta' Sadiya",
+            "roomNotAvailableDescription": "{roomId} ta' valid otaba ta' aktif",
+            "thisRoom": "Kamar Reya",
+            "restaurantInfo": "{restaurant} via {platform}",
+            "cartTitle": "Kranjang",
+            "unknownUser": "Pangguna Ta' Ditemmu",
+            "each": "sabbhan",
+            "noOrderItems": "Gita' adha' item pesenen.",
+            "shareRoomTitle": "Bagiyaghi Kamar",
+            "shareRoomDescription": "Pindai kode QR kaangguy mbagiyaghi kamar reya.",
+            "close": "Totop",
+            "errors": {
+                "loginToJoin": "Sampeyan kedah masok kaangguy gabung kamar reya",
+                "joinFailed": "Gagal gabung kamar. Coba pole.",
+                "participantRequired": "Sampeyan kedah daddi peserta kaangguy namba item",
+                "addFailed": "Gagal namba item pesenen. Coba pole.",
+                "notParticipant": "Sampeyan bannya' peserta e kamar reya.",
+                "editOwnItems": "Sampeyan coma bisa ngoba item sampeyan dibi'",
+                "loginToUpdate": "Sampeyan kedah masok kaangguy nganyari item",
+                "updateFailed": "Gagal nganyari item pesenen.",
+                "loginToDelete": "Sampeyan kedah masok kaangguy ngaposa item",
+                "deleteOwnItems": "Sampeyan coma bisa ngaposa item sampeyan dibi'",
+                "deleteFailed": "Gagal ngaposa item pesenen.",
+                "invalidUuid": "Format ID kamar ta' valid.",
+                "loadDetailsFailed": "Gagal ngamuat rincian kamar.",
+                "roomNotFound": "Kamar ta' ditemmu.",
+                "roomClosed": "Kamar reya ditotop.",
+                "loadParticipantsFailed": "Gagal ngamuat peserta.",
+                "loadItemsFailed": "Gagal ngamuat item pesenen.",
+                "checkParticipationFailed": "Gagal mariksa status partisipasi.",
+                "loadDataFailed": "Gagal ngamuat data kamar.",
+                "generateQrFailed": "Gagal ngasilaghi kode QR."
+            },
+            "toast": {
+                "deleteConfirm": "Hapus item pesenen reya?",
+                "delete": "Hapus",
+                "cancel": "Batal"
+            }
+        },
+        "histori": {
+            "title": "Riwayat Kamar",
+            "tabs": {
+                "active": "Aktif",
+                "closed": "Ditotop"
+            },
+            "emptyState": {
+                "activeTitle": "Ta' adha' kamar aktif",
+                "closedTitle": "Ta' adha' kamar ditotop",
+                "activeDescription": "Sampeyan gita' gabung kamar aktif.",
+                "closedDescription": "Sampeyan gita' gabung kamar se ampon ditotop."
+            }
+        },
+        "profile": {
+            "index": {
+                "memberSince": "Anggota molae",
+                "lastSignIn": "Masok pungkasan",
+                "provider": "Penyedia",
+                "noUserInfo": "Ta' adha' informasi pangguna",
+                "changeUsername": "Gante Nyama Pangguna",
+                "managePaymentMethods": "Atur Metode Pambayaran",
+                "signingOut": "Kaluar...",
+                "signOut": "Kaluar"
+            },
+            "mypayment": {
+                "title": "Metode Pambayaran Kule",
+                "addPaymentMethod": "Tamba Metode Pambayaran",
+                "noPaymentMethodsYet": "Gita' adha' metode pambayaran",
+                "addPaymentMethodDescription": "Tamba metode pambayaran kaangguy narema pesse dari peserta",
+                "addedOn": "Ditambaaghi tanggal",
+                "edit": "Uba",
+                "delete": "Hapus",
+                "add": "Tamba",
+                "paymentMethod": "Metode Pambayaran",
+                "paymentType": "Tipe Pambayaran",
+                "selectPaymentType": "Pile tipe pambayaran",
+                "bankTransfer": "Transfer Bank",
+                "goPay": "GoPay",
+                "ovo": "OVO",
+                "dana": "Dana",
+                "shopeePay": "ShopeePay",
+                "bankName": "Nyama Bank",
+                "bankNamePlaceholder": "cth., BCA, BNI, Mandiri",
+                "accountNumber": "Nomer Rekening",
+                "accountNumberPlaceholder": "Masokaghi nomer rekening",
+                "cancel": "Batal",
+                "update": "Perbarui",
+                "save": "Simpen",
+                "deletePaymentMethod": "Hapus Metode Pambayaran",
+                "deleteConfirm": "Yakin terro ngaposa metode pambayaran reya?",
+                "errors": {
+                    "saveFailed": "Gagal nyimpen metode pambayaran: {error}",
+                    "deleteFailed": "Gagal ngaposa metode pambayaran: {error}"
+                }
+            }
+        }
+    }
+};
+
+export default mad;

@@ -206,6 +206,20 @@ const en = {
             "description": "It looks like the address you typed doesn't lead anywhere. Don't worry, let's get you back on track.",
             "goToHomepage": "Go to Homepage"
         },
+        "index": {
+            "appName": "Talangin",
+            "heroSubtitle": "Make splitting bills transparent",
+            "heroDescription": "Record. Calculate. Done.",
+            "joinRoom": "Join Room",
+            "enterRoomCode": "Enter room code",
+            "go": "Go",
+            "monthlySpending": "Monthly Spending",
+            "noSpendingData": "No spending data available",
+            "dashboardFeatures": "Dashboard Features",
+            "trackExpenses": "Track your expenses",
+            "viewAnalytics": "View analytics",
+            "manageBudgets": "Manage budgets"
+        },
         "createRoom": {
             "title": "Create New Room",
             "description": "Enter the details for your food delivery order page.",
@@ -360,7 +374,7 @@ const en = {
                 "dana": "Dana",
                 "shopeePay": "ShopeePay",
                 "bankName": "Bank Name",
-                "bankNamePlaceholder": "e.g., BCA, BNI, Mandiri",
+                "bankNamePlaceholder": "e.g., HSBC, Barclays, Lloyds Bank",
                 "accountNumber": "Account Number",
                 "accountNumberPlaceholder": "Enter account number",
                 "cancel": "Cancel",
