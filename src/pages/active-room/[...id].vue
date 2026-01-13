@@ -680,6 +680,15 @@ const setupRealtimeSubscription = () => {
             async (payload) => {
                 console.log('[Realtime] room_participants', payload);
                 await loadOrderItems();
+                
+                // If a new user joined, fetch their profile
+                if (payload.event === 'INSERT' && payload.new) {
+                    const newUserId = payload.new.user_id;
+                    if (newUserId && !userCache.value[newUserId]) {
+                        console.log('New user joined, fetching profile:', newUserId);
+                        await loadUserProfiles([newUserId]);
+                    }
+                }
             }
         )
         .on(
@@ -698,7 +707,7 @@ const setupRealtimeSubscription = () => {
             )
         .on('channel_error', (err) => {
             console.error('Realtime channel error:', err);
-            window.location.reload();
+            // Don't force reload on channel errors, just log and let it reconnect
         })
         .on('presence', { event: 'sync' }, () => {
             console.log('Realtime presence sync');
@@ -712,7 +721,17 @@ const setupRealtimeSubscription = () => {
                 console.log('Successfully subscribed to realtime updates');
             } else if (status === 'CHANNEL_ERROR' || status === 'CLOSED' || status === 'TIMED_OUT') {
                 console.error('Realtime subscription failed or disconnected:', status);
-                window.location.reload();
+                // Don't force reload on navigation/disconnection - let it reconnect naturally
+                // Only force reload for critical errors that can't be recovered
+                if (status === 'CHANNEL_ERROR') {
+                    // For actual channel errors, we might want to reload, but not for normal disconnections
+                    setTimeout(() => {
+                        if (!realtimeChannel.value) {
+                            console.log('Attempting to re-establish realtime connection...');
+                            realtimeChannel.value = setupRealtimeSubscription();
+                        }
+                    }, 3000);
+                }
             }
         });
 
