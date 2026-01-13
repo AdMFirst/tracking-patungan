@@ -2,20 +2,20 @@
     <Dialog :open="open" @update:open="handleOpenChange">
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle>Settings</DialogTitle>
+                <DialogTitle>{{ $t('components.modals.SettingsModal.title') }}</DialogTitle>
                 <DialogDescription>
-                    Update your profile settings.
+                    {{ $t('components.modals.SettingsModal.description') }}
                 </DialogDescription>
             </DialogHeader>
 
             <div class="space-y-4 py-2">
                 <div class="space-y-1">
-                    <Label for="name">Username</Label>
+                    <Label for="name">{{ $t('components.modals.SettingsModal.usernameLabel') }}</Label>
                     <Input
                         id="name"
                         v-model="settingsForm.username"
                         type="text"
-                        placeholder="Enter your username..."
+                        :placeholder="$t('components.modals.SettingsModal.usernamePlaceholder')"
                         autofill="false"
                     />
                 </div>
@@ -27,13 +27,13 @@
                     variant="ghost"
                     class="w-full sm:w-auto"
                 >
-                    Cancel
+                    {{ $t('components.modals.SettingsModal.cancelButton') }}
                 </Button>
                 <Button
                     @click="saveSettings"
                     class="w-full sm:w-auto mt-2 sm:mt-0"
                 >
-                    Save Changes
+                    {{ $t('components.modals.SettingsModal.saveChangesButton') }}
                 </Button>
             </DialogFooter>
         </DialogContent>

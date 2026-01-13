@@ -5,10 +5,10 @@
         <div class="w-full max-w-md space-y-6">
             <div class="text-center">
                 <h2 class="text-2xl font-bold text-foreground">
-                    Welcome back!
+                    {{ $t('components.UserInfo.welcomeBack') }}
                 </h2>
                 <p class="mt-2 text-sm text-muted-foreground">
-                    Your account information
+                    {{ $t('components.UserInfo.accountInfo') }}
                 </p>
             </div>
 
@@ -43,7 +43,7 @@
                             }}
                         </p>
                         <p class="text-xs text-muted-foreground">
-                            Connected via Discord
+                            {{ $t('components.UserInfo.connectedViaDiscord') }}
                         </p>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         :src="
                             currentUser.user_metadata?.picture ||
                             currentUser.user_metadata?.avatar_url ||
-                            `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.user_metadata?.full_name || 'User')}&size=128`
+                            `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.user_metadata?.full_name || $t('components.UserInfo.defaultUser'))}&size=128`
                         "
                         :alt="currentUser.user_metadata?.full_name"
                         class="w-16 h-16 rounded-full border-2 border-border"
@@ -72,7 +72,7 @@
                             {{ currentUser.user_metadata?.email }}
                         </p>
                         <p class="text-xs text-muted-foreground">
-                            Connected via LinkedIn
+                            {{ $t('components.UserInfo.connectedViaLinkedIn') }}
                         </p>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-foreground">
-                            {{ currentUser.user_metadata?.full_name || 'User' }}
+                            {{ currentUser.user_metadata?.full_name || $t('components.UserInfo.defaultUser') }}
                         </h3>
                         <p class="text-sm text-muted-foreground">
                             {{ currentUser.email }}
@@ -105,13 +105,11 @@
                         class="flex justify-between items-center py-2 border-b border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Member since</span
+                            >{{ $t('components.UserInfo.memberSince') }}</span
                         >
                         <span class="text-sm text-foreground">
                             {{
-                                new Date(
-                                    currentUser.created_at
-                                ).toLocaleDateString()
+                                d(new Date(currentUser.created_at), { dateStyle: 'medium' })
                             }}
                         </span>
                     </div>
@@ -120,22 +118,20 @@
                         class="flex justify-between items-center py-2 border-b border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Last sign in</span
+                            >{{ $t('components.UserInfo.lastSignIn') }}</span
                         >
                         <span class="text-sm text-foreground">
                             {{
-                                new Date(
-                                    currentUser.last_sign_in_at
-                                ).toLocaleDateString()
+                                d(new Date(currentUser.last_sign_in_at), { dateStyle: 'medium' })
                             }}
                         </span>
                     </div>
 
                     <div class="flex justify-between items-center py-2">
                         <span class="text-sm text-muted-foreground"
-                            >Account status</span
+                            >{{ $t('components.UserInfo.accountStatus') }}</span
                         >
-                        <span class="text-sm text-green-600">Active</span>
+                        <span class="text-sm text-green-600">{{ $t('components.UserInfo.activeStatus') }}</span>
                     </div>
 
                     <div
@@ -143,9 +139,9 @@
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Provider</span
+                            >{{ $t('components.UserInfo.provider') }}</span
                         >
-                        <span class="text-sm text-blue-600">Discord</span>
+                        <span class="text-sm text-blue-600">{{ $t('components.UserInfo.discord') }}</span>
                     </div>
 
                     <div
@@ -156,9 +152,9 @@
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Provider</span
+                            >{{ $t('components.UserInfo.provider') }}</span
                         >
-                        <span class="text-sm text-blue-700">LinkedIn</span>
+                        <span class="text-sm text-blue-700">{{ $t('components.UserInfo.linkedIn') }}</span>
                     </div>
                 </div>
             </div>
@@ -168,7 +164,7 @@
                 class="bg-card p-6 rounded-lg border border-border shadow-sm text-center"
             >
                 <p class="text-muted-foreground">
-                    No user information available
+                    {{ $t('components.UserInfo.noUserInfo') }}
                 </p>
             </div>
 
@@ -177,7 +173,7 @@
                 :disabled="loading"
                 class="w-full py-2 px-4 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-                {{ loading ? 'Signing out...' : 'Sign Out' }}
+                {{ loading ? $t('components.UserInfo.signingOut') : $t('components.UserInfo.signOut') }}
             </button>
         </div>
     </div>
@@ -185,7 +181,9 @@
 
 <script setup>
 import { ref, inject, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const { t, d } = useI18n();
 const user = inject('user');
 const signOut = inject('signOut');
 

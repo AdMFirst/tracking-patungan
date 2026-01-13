@@ -1,0 +1,400 @@
+/**
+ * Instructions for AI machine:
+ * Rule 1: prioritize the use of t from useI18n rather than $t
+ * Rule 2: Use the file path as prefix for i18n key (e.g., files in @/components/room/OrderRooms.vue is components.room.OrderRooms.whateverYouWantAfterwards)
+ * Rule 3: Also use i18n on error messages and placeholder text
+ * Rule 4: when the text is combined with date or currency, do it last then ask on how to proceed
+ */
+const ms = {
+    "components": {
+        "auth": {
+            "AuthForm": {
+                "signInTitle": "Log masuk ke akaun anda",
+                "createAccountTitle": "Cipta akaun anda",
+                "noAccount": "Tiada akaun?",
+                "haveAccount": "Sudah mempunyai akaun?",
+                "signUp": "Daftar",
+                "signIn": "Log masuk",
+                "orContinueWith": "Atau teruskan dengan",
+                "emailLabel": "E-mel",
+                "passwordLabel": "Kata Laluan",
+                "hidePassword": "Sembunyikan kata laluan",
+                "showPassword": "Tunjukkan kata laluan",
+                "fullNameLabel": "Nama Penuh",
+                "emailPlaceholder": "Masukkan e-mel anda",
+                "passwordPlaceholder": "Masukkan kata laluan anda",
+                "fullNamePlaceholder": "Masukkan nama penuh anda",
+                "loading": "Memuatkan...",
+                "signInButton": "Log Masuk",
+                "signUpButton": "Daftar",
+                "genericError": "Ralat berlaku. Sila cuba lagi.",
+                "discordLoginError": "Gagal memulakan log masuk Discord. Sila cuba lagi.",
+                "linkedInLoginError": "Gagal memulakan log masuk LinkedIn. Sila cuba lagi."
+            }
+        },
+        "common": {
+            "BottomNav": {
+                "home": "Utama",
+                "histori": "Sejarah",
+                "create": "Cipta",
+                "my room": "Bilik Saya",
+                "profile": "Profil"
+            },
+            "LoadingScreen": {
+                "0": "Menghantar papan pemuka anda...",
+                "1": "Menyediakan ruang kerja anda...",
+                "2": "Mengimbas transaksi anda...",
+                "3": "Mengimbangi buku dengan selamat...",
+                "4": "Mengesahkan butiran pembayaran...",
+                "5": "Menjejak aliran dana anda...",
+                "6": "Mengira jumlah anda...",
+                "7": "Mengamankan data kewangan anda...",
+                "8": "Mengemas kini baki anda...",
+                "9": "Mengesahkan pembayaran terkini...",
+                "10": "Menganalisis corak perbelanjaan...",
+                "11": "Menyegerakkan sambungan bank...",
+                "12": "Menjana laporan anda...",
+                "13": "Mengunci lejar anda...",
+                "14": "Meramalkan aliran tunai anda...",
+                "15": "Menyiapkan sejarah transaksi...",
+            },
+            "UserAvatar": {
+                "connectedViaDiscord": "Disambungkan melalui Discord",
+                "connectedViaLinkedIn": "Disambungkan melalui LinkedIn",
+                "emailPassword": "E-mel/Kata Laluan",
+                "unknown": "Tidak Diketahui"
+            }
+        },
+        "qr": {
+            "QRScanner": {
+                "alignQRCode": "Selaraskan kod QR dalam bingkai",
+                "statusLabel": "Status",
+                "activeStatus": "Aktif",
+                "pausedStatus": "Dijeda",
+                "startButton": "Mula",
+                "stopButton": "Berhenti"
+            }
+        },
+        "room": {
+            "JoinRoomPrompt": {
+                "title": "Anda tidak menyertai bilik ini",
+                "description": "Bilik ini wujud tetapi anda belum menyertainya. Adakah anda ingin menyertai dan mengambil bahagian dalam pesanan?",
+                "noButton": "Tidak, kembali",
+                "yesButton": "Ya, sertai bilik",
+                "joining": "Menyertai..."
+            },
+            "OrderRooms": {
+                "untitledRoom": "Bilik Tanpa Tajuk",
+                "unknown": "Tidak Diketahui",
+                "notSpecified": "Tidak dinyatakan",
+                "roomStillOpen": "Bilik masih dibuka!",
+                "openRoomButton": "Buka Bilik",
+                "payNowButton": "Bayar Sekarang",
+                "yourTotal": "Jumlah anda:",
+                "runnerLabel": "Pelari:",
+                "restaurantLabel": "Restoran:",
+                "createdAtLabel": "Dicipta pada:",
+                "itemsOrderedLabel": "Item Dipesan:",
+                "each": "setiap satu",
+                "paidAt": "Dibayar pada {date}",
+                "paidAtVia": "Dibayar pada {date} melalui {method}",
+                "paymentConfirmed": "Pembayaran disahkan sebanyak {amount} menggunakan kaedah pembayaran yang dipilih. Bilik telah ditandakan sebagai dibayar.",
+                "paymentFailed": "Gagal mengesahkan pembayaran: {error}"
+            },
+            "QRScanDialog": {
+                "scanQRButton": "Imbas QR",
+                "title": "Sertai bilik dengan mengimbas kod QR",
+                "closeButton": "Tutup"
+            }
+        },
+        "modals": {
+            "AddOrderItemModal": {
+                "title": "Tambah Item Pesanan Baru",
+                "description": "Tambah item baru ke pesanan anda untuk bilik ini.",
+                "itemNameLabel": "Nama Item",
+                "itemNamePlaceholder": "Masukkan nama item",
+                "quantityLabel": "Kuantiti",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Harga Seunit",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Nota (pilihan)",
+                "notesPlaceholder": "Sebarang arahan khas",
+                "cancelButton": "Batal",
+                "addItemButton": "Tambah Item"
+            },
+            "CloseRoomModal": {
+                "title": "Tutup Bilik",
+                "description": "Masukkan jumlah akhir untuk bilik ini.",
+                "finalTotalLabel": "Jumlah Akhir",
+                "finalTotalPlaceholder": "Masukkan jumlah akhir...",
+                "cancelButton": "Batal",
+                "deleteRoomButton": "Padam Bilik",
+                "submitButton": "Hantar",
+                "deleteConfirmTitle": "Adakah anda pasti?",
+                "deleteConfirmDescription": "Tindakan ini tidak boleh dibuat asal. Semua data bilik akan dipadamkan secara kekal.",
+                "deleteCancelButton": "Batal",
+                "deleteConfirmButton": "Padam"
+            },
+            "EditOrderItemModal": {
+                "title": "Edit Item Pesanan",
+                "description": "Edit item pesanan ini.",
+                "itemNameLabel": "Nama Item",
+                "itemNamePlaceholder": "Masukkan nama item",
+                "quantityLabel": "Kuantiti",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Harga Seunit",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Nota (pilihan)",
+                "notesPlaceholder": "Sebarang arahan khas",
+                "cancelButton": "Batal",
+                "updateItemButton": "Kemas Kini Item"
+            },
+            "FilterModal": {
+                "title": "Penapis",
+                "description": "Laraskan kriteria carian bilik anda.",
+                "searchLabel": "Cari mengikut tajuk/nama",
+                "searchPlaceholder": "Cari bilik...",
+                "platformLabel": "Platform",
+                "platformPlaceholder": "Semua Platform",
+                "restaurantLabel": "Restoran (Khusus)",
+                "restaurantPlaceholder": "Tapis mengikut restoran tertentu...",
+                "dateFromLabel": "Dari Tarikh",
+                "dateToLabel": "Hingga Tarikh",
+                "clearFiltersButton": "Kosongkan Penapis",
+                "applyFiltersButton": "Gunakan Penapis"
+            },
+            "PaymentModal": {
+                "title": "Kaedah Pembayaran",
+                "description": "Pilih kaedah pembayaran anda dan sahkan pembayaran",
+                "availablePaymentMethods": "Kaedah Pembayaran Tersedia:",
+                "loadingPaymentMethods": "Memuatkan kaedah pembayaran...",
+                "noPaymentMethods": "Tiada kaedah pembayaran ditemui untuk pelari ini.",
+                "confirmPaymentCheckbox": "Saya mengesahkan bahawa saya telah membayar pesanan ini menggunakan kaedah pembayaran yang dipilih",
+                "cancelButton": "Batal",
+                "confirmPaymentButton": "Sahkan Pembayaran"
+            },
+            "SettingsModal": {
+                "title": "Tetapan",
+                "description": "Kemas kini tetapan profil anda.",
+                "usernameLabel": "Nama Pengguna",
+                "usernamePlaceholder": "Masukkan nama pengguna anda...",
+                "cancelButton": "Batal",
+                "saveChangesButton": "Simpan Perubahan"
+            }
+        },
+        "UserInfo": {
+            "welcomeBack": "Selamat kembali!",
+            "accountInfo": "Maklumat akaun anda",
+            "connectedViaDiscord": "Disambungkan melalui Discord",
+            "connectedViaLinkedIn": "Disambungkan melalui LinkedIn",
+            "defaultUser": "Pengguna",
+            "memberSince": "Ahli sejak",
+            "lastSignIn": "Log masuk terakhir",
+            "accountStatus": "Status akaun",
+            "activeStatus": "Aktif",
+            "provider": "Penyedia",
+            "discord": "Discord",
+            "linkedIn": "LinkedIn",
+            "noUserInfo": "Tiada maklumat pengguna",
+            "signingOut": "Log keluar...",
+            "signOut": "Log Keluar"
+        }
+    },
+    "pages": {
+        "404": {
+            "pageNotFound": "Halaman Tidak Ditemui",
+            "description": "Nampaknya alamat yang anda taip tidak membawa ke mana-mana. Jangan risau, mari kita kembali ke landasan.",
+            "goToHomepage": "Pergi ke Laman Utama"
+        },
+        "index": {
+            "appName": "Talangin",
+            "heroSubtitle": "Jadikan pembahagian bil telus",
+            "heroDescription": "Rekod. Kira. Selesai.",
+            "joinRoom": "Sertai Bilik",
+            "enterRoomCode": "Masukkan kod bilik",
+            "go": "Pergi",
+            "monthlySpending": "Perbelanjaan Bulanan",
+            "noSpendingData": "Tiada data perbelanjaan",
+            "dashboardFeatures": "Ciri Papan Pemuka",
+            "trackExpenses": "Jejak perbelanjaan anda",
+            "viewAnalytics": "Lihat analitik",
+            "manageBudgets": "Urus belanjawan"
+        },
+        "createRoom": {
+            "title": "Cipta Bilik Baru",
+            "description": "Masukkan butiran untuk halaman pesanan penghantaran makanan anda.",
+            "form": {
+                "titleLabel": "Tajuk",
+                "titlePlaceholder": "Makan malam dengan ibu bapa",
+                "restaurantLabel": "Nama Restoran",
+                "restaurantPlaceholder": "KFC, McDonalds, dll",
+                "deliveryTypeLabel": "Jenis Penghantaran",
+                "deliveryTypePlaceholder": "Pilih Aplikasi",
+                "customPlatformLabel": "Nama Platform Tersuai",
+                "customPlatformPlaceholder": "Cth., Perkhidmatan Penghantaran Tempatan",
+                "createButton": "Cipta",
+                "loading": "Memuatkan..."
+            },
+            "deliveryTypes": {
+                "goFood": "GoFood",
+                "grabFood": "GrabFood",
+                "shopeeFood": "Shopee Food",
+                "travelokaEats": "Traveloka Eats",
+                "maxim": "Maxim Food & Goods Delivery",
+                "tokopediaNow": "Tokopedia NOW!",
+                "custom": "Tersuai"
+            },
+            "errors": {
+                "connectionError": "Gagal menyambung ke pelayan."
+            }
+        },
+        "myroom": {
+            "roomDetails": {
+                "title": "Butiran Bilik",
+                "restaurant": "Restoran",
+                "orderTime": "Masa Pesanan",
+                "created": "Dicipta",
+                "finalTotal": "Jumlah Akhir",
+                "participants": "Peserta",
+                "paymentSummary": "Ringkasan Pembayaran",
+                "totalPaid": "Jumlah Dibayar",
+                "totalUnpaid": "Jumlah Belum Dibayar",
+                "remaining": "Baki",
+                "roomNotFound": "Bilik tidak ditemui",
+                "roomNotFoundDescription": "Bilik yang anda cari tidak wujud.",
+                "notSpecified": "Tidak dinyatakan",
+                "unknownUser": "Pengguna Tidak Diketahui",
+                "paid": "Dibayar",
+                "pending": "Menunggu",
+                "unpaid": "Belum Dibayar",
+                "you": "Anda",
+                "via": "melalui",
+                "noParticipants": "Tiada peserta ditemui."
+            },
+            "index": {
+                "title": "Bilik Saya",
+                "openFilters": "Buka Penapis",
+                "noRoomsFound": "Tiada bilik ditemui",
+                "noRoomsMatchFilters": "Tiada bilik yang sepadan dengan penapis semasa anda.",
+                "noRoomsCreated": "Anda belum mencipta sebarang bilik lagi.",
+                "untitledRoom": "Bilik Tanpa Tajuk",
+                "unknown": "Tidak Diketahui",
+                "notSpecified": "Tidak dinyatakan",
+                "restaurantLabel": "Restoran:",
+                "orderTimeLabel": "Masa Pesanan:",
+                "createdLabel": "Dicipta:",
+                "finalTotalLabel": "Jumlah Akhir:",
+                "manageRoom": "Urus Bilik",
+                "roomStillOpen": "Bilik masih meriah! Masuk dan tambah pesanan anda",
+                "closeRoom": "Tutup Bilik",
+                "openRoom": "Buka Bilik"
+            }
+        },
+        "activeRoom": {
+            "errorTitle": "Ralat",
+            "goBack": "Kembali",
+            "roomNotAvailableTitle": "Bilik Tidak Tersedia",
+            "roomNotAvailableDescription": "{roomId} tidak sah atau tidak aktif",
+            "thisRoom": "Bilik Ini",
+            "restaurantInfo": "{restaurant} melalui {platform}",
+            "cartTitle": "Troli",
+            "unknownUser": "Pengguna Tidak Diketahui",
+            "each": "setiap satu",
+            "noOrderItems": "Tiada item pesanan lagi.",
+            "shareRoomTitle": "Kongsi Bilik",
+            "shareRoomDescription": "Imbas kod QR untuk berkongsi bilik ini dengan orang lain.",
+            "close": "Tutup",
+            "errors": {
+                "loginToJoin": "Anda perlu log masuk untuk menyertai bilik ini",
+                "joinFailed": "Gagal menyertai bilik. Sila cuba lagi.",
+                "participantRequired": "Anda perlu menjadi peserta untuk menambah item",
+                "addFailed": "Gagal menambah item pesanan. Sila cuba lagi.",
+                "notParticipant": "Anda bukan peserta dalam bilik ini.",
+                "editOwnItems": "Anda hanya boleh mengedit item anda sendiri",
+                "loginToUpdate": "Anda perlu log masuk untuk mengemas kini item pesanan",
+                "updateFailed": "Gagal mengemas kini item pesanan.",
+                "loginToDelete": "Anda perlu log masuk untuk memadam item pesanan",
+                "deleteOwnItems": "Anda hanya boleh memadam item anda sendiri",
+                "deleteFailed": "Gagal memadam item pesanan.",
+                "invalidUuid": "Format ID bilik tidak sah. Sila gunakan UUID yang sah.",
+                "loadDetailsFailed": "Gagal memuatkan butiran bilik.",
+                "roomNotFound": "Bilik tidak ditemui. Sila semak ID bilik.",
+                "roomClosed": "Bilik ini ditutup. Hanya bilik aktif boleh diakses.",
+                "loadParticipantsFailed": "Gagal memuatkan peserta.",
+                "loadItemsFailed": "Gagal memuatkan item pesanan.",
+                "checkParticipationFailed": "Gagal menyemak status penyertaan anda.",
+                "loadDataFailed": "Gagal memuatkan data bilik.",
+                "generateQrFailed": "Gagal menjana kod QR."
+            },
+            "toast": {
+                "deleteConfirm": "Padam item pesanan ini?",
+                "delete": "Padam",
+                "cancel": "Batal"
+            }
+        },
+        "histori": {
+            "title": "Sejarah Bilik Disertai",
+            "tabs": {
+                "active": "Aktif",
+                "closed": "Ditutup"
+            },
+            "emptyState": {
+                "activeTitle": "Tiada bilik aktif ditemui",
+                "closedTitle": "Tiada bilik ditutup ditemui",
+                "activeDescription": "Anda belum menyertai sebarang bilik aktif lagi.",
+                "closedDescription": "Anda belum menyertai sebarang bilik yang ditutup lagi."
+            }
+        },
+        "profile": {
+            "index": {
+                "memberSince": "Ahli sejak",
+                "lastSignIn": "Log masuk terakhir",
+                "provider": "Penyedia",
+                "noUserInfo": "Tiada maklumat pengguna",
+                "changeUsername": "Tukar Nama Pengguna",
+                "managePaymentMethods": "Urus Kaedah Pembayaran",
+                "changeLanguage": "Tukar Bahasa",
+                "selectPreferredLanguage": "Pilih bahasa kegemaran anda",
+                "language": "Bahasa",
+                "selectLanguage": "Pilih Bahasa",
+                "save": "Simpan",
+                "cancel": "Batal",
+                "signingOut": "Log keluar...",
+                "signOut": "Log Keluar"
+            },
+            "mypayment": {
+                "title": "Kaedah Pembayaran Saya",
+                "addPaymentMethod": "Tambah Kaedah Pembayaran",
+                "noPaymentMethodsYet": "Tiada kaedah pembayaran lagi",
+                "addPaymentMethodDescription": "Tambah kaedah pembayaran untuk menerima pembayaran daripada peserta",
+                "addedOn": "Ditambah pada",
+                "edit": "Edit",
+                "delete": "Padam",
+                "add": "Tambah",
+                "paymentMethod": "Kaedah Pembayaran",
+                "paymentType": "Jenis Pembayaran",
+                "selectPaymentType": "Pilih jenis pembayaran",
+                "bankTransfer": "Pindahan Bank",
+                "goPay": "GoPay",
+                "ovo": "OVO",
+                "dana": "Dana",
+                "shopeePay": "ShopeePay",
+                "bankName": "Nama Bank",
+                "bankNamePlaceholder": "cth., Maybank, CIMB, Public Bank",
+                "accountNumber": "Nombor Akaun",
+                "accountNumberPlaceholder": "Masukkan nombor akaun",
+                "cancel": "Batal",
+                "update": "Kemas Kini",
+                "save": "Simpan",
+                "deletePaymentMethod": "Padam Kaedah Pembayaran",
+                "deleteConfirm": "Adakah anda pasti mahu memadam kaedah pembayaran ini?",
+                "errors": {
+                    "saveFailed": "Gagal menyimpan kaedah pembayaran: {error}",
+                    "deleteFailed": "Gagal memadam kaedah pembayaran: {error}"
+                }
+            }
+        }
+    }
+};
+
+export default ms;

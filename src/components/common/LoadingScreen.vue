@@ -11,25 +11,11 @@
 import { ref, onMounted } from 'vue';
 import LoadingApplication from '@/assets/LoadingApplication.json';
 import { Vue3Lottie } from 'vue3-lottie';
+import { useI18n } from 'vue-i18n';
 
-const messages = [
-    "Preparing your workspace...",
-    "Scanning your transactions...",
-    "Balancing the books securely...",
-    "Verifying payment details...",
-    "Tracking your funds flow...",
-    "Calculating your totals...",
-    "Securing your financial data...",
-    "Updating your balance...",
-    "Confirming recent payments...",
-    "Analyzing spending patterns...",
-    "Syncing bank connections...",
-    "Generating your reports...",
-    "Locking down your ledger...",
-    "Forecasting your cash flow...",
-    "Finalizing transaction history...",
-    "Delivering your dashboard..."
-];
+const { t } = useI18n();
+
+const messages = Array.from({ length: 16 }, (_, i) => t(`components.common.LoadingScreen.${i}`));
 
 const loadingMessage = ref(messages[0]);
 

@@ -1,10 +1,10 @@
 <template>
     <div class="container mx-auto p-4">
-        <PageHeader title="My Payment Methods">
+        <PageHeader :title="$t('pages.profile.mypayment.title')">
             <template #actions>
                 <Button class="w-full sm:w-auto" @click="openAddDialog">
                     <Plus class="w-4 h-4 mr-2" />
-                    Add Payment Method
+                    {{ $t('pages.profile.mypayment.addPaymentMethod') }}
                 </Button>
             </template>
         </PageHeader>
@@ -53,14 +53,14 @@
                 <CreditCard class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
             </div>
             <h3 class="text-base sm:text-lg font-medium mb-2">
-                No payment methods yet
+                {{ $t('pages.profile.mypayment.noPaymentMethodsYet') }}
             </h3>
             <p class="text-gray-500 mb-4 text-sm sm:text-base">
-                Add a payment method to receive payments from participants
+                {{ $t('pages.profile.mypayment.addPaymentMethodDescription') }}
             </p>
             <Button class="w-full sm:w-auto" @click="openAddDialog">
                 <Plus class="w-4 h-4 mr-2" />
-                Add Payment Method
+                {{ $t('pages.profile.mypayment.addPaymentMethod') }}
             </Button>
         </div>
 
@@ -79,7 +79,7 @@
 
 
                             <span class="text-xs text-gray-500">
-                                Added on
+                                {{ $t('pages.profile.mypayment.addedOn') }}
                                 {{
                                     new Date(method.created_at).toLocaleDateString()
                                 }}
@@ -98,7 +98,7 @@
                             @click="openEditDialog(method)"
                         >
                             <Pencil class="w-4 h-4 mr-2" />
-                            Edit
+                            {{ $t('pages.profile.mypayment.edit') }}
                         </Button>
                         <Button
                             variant="outline"
@@ -107,7 +107,7 @@
                             @click="openDeleteDialog(method)"
                         >
                             <Trash2 class="w-4 h-4 mr-2" />
-                            Delete
+                            {{ $t('pages.profile.mypayment.delete') }}
                         </Button>
                     </div>
                 </div>
@@ -119,29 +119,28 @@
             <DialogContent class="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle
-                        >{{ editingMethod ? 'Edit' : 'Add' }} Payment
-                        Method</DialogTitle
+                        >{{ editingMethod ? $t('pages.profile.mypayment.edit') : $t('pages.profile.mypayment.add') }} {{ $t('pages.profile.mypayment.paymentMethod') }}</DialogTitle
                     >
                 </DialogHeader>
                 <form @submit.prevent="handleSubmit" class="space-y-4">
                     <div class="grid gap-2">
-                        <Label for="paymentType">Payment Type</Label>
+                        <Label for="paymentType">{{ $t('pages.profile.mypayment.paymentType') }}</Label>
                         <Select v-model="formData.tipe" required>
                             <SelectTrigger id="paymentType">
                                 <SelectValue
-                                    placeholder="Select payment type"
+                                    :placeholder="$t('pages.profile.mypayment.selectPaymentType')"
                                 />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectItem value="Bank Transfer"
-                                        >Bank Transfer</SelectItem
+                                        >{{ $t('pages.profile.mypayment.bankTransfer') }}</SelectItem
                                     >
-                                    <SelectItem value="GoPay">GoPay</SelectItem>
-                                    <SelectItem value="OVO">OVO</SelectItem>
-                                    <SelectItem value="Dana">Dana</SelectItem>
+                                    <SelectItem value="GoPay">{{ $t('pages.profile.mypayment.goPay') }}</SelectItem>
+                                    <SelectItem value="OVO">{{ $t('pages.profile.mypayment.ovo') }}</SelectItem>
+                                    <SelectItem value="Dana">{{ $t('pages.profile.mypayment.dana') }}</SelectItem>
                                     <SelectItem value="ShopeePay"
-                                        >ShopeePay</SelectItem
+                                        >{{ $t('pages.profile.mypayment.shopeePay') }}</SelectItem
                                     >
                                 </SelectGroup>
                             </SelectContent>
@@ -152,21 +151,21 @@
                         v-if="formData.tipe === 'Bank Transfer'"
                         class="grid gap-2"
                     >
-                        <Label for="bankName">Bank Name</Label>
+                        <Label for="bankName">{{ $t('pages.profile.mypayment.bankName') }}</Label>
                         <Input
                             id="bankName"
                             v-model="formData.bank_name"
-                            placeholder="e.g., BCA, BNI, Mandiri"
+                            :placeholder="$t('pages.profile.mypayment.bankNamePlaceholder')"
                             required
                         />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="accountNumber">Account Number</Label>
+                        <Label for="accountNumber">{{ $t('pages.profile.mypayment.accountNumber') }}</Label>
                         <Input
                             id="accountNumber"
                             v-model="formData.norek"
-                            placeholder="Enter account number"
+                            :placeholder="$t('pages.profile.mypayment.accountNumberPlaceholder')"
                             required
                         />
                     </div>
@@ -177,10 +176,10 @@
                             variant="outline"
                             @click="isDialogOpen = false"
                         >
-                            Cancel
+                            {{ $t('pages.profile.mypayment.cancel') }}
                         </Button>
                         <Button type="submit">
-                            {{ editingMethod ? 'Update' : 'Save' }}
+                            {{ editingMethod ? $t('pages.profile.mypayment.update') : $t('pages.profile.mypayment.save') }}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -194,9 +193,9 @@
         >
             <DialogContent class="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Delete Payment Method</DialogTitle>
+                    <DialogTitle>{{ $t('pages.profile.mypayment.deletePaymentMethod') }}</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to delete this payment method?
+                        {{ $t('pages.profile.mypayment.deleteConfirm') }}
                         <div class="mt-2 p-2 bg-gray-50 rounded">
                             <div class="font-medium">
                                 {{ methodToDelete?.norek }}
@@ -213,14 +212,14 @@
                         variant="outline"
                         @click="isDeleteDialogOpen = false"
                     >
-                        Cancel
+                        {{ $t('pages.profile.mypayment.cancel') }}
                     </Button>
                     <Button
                         type="button"
                         variant="destructive"
                         @click="deletePaymentMethod"
                     >
-                        Delete
+                        {{ $t('pages.profile.mypayment.delete') }}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -231,6 +230,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -258,6 +258,7 @@ import { Plus, Pencil, Trash2, CreditCard } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import PageHeader from '@/components/common/PageHeader.vue';
 
+const { t } = useI18n();
 const router = useRouter();
 const paymentMethods = ref([]);
 const loading = ref(false);
@@ -387,7 +388,7 @@ async function handleSubmit() {
         isDialogOpen.value = false;
     } catch (error) {
         console.error('Error saving payment method:', error);
-        toast.error('Failed to save payment method: ' + error.message);
+        toast.error(t('pages.profile.mypayment.errors.saveFailed', { error: error.message }));
     }
 }
 
@@ -408,7 +409,7 @@ async function deletePaymentMethod() {
         isDeleteDialogOpen.value = false;
     } catch (error) {
         console.error('Error deleting payment method:', error);
-        toast.error('Failed to delete payment method: ' + error.message);
+        toast.error(t('pages.profile.mypayment.errors.deleteFailed', { error: error.message }));
     }
 }
 

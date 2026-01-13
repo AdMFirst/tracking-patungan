@@ -1,0 +1,400 @@
+/**
+ * Instructions for AI machine:
+ * Rule 1: prioritize the use of t from useI18n rather than $t
+ * Rule 2: Use the file path as prefix for i18n key (e.g., files in @/components/room/OrderRooms.vue is components.room.OrderRooms.whateverYouWantAfterwards)
+ * Rule 3: Also use i18n on error messages and placeholder text
+ * Rule 4: when the text is combined with date or currency, do it last then ask on how to proceed
+ */
+const min = {
+    "components": {
+        "auth": {
+            "AuthForm": {
+                "signInTitle": "Masuak ka akun Sanak",
+                "createAccountTitle": "Buek akun Sanak",
+                "noAccount": "Alun punyo akun?",
+                "haveAccount": "Alah punyo akun?",
+                "signUp": "Daftar",
+                "signIn": "Masuak",
+                "orContinueWith": "Atau lanjuik jo",
+                "emailLabel": "Email",
+                "passwordLabel": "Kato Sandi",
+                "hidePassword": "Suruakkan kato sandi",
+                "showPassword": "Caliakkan kato sandi",
+                "fullNameLabel": "Namo Lengkap",
+                "emailPlaceholder": "Masuakkan email Sanak",
+                "passwordPlaceholder": "Masuakkan kato sandi Sanak",
+                "fullNamePlaceholder": "Masuakkan namo lengkap Sanak",
+                "loading": "Memuat...",
+                "signInButton": "Masuak",
+                "signUpButton": "Daftar",
+                "genericError": "Tajadi kasalahan. Cubo baliak.",
+                "discordLoginError": "Gagal masuak jo Discord. Cubo baliak.",
+                "linkedInLoginError": "Gagal masuak jo LinkedIn. Cubo baliak."
+            }
+        },
+        "common": {
+            "BottomNav": {
+                "home": "Beranda",
+                "histori": "Riwayat",
+                "create": "Buek",
+                "my room": "Bilik Awak",
+                "profile": "Profil"
+            },
+            "LoadingScreen": {
+                "0": "Mangirimkan dasbor Sanak...",
+                "1": "Manyiapkan ruang karajo...",
+                "2": "Mamindai transaksi...",
+                "3": "Manyaimbangkan buku...",
+                "4": "Verifikasi rincian pambayaran...",
+                "5": "Malacak arus dana...",
+                "6": "Maituang total...",
+                "7": "Mangamankan data kauangan...",
+                "8": "Mampabarui saldo...",
+                "9": "Konfirmasi pambayaran...",
+                "10": "Analisis pengeluaran...",
+                "11": "Manyinkronkan koneksi bank...",
+                "12": "Mambuek laporan...",
+                "13": "Mangunci buku gadang...",
+                "14": "Parkiraan arus kas...",
+                "15": "Manyalasaikan riwayat transaksi...",
+            },
+            "UserAvatar": {
+                "connectedViaDiscord": "Tahubuang via Discord",
+                "connectedViaLinkedIn": "Tahubuang via LinkedIn",
+                "emailPassword": "Email/Kato Sandi",
+                "unknown": "Indak Dikatahui"
+            }
+        },
+        "qr": {
+            "QRScanner": {
+                "alignQRCode": "Paskan kode QR dalam bingkai",
+                "statusLabel": "Status",
+                "activeStatus": "Aktif",
+                "pausedStatus": "Jeda",
+                "startButton": "Mulai",
+                "stopButton": "Baranti"
+            }
+        },
+        "room": {
+            "JoinRoomPrompt": {
+                "title": "Sanak indak sato di bilik iko",
+                "description": "Bilik iko ado tapi Sanak alun gabuang. Nio gabuang dan sato pasan?",
+                "noButton": "Indak, baliak",
+                "yesButton": "Iyo, gabuang bilik",
+                "joining": "Bagabuang..."
+            },
+            "OrderRooms": {
+                "untitledRoom": "Bilik Tanpa Judul",
+                "unknown": "Indak Dikatahui",
+                "notSpecified": "Indak ditantukan",
+                "roomStillOpen": "Bilik masih bukak!",
+                "openRoomButton": "Bukak Bilik",
+                "payNowButton": "Bayar Kini",
+                "yourTotal": "Total Sanak:",
+                "runnerLabel": "Pelari:",
+                "restaurantLabel": "Restoran:",
+                "createdAtLabel": "Dibuek pado:",
+                "itemsOrderedLabel": "Item Dipasan:",
+                "each": "satiok",
+                "paidAt": "Dibayar pado {date}",
+                "paidAtVia": "Dibayar pado {date} via {method}",
+                "paymentConfirmed": "Pambayaran dikonfirmasi {amount} pakai metode nan dipiliah. Bilik alah lunas.",
+                "paymentFailed": "Gagal konfirmasi pambayaran: {error}"
+            },
+            "QRScanDialog": {
+                "scanQRButton": "Pindai QR",
+                "title": "Gabuang bilik jo pindai QR",
+                "closeButton": "Tutuik"
+            }
+        },
+        "modals": {
+            "AddOrderItemModal": {
+                "title": "Tambah Pasanan Baru",
+                "description": "Tambah item baru ka pesanan Sanak.",
+                "itemNameLabel": "Namo Item",
+                "itemNamePlaceholder": "Masuakkan namo item",
+                "quantityLabel": "Jumlah",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Harago Satuan",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Catatan (opsional)",
+                "notesPlaceholder": "Instruksi khusus",
+                "cancelButton": "Batal",
+                "addItemButton": "Tambah Item"
+            },
+            "CloseRoomModal": {
+                "title": "Tutuik Bilik",
+                "description": "Masuakkan total akhir untuak bilik iko.",
+                "finalTotalLabel": "Total Akhir",
+                "finalTotalPlaceholder": "Masuakkan total akhir...",
+                "cancelButton": "Batal",
+                "deleteRoomButton": "Hapus Bilik",
+                "submitButton": "Kirim",
+                "deleteConfirmTitle": "Yakin nio hapus?",
+                "deleteConfirmDescription": "Tindakan iko indak bisa dibatalkan. Sadonyo data bilik akan hilang.",
+                "deleteCancelButton": "Batal",
+                "deleteConfirmButton": "Hapus"
+            },
+            "EditOrderItemModal": {
+                "title": "Ubah Item Pasanan",
+                "description": "Ubah item pasanan iko.",
+                "itemNameLabel": "Namo Item",
+                "itemNamePlaceholder": "Masuakkan namo item",
+                "quantityLabel": "Jumlah",
+                "quantityPlaceholder": "1",
+                "unitPriceLabel": "Harago Satuan",
+                "unitPricePlaceholder": "0.00",
+                "notesLabel": "Catatan (opsional)",
+                "notesPlaceholder": "Instruksi khusus",
+                "cancelButton": "Batal",
+                "updateItemButton": "Parbarui Item"
+            },
+            "FilterModal": {
+                "title": "Saringan",
+                "description": "Atur kriteria cari bilik.",
+                "searchLabel": "Cari manuruik judul/namo",
+                "searchPlaceholder": "Cari bilik...",
+                "platformLabel": "Platform",
+                "platformPlaceholder": "Sadonyo Platform",
+                "restaurantLabel": "Restoran (Khusus)",
+                "restaurantPlaceholder": "Saring manuruik restoran...",
+                "dateFromLabel": "Dari Tanggal",
+                "dateToLabel": "Sampai Tanggal",
+                "clearFiltersButton": "Hapus Saringan",
+                "applyFiltersButton": "Terapkan Saringan"
+            },
+            "PaymentModal": {
+                "title": "Metode Pambayaran",
+                "description": "Pilih metode pambayaran dan konfirmasi",
+                "availablePaymentMethods": "Metode Pambayaran:",
+                "loadingPaymentMethods": "Memuat metode pambayaran...",
+                "noPaymentMethods": "Indak ado metode pambayaran.",
+                "confirmPaymentCheckbox": "Awak konfirmasi kalau awak alah mambayar",
+                "cancelButton": "Batal",
+                "confirmPaymentButton": "Konfirmasi Pambayaran"
+            },
+            "SettingsModal": {
+                "title": "Pangaturan",
+                "description": "Parbarui pangaturan profil Sanak.",
+                "usernameLabel": "Namo Pangguno",
+                "usernamePlaceholder": "Masuakkan namo pangguno...",
+                "cancelButton": "Batal",
+                "saveChangesButton": "Simpan Parubahan"
+            }
+        },
+        "UserInfo": {
+            "welcomeBack": "Salamaik datang baliak!",
+            "accountInfo": "Informasi akun Sanak",
+            "connectedViaDiscord": "Tahubuang via Discord",
+            "connectedViaLinkedIn": "Tahubuang via LinkedIn",
+            "defaultUser": "Pangguno",
+            "memberSince": "Anggota sajak",
+            "lastSignIn": "Masuak tarakhir",
+            "accountStatus": "Status akun",
+            "activeStatus": "Aktif",
+            "provider": "Panyedio",
+            "discord": "Discord",
+            "linkedIn": "LinkedIn",
+            "noUserInfo": "Indak ado informasi pangguno",
+            "signingOut": "Kaluar...",
+            "signOut": "Kaluar"
+        }
+    },
+    "pages": {
+        "404": {
+            "pageNotFound": "Laman Indak Ditamukan",
+            "description": "Alamat nan Sanak ketik indak ado. Jan cameh, mari baliak.",
+            "goToHomepage": "Ka Beranda"
+        },
+        "index": {
+            "appName": "Talangin",
+            "heroSubtitle": "Bikin patungan jadi transparan",
+            "heroDescription": "Catat. Hituang. Salasai.",
+            "joinRoom": "Gabuang Bilik",
+            "enterRoomCode": "Masuakkan kode bilik",
+            "go": "Lanjuik",
+            "monthlySpending": "Pangeluaran Bulanan",
+            "noSpendingData": "Indak ado data pangeluaran",
+            "dashboardFeatures": "Fitur Dasbor",
+            "trackExpenses": "Lacak pangeluaran",
+            "viewAnalytics": "Caliak analitik",
+            "manageBudgets": "Atur anggaran"
+        },
+        "createRoom": {
+            "title": "Buek Bilik Baru",
+            "description": "Masuakkan rincian untuak pesanan makanan.",
+            "form": {
+                "titleLabel": "Judul",
+                "titlePlaceholder": "Makan malam jo urang tuo",
+                "restaurantLabel": "Namo Restoran",
+                "restaurantPlaceholder": "KFC, McDonalds, dll",
+                "deliveryTypeLabel": "Tipe Pangiriman",
+                "deliveryTypePlaceholder": "Pilih Aplikasi",
+                "customPlatformLabel": "Namo Platform Khusus",
+                "customPlatformPlaceholder": "Cth., Jasa Kirim Lokal",
+                "createButton": "Buek",
+                "loading": "Memuat..."
+            },
+            "deliveryTypes": {
+                "goFood": "GoFood",
+                "grabFood": "GrabFood",
+                "shopeeFood": "Shopee Food",
+                "travelokaEats": "Traveloka Eats",
+                "maxim": "Maxim Food & Goods Delivery",
+                "tokopediaNow": "Tokopedia NOW!",
+                "custom": "Khusus"
+            },
+            "errors": {
+                "connectionError": "Gagal manyambuang ka server."
+            }
+        },
+        "myroom": {
+            "roomDetails": {
+                "title": "Rincian Bilik",
+                "restaurant": "Restoran",
+                "orderTime": "Waktu Pasan",
+                "created": "Dibuek",
+                "finalTotal": "Total Akhir",
+                "participants": "Peserta",
+                "paymentSummary": "Ringkasan Pambayaran",
+                "totalPaid": "Total Dibayar",
+                "totalUnpaid": "Total Alun Dibayar",
+                "remaining": "Siso",
+                "roomNotFound": "Bilik indak ditamukan",
+                "roomNotFoundDescription": "Bilik nan Sanak cari indak ado.",
+                "notSpecified": "Indak ditantukan",
+                "unknownUser": "Pangguno Indak Dikatahui",
+                "paid": "Lunas",
+                "pending": "Manunggu",
+                "unpaid": "Alun Lunas",
+                "you": "Sanak",
+                "via": "via",
+                "noParticipants": "Indak ado peserta."
+            },
+            "index": {
+                "title": "Bilik Awak",
+                "openFilters": "Bukak Saringan",
+                "noRoomsFound": "Indak ado bilik",
+                "noRoomsMatchFilters": "Indak ado bilik nan cocok.",
+                "noRoomsCreated": "Sanak alun mambuek bilik.",
+                "untitledRoom": "Bilik Tanpa Judul",
+                "unknown": "Indak Dikatahui",
+                "notSpecified": "Indak ditantukan",
+                "restaurantLabel": "Restoran:",
+                "orderTimeLabel": "Waktu Pasan:",
+                "createdLabel": "Dibuek:",
+                "finalTotalLabel": "Total Akhir:",
+                "manageRoom": "Atur Bilik",
+                "roomStillOpen": "Bilik masih rami! Masuak dan tambah pesanan",
+                "closeRoom": "Tutuik Bilik",
+                "openRoom": "Bukak Bilik"
+            }
+        },
+        "activeRoom": {
+            "errorTitle": "Kasalahan",
+            "goBack": "Baliak",
+            "roomNotAvailableTitle": "Bilik Indak Tersedia",
+            "roomNotAvailableDescription": "{roomId} indak valid atau indak aktif",
+            "thisRoom": "Bilik Iko",
+            "restaurantInfo": "{restaurant} via {platform}",
+            "cartTitle": "Karanjang",
+            "unknownUser": "Pangguno Indak Dikatahui",
+            "each": "satiok",
+            "noOrderItems": "Alun ado item pesanan.",
+            "shareRoomTitle": "Bagikan Bilik",
+            "shareRoomDescription": "Pindai kode QR untuak membagikan bilik iko.",
+            "close": "Tutuik",
+            "errors": {
+                "loginToJoin": "Sanak paralu masuak untuak gabuang bilik iko",
+                "joinFailed": "Gagal gabuang bilik. Cubo baliak.",
+                "participantRequired": "Sanak paralu jadi peserta untuak nambah item",
+                "addFailed": "Gagal nambah item pesanan. Cubo baliak.",
+                "notParticipant": "Sanak bukan peserta di bilik iko.",
+                "editOwnItems": "Sanak hanyo bisa maubah item Sanak surang",
+                "loginToUpdate": "Sanak paralu masuak untuak mambarui item",
+                "updateFailed": "Gagal mambarui item pesanan.",
+                "loginToDelete": "Sanak paralu masuak untuak menghapus item",
+                "deleteOwnItems": "Sanak hanyo bisa menghapus item Sanak surang",
+                "deleteFailed": "Gagal menghapus item pesanan.",
+                "invalidUuid": "Format ID bilik indak valid.",
+                "loadDetailsFailed": "Gagal memuat rincian bilik.",
+                "roomNotFound": "Bilik indak ditamukan.",
+                "roomClosed": "Bilik iko ditutuik.",
+                "loadParticipantsFailed": "Gagal memuat peserta.",
+                "loadItemsFailed": "Gagal memuat item pesanan.",
+                "checkParticipationFailed": "Gagal mameriksa status partisipasi.",
+                "loadDataFailed": "Gagal memuat data bilik.",
+                "generateQrFailed": "Gagal mahasilkan kode QR."
+            },
+            "toast": {
+                "deleteConfirm": "Hapus item pesanan iko?",
+                "delete": "Hapus",
+                "cancel": "Batal"
+            }
+        },
+        "histori": {
+            "title": "Riwayat Bilik",
+            "tabs": {
+                "active": "Aktif",
+                "closed": "Ditutuik"
+            },
+            "emptyState": {
+                "activeTitle": "Indak ado bilik aktif",
+                "closedTitle": "Indak ado bilik ditutuik",
+                "activeDescription": "Sanak alun gabuang bilik aktif.",
+                "closedDescription": "Sanak alun gabuang bilik nan alah ditutuik."
+            }
+        },
+        "profile": {
+            "index": {
+                "memberSince": "Anggota sajak",
+                "lastSignIn": "Masuak tarakhir",
+                "provider": "Panyedio",
+                "noUserInfo": "Indak ado informasi pangguno",
+                "changeUsername": "Ganti Namo Pangguno",
+                "managePaymentMethods": "Atur Metode Pambayaran",
+                "changeLanguage": "Ganti Basa",
+                "selectPreferredLanguage": "Pilih baso nan Sanak suka",
+                "language": "Baso",
+                "selectLanguage": "Pilih Basa",
+                "save": "Simpan",
+                "cancel": "Batal",
+                "signingOut": "Kaluar...",
+                "signOut": "Kaluar"
+            },
+            "mypayment": {
+                "title": "Metode Pambayaran Awak",
+                "addPaymentMethod": "Tambah Metode Pambayaran",
+                "noPaymentMethodsYet": "Alun ado metode pambayaran",
+                "addPaymentMethodDescription": "Tambah metode pambayaran untuak manarimo pambayaran dari peserta",
+                "addedOn": "Ditambahkan pado",
+                "edit": "Ubah",
+                "delete": "Hapus",
+                "add": "Tambah",
+                "paymentMethod": "Metode Pambayaran",
+                "paymentType": "Tipe Pambayaran",
+                "selectPaymentType": "Pilih tipe pambayaran",
+                "bankTransfer": "Transfer Bank",
+                "goPay": "GoPay",
+                "ovo": "OVO",
+                "dana": "Dana",
+                "shopeePay": "ShopeePay",
+                "bankName": "Namo Bank",
+                "bankNamePlaceholder": "cth., BCA, BNI, Mandiri",
+                "accountNumber": "Nomor Rekening",
+                "accountNumberPlaceholder": "Masuakkan nomor rekening",
+                "cancel": "Batal",
+                "update": "Parbarui",
+                "save": "Simpan",
+                "deletePaymentMethod": "Hapus Metode Pambayaran",
+                "deleteConfirm": "Yakin nio menghapus metode pambayaran iko?",
+                "errors": {
+                    "saveFailed": "Gagal manyimpan metode pambayaran: {error}",
+                    "deleteFailed": "Gagal menghapus metode pambayaran: {error}"
+                }
+            }
+        }
+    }
+};
+
+export default min;

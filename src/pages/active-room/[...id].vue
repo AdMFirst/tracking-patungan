@@ -46,10 +46,10 @@
          
         <!-- Error state -->
         <div v-else-if="error" class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
-            <h2 class="text-xl font-semibold text-red-600 mb-2">Error</h2>
+            <h2 class="text-xl font-semibold text-red-600 mb-2">{{ t('pages.activeRoom.errorTitle') }}</h2>
             <p class="text-gray-600">{{ error }}</p>
             <Button variant="outline" class="mt-4" @click="goBack">
-                Go Back
+                {{ t('pages.activeRoom.goBack') }}
             </Button>
         </div>
         
@@ -57,7 +57,7 @@
         <div v-else-if="showJoinPrompt">
             <JoinRoomPrompt
                 :roomId="roomID"
-                :roomTitle="room?.title || 'This Room'"
+                :roomTitle="room?.title || t('pages.activeRoom.thisRoom')"
                 @join="handleJoinRoom"
                 @cancel="handleCancelJoin"
             />
@@ -65,12 +65,12 @@
         
         <!-- Invalid room state -->
         <div v-else-if="!room && !error" class="text-center p-6 bg-yellow-50 rounded-lg border border-yellow-200">
-            <h2 class="text-xl font-semibold text-yellow-600 mb-2">Room Not Available</h2>
+            <h2 class="text-xl font-semibold text-yellow-600 mb-2">{{ t('pages.activeRoom.roomNotAvailableTitle') }}</h2>
             <p class="text-gray-600 mb-4">
-                {{ roomID }} is invalid or not active
+                {{ t('pages.activeRoom.roomNotAvailableDescription', { roomId: roomID }) }}
             </p>
             <Button variant="outline" @click="goBack">
-                Go Back
+                {{ t('pages.activeRoom.goBack') }}
             </Button>
         </div>
         
@@ -89,12 +89,12 @@
             </PageHeader>
             <div class="mb-4">
                 <p class="text-muted-foreground">
-                    {{ room.restaurant }} via {{ room.platform }}
+                    {{ t('pages.activeRoom.restaurantInfo', { restaurant: room.restaurant, platform: room.platform }) }}
                 </p>
             </div>
             <Separator class="my-6" />
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-4">Cart</h2>
+                <h2 class="text-xl font-semibold mb-4">{{ t('pages.activeRoom.cartTitle') }}</h2>
                 <div v-if="Object.keys(groupedOrderItems).length > 0" class="space-y-6">
                     <div
                         v-for="(userGroup, participantId) in groupedOrderItems"
@@ -111,7 +111,7 @@
                             <h3 class="font-semibold">
                                 {{
                                     userCache[userGroup[0]?.user_id]?.display_name ||
-                                    'Unknown User'
+                                    t('pages.activeRoom.unknownUser')
                                 }}
                             </h3>
                         </div>
@@ -130,7 +130,7 @@
                                                             item.unit_price
                                                         )
                                                     }}
-                                                    each</span
+                                                    {{ t('pages.activeRoom.each') }}</span
                                                 >
                                             </span>
                                             <span>{{
@@ -167,7 +167,7 @@
                     </div>
                 </div>
                 <div v-else class="text-muted-foreground">
-                    No order items yet.
+                    {{ t('pages.activeRoom.noOrderItems') }}
                 </div>
             </div>
         </div>
@@ -196,9 +196,9 @@
     <Dialog v-model:open="showShareModal">
         <DialogContent class="sm:max-w-md">
             <DialogHeader>
-                <DialogTitle>Share Room</DialogTitle>
+                <DialogTitle>{{ t('pages.activeRoom.shareRoomTitle') }}</DialogTitle>
                 <DialogDescription>
-                    Scan the QR code to share this room with others.
+                    {{ t('pages.activeRoom.shareRoomDescription') }}
                 </DialogDescription>
             </DialogHeader>
             <div class="flex justify-center py-4">
@@ -206,7 +206,7 @@
             </div>
             <DialogFooter>
                 <Button variant="outline" @click="showShareModal = false">
-                    Close
+                    {{ t('pages.activeRoom.close') }}
                 </Button>
             </DialogFooter>
         </DialogContent>
@@ -216,6 +216,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { user as currentUser } from '@/lib/auth';
 import {
     supabase,
@@ -249,7 +250,8 @@ import { toast } from 'vue-sonner';
 // State management
 const route = useRoute();
 const router = useRouter();
-const roomID = route.params.id;
+const { t } = useI18n();
+const roomID = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 const room = ref(null);
 const orderItems = ref([]);
 const loading = ref(true);
@@ -269,6 +271,9 @@ const participantIds = ref([]);
 // UUID validation regex
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+const goBack = () => {
+    router.push('/');
+};
 
 // Share functionality
 const generateQRCode = async () => {
@@ -277,7 +282,7 @@ const generateQRCode = async () => {
         qrCodeUrl.value = await QRCode.toDataURL(currentUrl);
     } catch (err) {
         console.error('Error generating QR code:', err);
-        error.value = 'Failed to generate QR code.';
+        error.value = t('pages.activeRoom.errors.generateQrFailed');
     }
 };
 
@@ -290,7 +295,7 @@ const handleShareClick = async () => {
 const handleJoinRoom = async () => {
     try {
         if (!currentUser.value) {
-            error.value = 'You need to be logged in to join this room';
+            error.value = t('pages.activeRoom.errors.loginToJoin');
             return;
         }
 
@@ -306,7 +311,7 @@ const handleJoinRoom = async () => {
         
     } catch (err) {
         console.error('Error joining room:', err);
-        error.value = 'Failed to join room. Please try again.';
+        error.value = t('pages.activeRoom.errors.joinFailed');
     } finally {
         loading.value = false;
     }
@@ -321,7 +326,7 @@ const handleCancelJoin = () => {
 const handleAddOrderItem = async (itemData) => {
     try {
         if (!currentUser.value || !isParticipant.value) {
-            error.value = 'You need to be a participant to add items';
+            error.value = t('pages.activeRoom.errors.participantRequired');
             return;
         }
         
@@ -339,13 +344,13 @@ const handleAddOrderItem = async (itemData) => {
         
         if (participantError) {
             console.error('Error fetching participant ID:', participantError);
-            error.value = 'Failed to add order item. Please try again.';
+            error.value = t('pages.activeRoom.errors.addFailed');
             return;
         }
         
         if (!participantData) {
             console.error('Participant record not found');
-            error.value = 'You are not a participant in this room.';
+            error.value = t('pages.activeRoom.errors.notParticipant');
             return;
         }
         
@@ -363,7 +368,7 @@ const handleAddOrderItem = async (itemData) => {
         
         if (insertError) {
             console.error('Error adding order item:', insertError);
-            error.value = 'Failed to add order item. Please try again.';
+            error.value = t('pages.activeRoom.errors.addFailed');
             return;
         }
         
@@ -375,7 +380,7 @@ const handleAddOrderItem = async (itemData) => {
         
     } catch (err) {
         console.error('Error adding order item:', err);
-        error.value = err.message || 'Failed to add order item.';
+        error.value = err.message || t('pages.activeRoom.errors.addFailed');
     } finally {
         loading.value = false;
     }
@@ -397,7 +402,7 @@ const canEditItem = (item) => {
 // Edit order item handler
 const handleEditOrderItem = (item) => {
     if (!canEditItem(item)) {
-        error.value = 'You can only edit your own items';
+        error.value = t('pages.activeRoom.errors.editOwnItems');
         return;
     }
     editingItem.value = { ...item };
@@ -408,7 +413,7 @@ const handleEditOrderItem = (item) => {
 const handleUpdateOrderItem = async (updatedData) => {
     try {
         if (!currentUser.value) {
-            error.value = 'You need to be logged in to update order items';
+            error.value = t('pages.activeRoom.errors.loginToUpdate');
             return;
         }
         
@@ -433,7 +438,7 @@ const handleUpdateOrderItem = async (updatedData) => {
         
     } catch (err) {
         console.error('Error updating order item:', err);
-        error.value = err.message || 'Failed to update order item.';
+        error.value = err.message || t('pages.activeRoom.errors.updateFailed');
     } finally {
         loading.value = false;
     }
@@ -443,7 +448,7 @@ const handleUpdateOrderItem = async (updatedData) => {
 const handleDeleteOrderItem = async (itemId, itemUserId) => {
     try {
         if (!currentUser.value) {
-            error.value = 'You need to be logged in to delete order items';
+            error.value = t('pages.activeRoom.errors.loginToDelete');
             return;
         }
         
@@ -452,18 +457,18 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
         const isRunnerUser = isRunner.value;
         
         if (!isOwner && !isRunnerUser) {
-            error.value = 'You can only delete your own items';
+            error.value = t('pages.activeRoom.errors.deleteOwnItems');
             return;
         }
         
         const confirmed = await new Promise((resolve) => {
-            toast.warning('Delete this order item?', {
+            toast.warning(t('pages.activeRoom.toast.deleteConfirm'), {
                 action: {
-                    label: 'Delete',
+                    label: t('pages.activeRoom.toast.delete'),
                     onClick: () => resolve(true),
                 },
                 cancel: {
-                    label: 'Cancel',
+                    label: t('pages.activeRoom.toast.cancel'),
                     onClick: () => resolve(false),
                 },
                 onDismiss: () => resolve(false),
@@ -483,7 +488,7 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
         
     } catch (err) {
         console.error('Error deleting order item:', err);
-        error.value = err.message || 'Failed to delete order item.';
+        error.value = err.message || t('pages.activeRoom.errors.deleteFailed');
     } finally {
         loading.value = false;
     }
@@ -505,14 +510,14 @@ const groupedOrderItems = computed(() => {
 const loadRoomDetails = async () => {
     try {
         // Validate UUID format
-        if (!uuidRegex.test(roomID)) {
+        if (!roomID || !uuidRegex.test(roomID)) {
             console.error('Invalid room ID format:', roomID);
-            error.value = 'Invalid room ID format. Please use a valid UUID.';
+            error.value = t('pages.activeRoom.errors.invalidUuid');
             room.value = null;
             return false;
         }
 
-        const { data, error } = await supabase
+        const { data, error: fetchError } = await supabase
             .from('rooms')
             .select('*')
             .eq('id', roomID)
@@ -520,9 +525,9 @@ const loadRoomDetails = async () => {
 
         console.log('this is the room id', roomID, data)
 
-        if (error) {
-            console.error('Error fetching room details:', error);
-            error.value = 'Failed to load room details.';
+        if (fetchError) {
+            console.error('Error fetching room details:', fetchError);
+            error.value = t('pages.activeRoom.errors.loadDetailsFailed');
             room.value = null;
             return false;
         }
@@ -530,15 +535,15 @@ const loadRoomDetails = async () => {
         // Check if the room exists
         if (!data) {
             console.error('Room not found:', roomID);
-            error.value = 'Room not found. Please check the room ID.';
+            error.value = t('pages.activeRoom.errors.roomNotFound');
             room.value = null;
             return false;
         }
 
-        // Check if the room is active (no order_time or final_total yet)
-        if (data.order_time || data.final_total) {
+        // Check if the room is active (no final_total yet)
+        if (data.final_total) {
             console.error('Room is not active:', roomID);
-            error.value = 'This room is not active. Only active rooms can be accessed.';
+            error.value = t('pages.activeRoom.errors.roomClosed');
             room.value = null;
             return false;
         }
@@ -547,7 +552,7 @@ const loadRoomDetails = async () => {
         return true;
     } catch (err) {
         console.error('Error fetching room details:', err);
-        error.value = 'Failed to load room details.';
+        error.value = t('pages.activeRoom.errors.loadDetailsFailed');
         room.value = null;
         return false;
     }
@@ -563,7 +568,7 @@ const loadOrderItems = async () => {
         
         if (participantsError) {
             console.error('Error fetching participants:', participantsError);
-            error.value = 'Failed to load participants.';
+            error.value = t('pages.activeRoom.errors.loadParticipantsFailed');
             orderItems.value = [];
             return;
         }
@@ -586,7 +591,7 @@ const loadOrderItems = async () => {
         
         if (error) {
             console.error('Error fetching order items:', error);
-            error.value = 'Failed to load order items.';
+            error.value = t('pages.activeRoom.errors.loadItemsFailed');
             orderItems.value = [];
         } else {
             // Map the data to include user_id from the participant relationship
@@ -597,7 +602,7 @@ const loadOrderItems = async () => {
         }
     } catch (err) {
         console.error('Error fetching order items:', err);
-        error.value = 'Failed to load order items.';
+        error.value = t('pages.activeRoom.errors.loadItemsFailed');
         orderItems.value = [];
     }
 };
@@ -636,7 +641,7 @@ const checkParticipation = async () => {
         return participant;
     } catch (err) {
         console.error('Error checking participation:', err);
-        error.value = 'Failed to check your participation status.';
+        error.value = t('pages.activeRoom.errors.checkParticipationFailed');
         return false;
     }
 };
@@ -750,7 +755,7 @@ const loadRoomData = async () => {
         
     } catch (err) {
         console.error('Error loading room data:', err);
-        error.value = err.message || 'Failed to load room data.';
+        error.value = err.message || t('pages.activeRoom.errors.loadDataFailed');
     } finally {
         loading.value = false;
     }

@@ -3,16 +3,16 @@
         <!-- 🔧 REMOVED overflow-hidden -->
         <DialogContent class="sm:max-w-md max-h-[80vh] flex flex-col">
             <DialogHeader>
-                <DialogTitle>Payment Method</DialogTitle>
+                <DialogTitle>{{ $t('components.modals.PaymentModal.title') }}</DialogTitle>
                 <DialogDescription>
-                    Select your payment method and confirm payment
+                    {{ $t('components.modals.PaymentModal.description') }}
                 </DialogDescription>
             </DialogHeader>
 
             <!-- 🔧 min-h-0 added -->
             <div class="flex-1 flex flex-col min-h-0">
                 <div class="text-sm font-medium mb-2">
-                    Available Payment Methods:
+                    {{ $t('components.modals.PaymentModal.availablePaymentMethods') }}
                 </div>
 
                 <!-- 🔧 ONLY this section scrolls -->
@@ -37,14 +37,14 @@
                     </div>
 
                     <div v-if="loadingMethods" class="text-center py-4 text-sm text-muted-foreground">
-                        Loading payment methods...
+                        {{ $t('components.modals.PaymentModal.loadingPaymentMethods') }}
                     </div>
 
                     <div
                         v-if="!loadingMethods && paymentMethods.length === 0"
                         class="text-center py-4 text-sm text-muted-foreground"
                     >
-                        No payment methods found for this runner.
+                        {{ $t('components.modals.PaymentModal.noPaymentMethods') }}
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@
                             class="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                         >
                         <span class="text-sm text-muted-foreground">
-                            I confirm that I have already paid for this order using the selected payment method
+                            {{ $t('components.modals.PaymentModal.confirmPaymentCheckbox') }}
                         </span>
                     </label>
                 </div>
@@ -69,14 +69,14 @@
                     @click="handleClose"
                     class="w-full"
                 >
-                    Cancel
+                    {{ $t('components.modals.PaymentModal.cancelButton') }}
                 </Button>
-                <Button 
+                <Button
                     :disabled="!canPay"
                     @click="handleConfirmPayment"
                     class="w-full"
                 >
-                    Confirm Payment
+                    {{ $t('components.modals.PaymentModal.confirmPaymentButton') }}
                 </Button>
             </DialogFooter>
         </DialogContent>
@@ -96,6 +96,9 @@ import {
 import Button from '@/components/ui/button/Button.vue'
 import { supabase } from '../../lib/supabaseClient'
 import { toast } from 'vue-sonner'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
     room: Object,

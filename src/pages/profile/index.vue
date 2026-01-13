@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-background p-4 flex justify-center">
+    <div class="min-h-screen bg-background p-4 pb-20 flex justify-center">
         <div class="w-full max-w-sm space-y-6">
             <Card v-if="user">
                 <UserAvatar
@@ -12,7 +12,7 @@
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Member since</span
+                            >{{ $t('pages.profile.index.memberSince') }}</span
                         >
                         <span class="text-sm font-medium">
                             {{ formatDate(user.created_at) }}
@@ -23,7 +23,7 @@
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Last sign in</span
+                            >{{ $t('pages.profile.index.lastSignIn') }}</span
                         >
                         <span class="text-sm font-medium">
                             {{ formatDate(user.last_sign_in_at) }}
@@ -34,7 +34,7 @@
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
                         <span class="text-sm text-muted-foreground"
-                            >Provider</span
+                            >{{ $t('pages.profile.index.provider') }}</span
                         >
 
                         <Badge
@@ -54,17 +54,24 @@
             <Card v-else>
                 <CardContent class="p-6 text-center">
                     <p class="text-muted-foreground">
-                        No user information available
+                        {{ $t('pages.profile.index.noUserInfo') }}
                     </p>
                 </CardContent>
             </Card>
 
             <Button @click="openSettingsModal" class="w-full mb-4">
-                Change Username
+                <User class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeUsername') }}
             </Button>
 
             <Button @click="navigateToMyPayment" class="w-full mb-4">
-                Manage Payment Methods
+                <CreditCard class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.managePaymentMethods') }}
+            </Button>
+
+            <Button @click="openLanguageModal" class="w-full mb-4">
+                <Languages class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeLanguage') }}
             </Button>
 
             <Button
@@ -73,8 +80,14 @@
                 variant="destructive"
                 class="w-full"
             >
-                <template v-if="loading">Signing out...</template>
-                <template v-else>Sign Out</template>
+                <template v-if="loading">
+                    <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+                    {{ $t('pages.profile.index.signingOut') }}
+                </template>
+                <template v-else>
+                    <LogOut class="mr-2 h-4 w-4" />
+                    {{ $t('pages.profile.index.signOut') }}
+                </template>
             </Button>
         </div>
 
@@ -84,6 +97,11 @@
             :user="userData"
             @save="handleSaveSettings"
         />
+
+        <LanguageModal
+            :open="isLanguageModalOpen"
+            @update:open="isLanguageModalOpen = $event"
+        />
     </div>
 </template>
 
@@ -92,18 +110,25 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 import { ref, inject, computed } from 'vue';
 import UserAvatar from '@/components/common/UserAvatar.vue';
 import SettingsModal from '@/components/modals/SettingsModal.vue';
+import LanguageModal from '@/components/modals/LanguageModal.vue';
 import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 
+// Import icons from lucide-vue-next
+import { User, CreditCard, Languages, LogOut, Loader2 } from 'lucide-vue-next';
+
+const { t } = useI18n();
 const user = inject('user');
 const router = useRouter();
 
 const loading = ref(false);
 const isSettingsModalOpen = ref(false);
+const isLanguageModalOpen = ref(false);
 
 // User data for the settings modal
 const userData = computed(() => ({
@@ -128,6 +153,10 @@ const navigateToMyPayment = () => {
 
 const openSettingsModal = () => {
     isSettingsModalOpen.value = true;
+};
+
+const openLanguageModal = () => {
+    isLanguageModalOpen.value = true;
 };
 
 const handleSaveSettings = async (updatedUser) => {

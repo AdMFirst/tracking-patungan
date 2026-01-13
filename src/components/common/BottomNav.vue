@@ -3,9 +3,11 @@ import { useRouter, useRoute } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import { navItems } from '@/lib/router'; // { icon: lucide icon, label: 'Page Name', route: '/route' },
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 function navigateTo(route) {
     router.push(route);
@@ -27,6 +29,14 @@ const shouldShowNav = computed(() => {
             route.path === baseRoute || route.path.startsWith(baseRoute + '/')
     );
 });
+
+// 2. Map nav items to use i18n keys
+const i18nNavItems = computed(() => {
+    return navItems.map((item) => ({
+        ...item,
+        label: t(`components.common.BottomNav.${item.label.toLowerCase()}`)
+    }))
+});
 </script>
 
 <template>
@@ -36,7 +46,7 @@ const shouldShowNav = computed(() => {
     >
         <div class="flex h-16 items-center justify-around">
             <Button
-                v-for="item in navItems"
+                v-for="item in i18nNavItems"
                 :key="item.route"
                 variant="ghost"
                 class="flex flex-col h-full p-0 rounded-none text-muted-foreground"

@@ -1,11 +1,13 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 /**
  * Component logic for the 404 Page.
  * Uses Vue Router to navigate the user back to the homepage.
  */
 const router = useRouter();
+const { t } = useI18n();
 
 const goHome = () => {
     // Navigates to the root path (homepage)

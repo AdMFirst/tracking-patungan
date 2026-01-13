@@ -20,6 +20,7 @@ import {
 import { createRoom } from '@/lib/supabaseClient';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
+import { useI18n } from 'vue-i18n';
 
 // Daftar layanan pesan makanan online di Indonesia
 const DeliveryTypes = [

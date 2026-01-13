@@ -4,13 +4,13 @@
             <div class="max-w-md mx-auto">
                 <div class="text-center py-8">
                     <h1 class="text-3xl font-bold text-foreground mb-4">
-                        Talangin
+                        {{ $t('pages.index.appName') }}
                     </h1>
                     <p class="text-lg text-muted-foreground">
-                        bikin urusan patungan jadi transparan
+                        {{ $t('pages.index.heroSubtitle') }}
                     </p>
                     <p class="text-sm text-muted-foreground mt-2">
-                        Catat. Hitung. Beres.
+                        {{ $t('pages.index.heroDescription') }}
                     </p>
                 </div>
 
@@ -18,13 +18,13 @@
                 <!-- Join Room Card -->
                 <Card class="mb-6">
                     <CardHeader>
-                        <CardTitle>Join Room</CardTitle>
+                        <CardTitle>{{ $t('pages.index.joinRoom') }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div class="flex gap-2">
                             <Input
                                 v-model="roomCode"
-                                placeholder="Enter room code"
+                                :placeholder="$t('pages.index.enterRoomCode')"
                                 class="flex-1"
                                 @keyup.enter="joinRoom"
                             />
@@ -32,7 +32,7 @@
                                 @click="joinRoom"
                                 :disabled="!roomCode || isLoading"
                             >
-                                <span v-if="!isLoading">Go</span>
+                                <span v-if="!isLoading">{{ $t('pages.index.go') }}</span>
                                 <Spinner v-else class="w-4 h-4" />
                             </Button>
                         </div>
@@ -45,7 +45,7 @@
                 <!-- Monthly Spending Tracker -->
                 <Card class="mb-6">
                     <CardHeader>
-                        <CardTitle>Monthly Spending</CardTitle>
+                        <CardTitle>{{ $t('pages.index.monthlySpending') }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div class="space-y-4 max-h-1/2 overflow-y-scroll">
@@ -69,7 +69,7 @@
                                 class="text-center py-4"
                             >
                                 <p class="text-sm text-muted-foreground">
-                                    No spending data available
+                                    {{ $t('pages.index.noSpendingData') }}
                                 </p>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Dashboard Features</CardTitle>
+                        <CardTitle>{{ $t('pages.index.dashboardFeatures') }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div class="space-y-3">
@@ -87,7 +87,7 @@
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
                                 <span class="text-sm text-muted-foreground"
-                                    >Track your expenses</span
+                                    >{{ $t('pages.index.trackExpenses') }}</span
                                 >
                             </div>
                             <div class="flex items-center space-x-3">
@@ -95,7 +95,7 @@
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
                                 <span class="text-sm text-muted-foreground"
-                                    >View analytics</span
+                                    >{{ $t('pages.index.viewAnalytics') }}</span
                                 >
                             </div>
                             <div class="flex items-center space-x-3">
@@ -103,7 +103,7 @@
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
                                 <span class="text-sm text-muted-foreground"
-                                    >Manage budgets</span
+                                    >{{ $t('pages.index.manageBudgets') }}</span
                                 >
                             </div>
                         </div>
@@ -117,6 +117,7 @@
 <script setup>
 import { inject, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { fetchMonthlySpending } from '@/lib/supabaseClient';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input/Input.vue';
@@ -126,6 +127,7 @@ import QRScanDialog from '@/components/room/QRScanDialog.vue';
 
 const user = inject('user');
 const router = useRouter();
+const { t } = useI18n();
 
 const roomCode = ref('');
 const isLoading = ref(false);

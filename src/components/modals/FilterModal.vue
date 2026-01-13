@@ -2,33 +2,33 @@
     <Dialog :open="open" @update:open="handleOpenChange">
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle>Filters</DialogTitle>
+                <DialogTitle>{{ $t('components.modals.FilterModal.title') }}</DialogTitle>
                 <DialogDescription>
-                    Adjust your room search criteria.
+                    {{ $t('components.modals.FilterModal.description') }}
                 </DialogDescription>
             </DialogHeader>
 
             <div class="space-y-4 py-2">
                 <div class="space-y-1">
-                    <Label for="search">Search by title/name</Label>
+                    <Label for="search">{{ $t('components.modals.FilterModal.searchLabel') }}</Label>
                     <Input
                         id="search"
                         v-model="filterForm.search"
                         type="text"
-                        placeholder="Search rooms..."
+                        :placeholder="$t('components.modals.FilterModal.searchPlaceholder')"
                     />
                 </div>
 
                 <div class="space-y-1">
-                    <Label for="platform">Platform</Label>
+                    <Label for="platform">{{ $t('components.modals.FilterModal.platformLabel') }}</Label>
                     <Select v-model="filterForm.platform">
                         <SelectTrigger id="platform">
-                            <SelectValue placeholder="All Platforms" />
+                            <SelectValue :placeholder="$t('components.modals.FilterModal.platformPlaceholder')" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
                                 <SelectItem value="ALL"
-                                    >All Platforms</SelectItem
+                                    >{{ $t('components.modals.FilterModal.platformPlaceholder') }}</SelectItem
                                 >
                                 <SelectItem value="GrabFood"
                                     >GrabFood</SelectItem
@@ -49,18 +49,18 @@
                 </div>
 
                 <div class="space-y-1">
-                    <Label for="restaurant">Restaurant (Specific)</Label>
+                    <Label for="restaurant">{{ $t('components.modals.FilterModal.restaurantLabel') }}</Label>
                     <Input
                         id="restaurant"
                         v-model="filterForm.restaurant"
                         type="text"
-                        placeholder="Filter by specific restaurant..."
+                        :placeholder="$t('components.modals.FilterModal.restaurantPlaceholder')"
                     />
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-1">
-                        <Label for="dateFrom">From Date</Label>
+                        <Label for="dateFrom">{{ $t('components.modals.FilterModal.dateFromLabel') }}</Label>
                         <Input
                             id="dateFrom"
                             v-model="filterForm.dateFrom"
@@ -68,7 +68,7 @@
                         />
                     </div>
                     <div class="space-y-1">
-                        <Label for="dateTo">To Date</Label>
+                        <Label for="dateTo">{{ $t('components.modals.FilterModal.dateToLabel') }}</Label>
                         <Input
                             id="dateTo"
                             v-model="filterForm.dateTo"
@@ -84,13 +84,13 @@
                     variant="ghost"
                     class="w-full sm:w-auto"
                 >
-                    Clear Filters
+                    {{ $t('components.modals.FilterModal.clearFiltersButton') }}
                 </Button>
                 <Button
                     @click="applyFilters"
                     class="w-full sm:w-auto mt-2 sm:mt-0"
                 >
-                    Apply Filters
+                    {{ $t('components.modals.FilterModal.applyFiltersButton') }}
                 </Button>
             </DialogFooter>
         </DialogContent>
@@ -118,6 +118,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
     open: Boolean,
