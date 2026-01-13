@@ -679,8 +679,6 @@ const setupRealtimeSubscription = () => {
             },
             async (payload) => {
                 console.log('[Realtime] room_participants', payload);
-                await loadOrderItems();
-                
                 // If a new user joined, fetch their profile
                 if (payload.event === 'INSERT' && payload.new) {
                     const newUserId = payload.new.user_id;
@@ -689,6 +687,7 @@ const setupRealtimeSubscription = () => {
                         await loadUserProfiles([newUserId]);
                     }
                 }
+                await loadOrderItems();
             }
         )
         .on(
