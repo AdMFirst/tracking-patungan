@@ -2,7 +2,7 @@
     <div class="min-h-screen p-4 pb-20">
         <div class="max-w-md mx-auto">
             <div class="text-center py-0 mb-6">
-                <h1 class="text-2xl font-bold">My Rooms</h1>
+                <h1 class="text-2xl font-bold">{{ $t('pages.myroom.index.title') }}</h1>
             </div>
 
             <div class="mb-6">
@@ -12,7 +12,7 @@
                     class="w-full h-auto py-3 justify-center"
                 >
                     <Filter class="w-5 h-5 mr-2" />
-                    <span>Open Filters</span>
+                    <span>{{ $t('pages.myroom.index.openFilters') }}</span>
                 </Button>
             </div>
 
@@ -52,12 +52,12 @@
                 >
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 class="text-lg font-semibold mb-2">No rooms found</h3>
+                <h3 class="text-lg font-semibold mb-2">{{ $t('pages.myroom.index.noRoomsFound') }}</h3>
                 <p class="text-sm text-muted-foreground">
                     {{
                         hasActiveFilters
-                            ? 'No rooms match your current filters.'
-                            : "You haven't created any rooms yet."
+                            ? $t('pages.myroom.index.noRoomsMatchFilters')
+                            : $t('pages.myroom.index.noRoomsCreated')
                     }}
                 </p>
             </div>
@@ -71,32 +71,32 @@
                     <CardHeader class="p-4 pb-3">
                         <div class="flex justify-between items-start">
                             <CardTitle class="text-lg font-semibold">{{
-                                room.title || 'Untitled Room'
+                                room.title || $t('pages.myroom.index.untitledRoom')
                             }}</CardTitle>
                             <Badge variant="secondary">{{
-                                room.platform || 'Unknown'
+                                room.platform || $t('pages.myroom.index.unknown')
                             }}</Badge>
                         </div>
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >Restaurant:</span
+                                >{{ $t('pages.myroom.index.restaurantLabel') }}</span
                             >
                             <span>{{
-                                room.restaurant || 'Not specified'
+                                room.restaurant || $t('pages.myroom.index.notSpecified')
                             }}</span>
                         </div>
 
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >Order Time:</span
+                                >{{ $t('pages.myroom.index.orderTimeLabel') }}</span
                             >
                             <span>{{ formatDateTime(room.order_time) }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">Created:</span>
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.index.createdLabel') }}</span>
                             <span>{{ formatDateTime(room.created_at) }}</span>
                         </div>
 
@@ -107,7 +107,7 @@
                         >
                             <div class="flex justify-between flex-row">
                                 <span class="text-muted-foreground"
-                                    >Final Total:</span
+                                    >{{ $t('pages.myroom.index.finalTotalLabel') }}</span
                                 >
                                 <span
                                     class="text-lg font-semibold text-green-600 dark:text-green-400"
@@ -117,13 +117,12 @@
                             </div>
 
                             <Button @click="openRoom(room)">
-                                Manage Room
+                                {{ $t('pages.myroom.index.manageRoom') }}
                             </Button>
                         </div>
                         <div v-else class="flex flex-col pt-2">
                             <span class="text-muted-foreground font-semibold"
-                                >The room is still hopping! Jump in and add your
-                                order</span
+                                >{{ $t('pages.myroom.index.roomStillOpen') }}</span
                             >
                             <div class="w-full flex flex-row gap-2 mt-2">
                                 <Button
@@ -131,14 +130,14 @@
                                     variant="destructive"
                                     class="flex-1"
                                 >
-                                    Close Room
+                                    {{ $t('pages.myroom.index.closeRoom') }}
                                 </Button>
                                 <Button
                                     @click="openRoom(room)"
                                     variant="default"
                                     class="flex-1"
                                 >
-                                    Open Room
+                                    {{ $t('pages.myroom.index.openRoom') }}
                                 </Button>
                             </div>
                         </div>
@@ -167,6 +166,7 @@
 <script setup>
 import { ref, computed, onMounted, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -177,6 +177,8 @@ import { fetchUserRooms, updateRoom, deleteRoom, queryClient } from '../../lib/s
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import CloseRoomModal from '@/components/modals/CloseRoomModal.vue';
 import FilterModal from '@/components/modals/FilterModal.vue';
+
+const { t } = useI18n();
 
 const debounce = (fn, delay) => {
     let timeoutId;

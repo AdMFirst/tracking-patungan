@@ -1,6 +1,6 @@
 /**
  * Instructions for AI machine:
- * Rule 1: prioritize the use $t in <template> and useI18n in <script setup>
+ * Rule 1: prioritize the use of t from useI18n rather than $t
  * Rule 2: Use the file path as prefix for i18n key (e.g., files in @/components/room/OrderRooms.vue is components.room.OrderRooms.whateverYouWantAfterwards)
  * Rule 3: Also use i18n on error messages and placeholder text
  * Rule 4: when the text is combined with date or currency, do it last then ask on how to proceed
@@ -201,6 +201,81 @@ const en = {
         }
     },
     "pages": {
+        "404": {
+            "pageNotFound": "Page Not Found",
+            "description": "It looks like the address you typed doesn't lead anywhere. Don't worry, let's get you back on track.",
+            "goToHomepage": "Go to Homepage"
+        },
+        "createRoom": {
+            "title": "Create New Room",
+            "description": "Enter the details for your food delivery order page.",
+            "form": {
+                "titleLabel": "Title",
+                "titlePlaceholder": "Dinner with parents",
+                "restaurantLabel": "Restaurant Name",
+                "restaurantPlaceholder": "KFC, McDonalds, etc",
+                "deliveryTypeLabel": "Delivery Type",
+                "deliveryTypePlaceholder": "Choose App",
+                "customPlatformLabel": "Custom Platform Name",
+                "customPlatformPlaceholder": "E.g., Local Delivery Service",
+                "createButton": "Create",
+                "loading": "Loading..."
+            },
+            "deliveryTypes": {
+                "goFood": "GoFood",
+                "grabFood": "GrabFood",
+                "shopeeFood": "Shopee Food",
+                "travelokaEats": "Traveloka Eats",
+                "maxim": "Maxim Food & Goods Delivery",
+                "tokopediaNow": "Tokopedia NOW!",
+                "custom": "Custom"
+            },
+            "errors": {
+                "connectionError": "Failed connection to the server."
+            }
+        },
+        "myroom": {
+            "roomDetails": {
+                "title": "Room Details",
+                "restaurant": "Restaurant",
+                "orderTime": "Order Time",
+                "created": "Created",
+                "finalTotal": "Final Total",
+                "participants": "Participants",
+                "paymentSummary": "Payment Summary",
+                "totalPaid": "Total Paid",
+                "totalUnpaid": "Total Unpaid",
+                "remaining": "Remaining",
+                "roomNotFound": "Room not found",
+                "roomNotFoundDescription": "The room you are looking for does not exist.",
+                "notSpecified": "Not specified",
+                "unknownUser": "Unknown User",
+                "paid": "Paid",
+                "pending": "Pending",
+                "unpaid": "Unpaid",
+                "you": "You",
+                "via": "via",
+                "noParticipants": "No participants found."
+            },
+            "index": {
+                "title": "My Rooms",
+                "openFilters": "Open Filters",
+                "noRoomsFound": "No rooms found",
+                "noRoomsMatchFilters": "No rooms match your current filters.",
+                "noRoomsCreated": "You haven't created any rooms yet.",
+                "untitledRoom": "Untitled Room",
+                "unknown": "Unknown",
+                "notSpecified": "Not specified",
+                "restaurantLabel": "Restaurant:",
+                "orderTimeLabel": "Order Time:",
+                "createdLabel": "Created:",
+                "finalTotalLabel": "Final Total:",
+                "manageRoom": "Manage Room",
+                "roomStillOpen": "The room is still hopping! Jump in and add your order",
+                "closeRoom": "Close Room",
+                "openRoom": "Open Room"
+            }
+        },
         "activeRoom": {
             "errorTitle": "Error",
             "goBack": "Go Back",
@@ -254,6 +329,49 @@ const en = {
                 "closedTitle": "No closed rooms found",
                 "activeDescription": "You haven't participated in any active rooms yet.",
                 "closedDescription": "You haven't participated in any closed rooms yet."
+            }
+        },
+        "profile": {
+            "index": {
+                "memberSince": "Member since",
+                "lastSignIn": "Last sign in",
+                "provider": "Provider",
+                "noUserInfo": "No user information available",
+                "changeUsername": "Change Username",
+                "managePaymentMethods": "Manage Payment Methods",
+                "signingOut": "Signing out...",
+                "signOut": "Sign Out"
+            },
+            "mypayment": {
+                "title": "My Payment Methods",
+                "addPaymentMethod": "Add Payment Method",
+                "noPaymentMethodsYet": "No payment methods yet",
+                "addPaymentMethodDescription": "Add a payment method to receive payments from participants",
+                "addedOn": "Added on",
+                "edit": "Edit",
+                "delete": "Delete",
+                "add": "Add",
+                "paymentMethod": "Payment Method",
+                "paymentType": "Payment Type",
+                "selectPaymentType": "Select payment type",
+                "bankTransfer": "Bank Transfer",
+                "goPay": "GoPay",
+                "ovo": "OVO",
+                "dana": "Dana",
+                "shopeePay": "ShopeePay",
+                "bankName": "Bank Name",
+                "bankNamePlaceholder": "e.g., BCA, BNI, Mandiri",
+                "accountNumber": "Account Number",
+                "accountNumberPlaceholder": "Enter account number",
+                "cancel": "Cancel",
+                "update": "Update",
+                "save": "Save",
+                "deletePaymentMethod": "Delete Payment Method",
+                "deleteConfirm": "Are you sure you want to delete this payment method?",
+                "errors": {
+                    "saveFailed": "Failed to save payment method: {error}",
+                    "deleteFailed": "Failed to delete payment method: {error}"
+                }
             }
         }
     }

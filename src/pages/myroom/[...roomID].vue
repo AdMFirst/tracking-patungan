@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen p-4 pb-20">
         <div class="max-w-md mx-auto">
-            <PageHeader title="Room Details" />
+            <PageHeader :title="$t('pages.myroom.roomDetails.title')" />
 
             <div v-if="loading" class="space-y-6">
                 <!-- Room Information Skeleton -->
@@ -14,20 +14,20 @@
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[100px]" />
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.restaurant') }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[100px]" />
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.orderTime') }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[100px]" />
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.created') }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <Separator class="my-2" />
                         <div class="flex justify-between pt-2">
-                            <Skeleton class="h-4 w-[100px]" />
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.finalTotal') }}</span>
                             <Skeleton class="h-6 w-[120px]" />
                         </div>
                     </CardContent>
@@ -36,7 +36,7 @@
                 <!-- Participants List Skeleton -->
                 <Card>
                     <CardHeader class="p-4">
-                        <Skeleton class="h-6 w-[150px]" />
+                        <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.participants') }}</span>
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-4">
                         <!-- Participant Card Skeletons -->
@@ -76,7 +76,7 @@
                             <!-- Summary Card Skeleton -->
                             <Card>
                                 <CardHeader class="pb-3">
-                                    <Skeleton class="h-5 w-[150px]" />
+                                    <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.paymentSummary') }}</span>
                                 </CardHeader>
                                 <CardContent class="space-y-3">
                                     <div class="flex justify-between items-center">
@@ -105,9 +105,9 @@
                 >
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Room not found</h3>
+                <h3 class="text-lg font-semibold mb-2">{{ $t('pages.myroom.roomDetails.roomNotFound') }}</h3>
                 <p class="text-sm text-muted-foreground">
-                    The room you are looking for does not exist.
+                    {{ $t('pages.myroom.roomDetails.roomNotFoundDescription') }}
                 </p>
             </div>
 
@@ -127,29 +127,29 @@
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >Restaurant:</span
+                                >{{ $t('pages.myroom.roomDetails.restaurant') }}:</span
                             >
                             <span>{{
-                                room.restaurant || 'Not specified'
+                                room.restaurant || $t('pages.myroom.roomDetails.notSpecified')
                             }}</span>
                         </div>
 
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >Order Time:</span
+                                >{{ $t('pages.myroom.roomDetails.orderTime') }}:</span
                             >
                             <span>{{ formatDateTime(room.order_time) }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">Created:</span>
+                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.created') }}:</span>
                             <span>{{ formatDateTime(room.created_at) }}</span>
                         </div>
 
                         <Separator class="my-2" />
                         <div class="flex justify-between pt-2">
                             <span class="text-muted-foreground"
-                                >Final Total:</span
+                                >{{ $t('pages.myroom.roomDetails.finalTotal') }}:</span
                             >
                             <span
                                 class="text-lg font-semibold text-green-600 dark:text-green-400"
@@ -164,7 +164,7 @@
                 <Card>
                     <CardHeader class="p-4">
                         <CardTitle class="text-lg font-semibold"
-                            >Participants</CardTitle
+                            >{{ $t('pages.myroom.roomDetails.participants') }}</CardTitle
                         >
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-1">
@@ -173,7 +173,7 @@
                             class="text-center py-4"
                         >
                             <p class="text-muted-foreground">
-                                No participants found.
+                                {{ $t('pages.myroom.roomDetails.noParticipants') }}
                             </p>
                         </div>
 
@@ -199,7 +199,7 @@
                                             <h4 class="font-medium truncate">
                                                 {{
                                                     participant.user_profile?.display_name ||
-                                                    'Unknown User'
+                                                    $t('pages.myroom.roomDetails.unknownUser')
                                                 }}
                                             </h4>
                                             <div class="mt-1 flex items-center gap-2">
@@ -211,8 +211,8 @@
                                                 <span
                                                     class="text-xs"
                                                 >
-                                                    {{ participant.paid_at ? 'Paid' : 'Pending' }}
-                                                </span>
+                                                {{ participant.paid_at ? $t('pages.myroom.roomDetails.paid') : $t('pages.myroom.roomDetails.pending') }}
+                                            </span>
                                             </div>
                                         </div>
                                     </div>
@@ -224,13 +224,13 @@
                                             class="text-xs"
                                         >
                                             <template v-if="!participant.paid_at">
-                                                Unpaid
+                                                {{ $t('pages.myroom.roomDetails.unpaid') }}
                                             </template>
                                             <template v-else-if="participant.paid_at && !participant.paid_via">
-                                                You
+                                                {{ $t('pages.myroom.roomDetails.you') }}
                                             </template>
                                             <template v-else>
-                                                via {{ participant.paid_via.tipe }}
+                                                {{ $t('pages.myroom.roomDetails.via') }} {{ participant.paid_via.tipe }}
                                             </template>
                                         </Badge>
                                     </div>
@@ -240,24 +240,24 @@
                             <!-- Summary Card -->
                             <Card>
                                 <CardHeader class="pb-3">
-                                    <CardTitle class="text-base">Payment Summary</CardTitle>
+                                    <CardTitle class="text-base">{{ $t('pages.myroom.roomDetails.paymentSummary') }}</CardTitle>
                                 </CardHeader>
                                 <CardContent class="space-y-3">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-sm text-muted-foreground">Total Paid</span>
+                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.totalPaid') }}</span>
                                         <span class="font-medium text-green-600 dark:text-green-400">
                                             {{ formatCurrency(totalPaid) }}
                                         </span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-sm text-muted-foreground">Total Unpaid</span>
+                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.totalUnpaid') }}</span>
                                         <span class="font-medium text-red-600 dark:text-red-400">
                                             {{ formatCurrency(totalUnpaid) }}
                                         </span>
                                     </div>
                                     <Separator />
                                     <div class="flex justify-between items-center font-medium">
-                                        <span class="text-sm text-muted-foreground">Remaining</span>
+                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.remaining') }}</span>
                                         <span
                                             :class="{
                                                 'text-green-600 dark:text-green-400': remainingAmount <= 0,
@@ -280,6 +280,7 @@
 <script setup>
 import { ref, computed, onMounted, inject, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 // SHADCN/UI COMPONENTS IMPORTS
 import { Button } from '@/components/ui/button';
@@ -300,6 +301,7 @@ import PageHeader from '@/components/common/PageHeader.vue';
 
 const user = inject('user');
 const route = useRoute();
+const { t } = useI18n();
 
 // State
 const room = ref(null);
