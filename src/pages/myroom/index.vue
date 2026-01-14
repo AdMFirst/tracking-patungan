@@ -173,7 +173,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Filter, Home } from 'lucide-vue-next';
-import { fetchUserRooms, updateRoom, deleteRoom, queryClient } from '../../lib/supabaseClient';
+import { fetchUserRooms, updateRoom, deleteRoom } from '../../lib/supabaseClient';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import CloseRoomModal from '@/components/modals/CloseRoomModal.vue';
 import FilterModal from '@/components/modals/FilterModal.vue';
