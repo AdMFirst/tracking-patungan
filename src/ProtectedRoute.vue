@@ -2,27 +2,17 @@
     <LoadingScreen v-if="isLoading" />
 
     <div v-else>
-        <template v-if="user">
-            <router-view />
-            <BottomNav />
-        </template>
-
-        <template v-else>
-            <AuthForm />
-        </template>
+        <router-view />
+        <BottomNav v-if="user" />
     </div>
 </template>
 
 <script setup>
-import { inject, computed } from 'vue';
-import { authReady } from '@/lib/auth'; // Import readiness state
+import { computed } from 'vue';
+import { user, authReady } from '@/lib/auth'; // Import user and readiness state directly
 import BottomNav from '@/components/common/BottomNav.vue';
-import AuthForm from '@/components/auth/AuthForm.vue';
 import LoadingScreen from '@/components/common/LoadingScreen.vue';
-
-const user = inject('user');
 
 // Optional: Hide everything until the Router Guard finishes the first check
 const isLoading = computed(() => !authReady.value);
 </script>
-

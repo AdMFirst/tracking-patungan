@@ -219,11 +219,16 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { user as currentUser } from '@/lib/auth';
 import {
-    supabase,
     checkUserParticipation,
     joinRoom,
     updateOrderItem,
     deleteOrderItem,
+    fetchRoomDetails,
+    fetchRoomOrderItems,
+    addOrderItem,
+    fetchUserProfiles,
+    subscribeToRoomUpdates,
+    supabase, // Kept for removeChannel if needed, though we could wrap that too
 } from '@/lib/supabaseClient';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
@@ -333,44 +338,8 @@ const handleAddOrderItem = async (itemData) => {
         loading.value = true;
         error.value = null;
         console.log('this is the room id',roomID)
-        
-        // First, get the participant ID for this user in this room
-        const { data: participantData, error: participantError } = await supabase
-            .from('room_participants')
-            .select('id')
-            .eq('room_id', roomID)
-            .eq('user_id', currentUser.value.id)
-            .maybeSingle();
-        
-        if (participantError) {
-            console.error('Error fetching participant ID:', participantError);
-            error.value = t('pages.activeRoom.errors.addFailed');
-            return;
-        }
-        
-        if (!participantData) {
-            console.error('Participant record not found');
-            error.value = t('pages.activeRoom.errors.notParticipant');
-            return;
-        }
-        
-        // Insert the new order item into the database
-        const { data, error: insertError } = await supabase
-            .from('order_items')
-            .insert([{
-                participant_id: participantData.id,
-                item_name: itemData.itemName,
-                quantity: itemData.quantity,
-                unit_price: itemData.unitPrice,
-                notes: itemData.notes || null
-            }])
-            .select();
-        
-        if (insertError) {
-            console.error('Error adding order item:', insertError);
-            error.value = t('pages.activeRoom.errors.addFailed');
-            return;
-        }
+
+        const data = await addOrderItem(roomID, currentUser.value.id, itemData);
         
         // Refresh the order items list
         await loadOrderItems();
@@ -517,20 +486,7 @@ const loadRoomDetails = async () => {
             return false;
         }
 
-        const { data, error: fetchError } = await supabase
-            .from('rooms')
-            .select('*')
-            .eq('id', roomID)
-            .maybeSingle();
-
-        console.log('this is the room id', roomID, data)
-
-        if (fetchError) {
-            console.error('Error fetching room details:', fetchError);
-            error.value = t('pages.activeRoom.errors.loadDetailsFailed');
-            room.value = null;
-            return false;
-        }
+        const data = await fetchRoomDetails(roomID);
 
         // Check if the room exists
         if (!data) {
@@ -560,18 +516,7 @@ const loadRoomDetails = async () => {
 
 const loadOrderItems = async () => {
     try {
-        // Get all participants in this room first
-        const { data: participants, error: participantsError } = await supabase
-            .from('room_participants')
-            .select('id, user_id')
-            .eq('room_id', roomID);
-        
-        if (participantsError) {
-            console.error('Error fetching participants:', participantsError);
-            error.value = t('pages.activeRoom.errors.loadParticipantsFailed');
-            orderItems.value = [];
-            return;
-        }
+        const { items, participants } = await fetchRoomOrderItems(roomID);
         
         // Get participant IDs and update reactive state
         participantIds.value = participants.map(p => p.id);
@@ -583,23 +528,7 @@ const loadOrderItems = async () => {
             }
         });
         
-        // Now get all order items for these participants
-        const { data, error } = await supabase
-            .from('order_items')
-            .select('*, room_participants(user_id)')
-            .in('participant_id', participantIds.value);
-        
-        if (error) {
-            console.error('Error fetching order items:', error);
-            error.value = t('pages.activeRoom.errors.loadItemsFailed');
-            orderItems.value = [];
-        } else {
-            // Map the data to include user_id from the participant relationship
-            orderItems.value = data.map(item => ({
-                ...item,
-                user_id: item.room_participants?.user_id || item.user_id
-            })) || [];
-        }
+        orderItems.value = items;
     } catch (err) {
         console.error('Error fetching order items:', err);
         error.value = t('pages.activeRoom.errors.loadItemsFailed');
@@ -611,18 +540,10 @@ const loadUserProfiles = async (userIds) => {
     if (!userIds || userIds.length === 0) return;
     
     try {
-        const { data, error } = await supabase
-            .rpc('get_user_profiles', {
-                user_ids: userIds
-            });
-        
-        if (error) {
-            console.error('Error fetching user profiles:', error);
-        } else {
-            data.forEach((user) => {
-                userCache.value[user.id] = user;
-            });
-        }
+        const data = await fetchUserProfiles(userIds);
+        data.forEach((user) => {
+            userCache.value[user.id] = user;
+        });
     } catch (err) {
         console.error('Error fetching user profiles:', err);
     }
@@ -667,17 +588,8 @@ const checkRunnerStatus = async () => {
 const setupRealtimeSubscription = () => {
     if (!currentUser.value) return null;
 
-    const channel = supabase
-        .channel(`room-${roomID}`)
-        .on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'room_participants',
-                filter: `room_id=eq.${roomID}`,
-            },
-            async (payload) => {
+    return subscribeToRoomUpdates(roomID, {
+        onParticipantsChange: async (payload) => {
                 console.log('[Realtime] room_participants', payload);
                 // If a new user joined, fetch their profile
                 if (payload.event === 'INSERT' && payload.new) {
@@ -688,33 +600,18 @@ const setupRealtimeSubscription = () => {
                     }
                 }
                 await loadOrderItems();
-            }
-        )
-        .on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'order_items',
-            },
-            async (payload) => {
+        },
+        onOrderItemsChange: async (payload) => {
                 // Optional: cek apakah item ini milik room ini
                 if (participantIds.value.includes(payload.new.participant_id)) {
                     await loadOrderItems();
                 }
-            }
-            )
-        .on('channel_error', (err) => {
+        },
+        onChannelError: (err) => {
             console.error('Realtime channel error:', err);
             // Don't force reload on channel errors, just log and let it reconnect
-        })
-        .on('presence', { event: 'sync' }, () => {
-            console.log('Realtime presence sync');
-        })
-        .on('broadcast', { event: 'custom_event' }, (payload) => {
-            console.log('Realtime broadcast:', payload);
-        })
-        .subscribe((status) => {
+        },
+        onStatusChange: (status) => {
             console.log('[Realtime status]', status);
             if (status === 'SUBSCRIBED') {
                 console.log('Successfully subscribed to realtime updates');
@@ -732,9 +629,8 @@ const setupRealtimeSubscription = () => {
                     }, 3000);
                 }
             }
-        });
-
-    return channel;
+        }
+    });
 };
 
 

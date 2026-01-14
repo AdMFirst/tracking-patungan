@@ -52,6 +52,7 @@ export async function createRoom(roomData) {
 
     // Invalidate relevant caches after creating a room
     queryClient.invalidateQueries({ queryKey: ['userRooms'] });
+    queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
 
     return data;
 }
@@ -94,6 +95,7 @@ export async function updateRoom(roomID, updates) {
     // Invalidate relevant caches after updating a room
     queryClient.invalidateQueries({ queryKey: ['roomDetails', roomID] });
     queryClient.invalidateQueries({ queryKey: ['userRooms'] });
+    queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
 
     return data;
 }
@@ -391,6 +393,10 @@ export async function joinRoom(roomID, userID) {
             throw error;
         }
 
+        // Invalidate caches to update history and room participants list
+        queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
+        queryClient.invalidateQueries({ queryKey: ['roomWithParticipants', roomID] });
+
         return data;
     } catch (error) {
         console.error('Error in joinRoom:', error);
@@ -476,6 +482,10 @@ export async function updateOrderItem(itemID, updates) {
         throw error;
     }
 
+    // Invalidate caches to update history and spending
+    queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
+    queryClient.invalidateQueries({ queryKey: ['monthlySpending'] });
+
     return data;
 }
 
@@ -549,6 +559,10 @@ export async function deleteOrderItem(itemID) {
     if (error) {
         throw error;
     }
+
+    // Invalidate caches to update history and spending
+    queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
+    queryClient.invalidateQueries({ queryKey: ['monthlySpending'] });
 }
 
 /**
@@ -687,10 +701,177 @@ export async function setParticipantAsPaid(roomID, paymentMethodID, userID) {
         // Invalidate relevant caches after payment confirmation
         queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
         queryClient.invalidateQueries({ queryKey: ['roomDetails', roomID] });
+        queryClient.invalidateQueries({ queryKey: ['roomWithParticipants', roomID] });
 
         return updatedParticipant;
     } catch (error) {
         console.error('Error in handlePaymentConfirmed:', error);
         throw error;
     }
+}
+
+/**
+ * Fetch basic room details
+ *
+ * @param {string} roomID - The ID of the room
+ * @returns {Promise<Object|null>} Room details or null if not found
+ */
+export async function fetchRoomDetails(roomID) {
+    const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('id', roomID)
+        .maybeSingle();
+
+    if (error) throw error;
+    return data;
+}
+
+/**
+ * Fetch order items and participants for a room
+ *
+ * @param {string} roomID - The ID of the room
+ * @returns {Promise<Object>} Object containing items and participants
+ */
+export async function fetchRoomOrderItems(roomID) {
+    // Get all participants in this room first
+    const { data: participants, error: participantsError } = await supabase
+        .from('room_participants')
+        .select('id, user_id')
+        .eq('room_id', roomID);
+
+    if (participantsError) throw participantsError;
+
+    const participantIds = participants.map((p) => p.id);
+
+    if (participantIds.length === 0) {
+        return { items: [], participants };
+    }
+
+    // Now get all order items for these participants
+    const { data: items, error: itemsError } = await supabase
+        .from('order_items')
+        .select('*, room_participants(user_id)')
+        .in('participant_id', participantIds);
+
+    if (itemsError) throw itemsError;
+
+    // Map the data to include user_id from the participant relationship
+    const mappedItems = items.map((item) => ({
+        ...item,
+        user_id: item.room_participants?.user_id || item.user_id,
+    }));
+
+    return { items: mappedItems, participants };
+}
+
+/**
+ * Add a new order item
+ *
+ * @param {string} roomID - The ID of the room
+ * @param {string} userID - The ID of the user adding the item
+ * @param {Object} itemData - The item data (itemName, quantity, unitPrice, notes)
+ * @returns {Promise<Object>} The created order item
+ */
+export async function addOrderItem(roomID, userID, itemData) {
+    // First, get the participant ID for this user in this room
+    const { data: participantData, error: participantError } = await supabase
+        .from('room_participants')
+        .select('id')
+        .eq('room_id', roomID)
+        .eq('user_id', userID)
+        .maybeSingle();
+
+    if (participantError) throw participantError;
+
+    if (!participantData) {
+        throw new Error('Participant not found');
+    }
+
+    // Insert the new order item into the database
+    const { data, error } = await supabase
+        .from('order_items')
+        .insert([
+            {
+                participant_id: participantData.id,
+                item_name: itemData.itemName,
+                quantity: itemData.quantity,
+                unit_price: itemData.unitPrice,
+                notes: itemData.notes || null,
+            },
+        ])
+        .select()
+        .single();
+
+    if (error) throw error;
+
+    // Invalidate caches to update history and spending
+    queryClient.invalidateQueries({ queryKey: ['joinedRooms'] });
+    queryClient.invalidateQueries({ queryKey: ['monthlySpending'] });
+
+    return data;
+}
+
+/**
+ * Fetch user profiles
+ *
+ * @param {Array<string>} userIds - Array of user IDs
+ * @returns {Promise<Array>} Array of user profiles
+ */
+export async function fetchUserProfiles(userIds) {
+    if (!userIds || userIds.length === 0) return [];
+
+    const { data, error } = await supabase.rpc('get_user_profiles', {
+        user_ids: userIds,
+    });
+
+    if (error) throw error;
+
+    return data;
+}
+
+/**
+ * Subscribe to room updates
+ *
+ * @param {string} roomID - The ID of the room
+ * @param {Object} callbacks - Callbacks for events
+ * @returns {Object} The realtime channel
+ */
+export function subscribeToRoomUpdates(roomID, callbacks) {
+    const channel = supabase.channel(`room-${roomID}`);
+
+    channel
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'room_participants',
+                filter: `room_id=eq.${roomID}`,
+            },
+            (payload) => {
+                if (callbacks.onParticipantsChange)
+                    callbacks.onParticipantsChange(payload);
+            }
+        )
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'order_items',
+            },
+            (payload) => {
+                if (callbacks.onOrderItemsChange)
+                    callbacks.onOrderItemsChange(payload);
+            }
+        )
+        .on('channel_error', (err) => {
+            if (callbacks.onChannelError) callbacks.onChannelError(err);
+        })
+        .subscribe((status) => {
+            if (callbacks.onStatusChange) callbacks.onStatusChange(status);
+        });
+
+    return channel;
 }

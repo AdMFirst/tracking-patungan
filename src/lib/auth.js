@@ -7,6 +7,8 @@ export const authReady = ref(false);
 
 export const initAuth = async () => {
     if (authReady.value) return; // Already ran? Skip.
+    await new Promise((resolve) => setTimeout(resolve, 500)) // REMINDER remove this later, this is to check if loading is correctly hide authready
+
 
     const { data } = await supabase.auth.getSession();
     user.value = data.session?.user ?? null;

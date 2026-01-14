@@ -10,14 +10,23 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    // 1. If we haven't checked Supabase yet, wait for it here
+    // 1. Wait for Supabase/Auth
     if (!authReady.value) {
         await initAuth();
     }
 
-    // 2. Standard Guard Logic
-    if (to.meta.requiresAuth && !user.value) {
-        next('/login'); // or strictly return false if you use your Gatekeeper component
+    // 2. Identify Public Routes
+    // Add any routes that should be accessible without login
+    const publicRouteNames = ['/login', '/forgot-password', '/[...404]'];
+    
+    // Check if the current route is marked as public in the file's <route> block
+    const isPublic = publicRouteNames.includes(to.name) || to.meta.isPublic;
+
+    // 3. Logic
+    if (!isPublic && !user.value) {
+        // Only redirect to login if the route is NOT public AND the user is NOT authenticated
+        // This allows the 404 page ([...path]) to render normally
+        next('/login');
     } else {
         next();
     }
