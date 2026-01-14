@@ -17,7 +17,7 @@ router.beforeEach(async (to, from, next) => {
 
     // 2. Identify Public Routes
     // Add any routes that should be accessible without login
-    const publicRouteNames = ['/login', '/forgot-password', '/[...404]'];
+    const publicRouteNames = ['/login', '/[...404]'];
 
     // Check if the current route is marked as public in the file's <route> block
     const isPublic = publicRouteNames.includes(to.name) || to.meta.isPublic;

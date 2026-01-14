@@ -69,6 +69,16 @@
                 {{ $t('pages.profile.index.managePaymentMethods') }}
             </Button>
 
+            <Button v-if="provider === 'email'" @click="navigateToUpdatePassword" class="w-full mb-4">
+                <Lock class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changePassword') }}
+            </Button>
+
+            <Button v-if="provider === 'email'" @click="navigateToUpdateEmail" class="w-full mb-4">
+                <Mail class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeEmail') }}
+            </Button>
+
             <Button @click="openLanguageModal" class="w-full mb-4">
                 <Languages class="mr-2 h-4 w-4" />
                 {{ $t('pages.profile.index.changeLanguage') }}
@@ -120,7 +130,7 @@ import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 
 // Import icons from lucide-vue-next
-import { User, CreditCard, Languages, LogOut, Loader2 } from 'lucide-vue-next';
+import { User, CreditCard, Languages, LogOut, Loader2, Lock, Mail } from 'lucide-vue-next';
 
 const { t } = useI18n();
 const user = inject('user');
@@ -149,6 +159,14 @@ const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const navigateToMyPayment = () => {
     router.push('/profile/mypayment');
+};
+
+const navigateToUpdatePassword = () => {
+    router.push('/profile/update-password');
+};
+
+const navigateToUpdateEmail = () => {
+    router.push('/profile/update-email');
 };
 
 const openSettingsModal = () => {

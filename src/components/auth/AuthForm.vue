@@ -101,12 +101,28 @@
                     </div>
 
                     <div>
-                        <label
-                            for="password"
-                            class="block text-sm font-medium text-foreground mb-1"
-                        >
-                            {{ $t('components.auth.AuthForm.passwordLabel') }}
-                        </label>
+                        <div class="flex items-center justify-between mb-1">
+                            <label
+                                for="password"
+                                class="text-sm font-medium text-foreground"
+                            >
+                                {{
+                                    $t('components.auth.AuthForm.passwordLabel')
+                                }}
+                            </label>
+                            <button
+                                v-if="isLogin"
+                                type="button"
+                                @click="handlePasswordReset"
+                                class="text-sm font-medium text-primary hover:underline focus:outline-none"
+                            >
+                                {{
+                                    $t(
+                                        'components.auth.AuthForm.forgotPassword'
+                                    )
+                                }}
+                            </button>
+                        </div>
                         <input
                             id="password"
                             v-model="formData.password"
@@ -186,7 +202,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { supabase } from '../../lib/supabaseClient';
+import { resetPassword } from '../../lib/auth';
 import { useI18n } from 'vue-i18n';
+import { toast } from 'vue-sonner';
 
 const { t } = useI18n();
 
@@ -239,6 +257,27 @@ const handleSubmit = async () => {
         }
     } catch (err) {
         error.value = err.message || t('components.auth.AuthForm.genericError');
+    } finally {
+        loading.value = false;
+    }
+};
+
+const handlePasswordReset = async () => {
+    if (!formData.email) {
+        error.value = t('components.auth.AuthForm.enterEmailForPasswordReset');
+        return;
+    }
+
+    loading.value = true;
+    error.value = '';
+
+    try {
+        await resetPassword(formData.email);
+        toast.success(t('components.auth.AuthForm.passwordResetEmailSent'));
+    } catch (err) {
+        error.value =
+            err.message ||
+            t('components.auth.AuthForm.passwordResetError');
     } finally {
         loading.value = false;
     }
