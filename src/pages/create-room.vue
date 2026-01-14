@@ -17,7 +17,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { useCreateRoomMutation } from '@/lib/supabaseClient';
+import { useCreateRoomMutation, useJoinRoomMutation } from '@/lib/supabaseClient';
 import { useMutation } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
@@ -56,8 +56,9 @@ const handleDeliveryChange = (value) => {
     }
 };
 
-// Set up mutation for creating rooms
+// Set up mutations for creating rooms and joining rooms
 const createRoomMutation = useMutation(useCreateRoomMutation());
+const joinRoomMutation = useMutation(useJoinRoomMutation());
 
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,6 +83,13 @@ const handleSubmit = async (e) => {
 
         // 4. Sukses
         console.log('Data berhasil dimasukkan:', data);
+        
+        // Add user as participant before redirecting
+        await joinRoomMutation.mutateAsync({
+            roomID: data.id,
+            userID: user.value.id,
+        });
+        
         router.push(`/active-room/${data.id}`);
     } catch (err) {
         console.error('General Submission Error:', err);
