@@ -11,9 +11,9 @@
                     <div
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('pages.profile.index.memberSince') }}</span
-                        >
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('pages.profile.index.memberSince')
+                        }}</span>
                         <span class="text-sm font-medium">
                             {{ formatDate(user.created_at) }}
                         </span>
@@ -22,9 +22,9 @@
                     <div
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('pages.profile.index.lastSignIn') }}</span
-                        >
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('pages.profile.index.lastSignIn')
+                        }}</span>
                         <span class="text-sm font-medium">
                             {{ formatDate(user.last_sign_in_at) }}
                         </span>
@@ -33,9 +33,9 @@
                     <div
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('pages.profile.index.provider') }}</span
-                        >
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('pages.profile.index.provider')
+                        }}</span>
 
                         <Badge
                             :class="{

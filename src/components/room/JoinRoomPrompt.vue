@@ -1,6 +1,8 @@
 <template>
     <div class="text-center p-6 bg-gray-50 rounded-lg border">
-        <h2 class="text-xl font-semibold mb-4">{{ $t('components.room.JoinRoomPrompt.title') }}</h2>
+        <h2 class="text-xl font-semibold mb-4">
+            {{ $t('components.room.JoinRoomPrompt.title') }}
+        </h2>
         <p class="text-gray-600 mb-6">
             {{ $t('components.room.JoinRoomPrompt.description') }}
         </p>
@@ -13,7 +15,9 @@
                     <Spinner class="mr-2 h-4 w-4" />
                     {{ $t('components.room.JoinRoomPrompt.joining') }}
                 </span>
-                <span v-else>{{ $t('components.room.JoinRoomPrompt.yesButton') }}</span>
+                <span v-else>{{
+                    $t('components.room.JoinRoomPrompt.yesButton')
+                }}</span>
             </Button>
         </div>
     </div>
@@ -27,12 +31,12 @@ import Spinner from '@/components/ui/spinner/Spinner.vue';
 const props = defineProps({
     roomId: {
         type: String,
-        required: true
+        required: true,
     },
     roomTitle: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const emit = defineEmits(['join', 'cancel']);

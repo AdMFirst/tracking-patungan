@@ -3,7 +3,7 @@
         <div class="max-w-md mx-auto">
             <PageHeader :title="$t('pages.myroom.roomDetails.title')" />
 
-            <div v-if="loading" class="space-y-6">
+            <div v-if="isRoomLoading" class="space-y-6">
                 <!-- Room Information Skeleton -->
                 <Card>
                     <CardHeader class="p-4 pb-3">
@@ -14,20 +14,28 @@
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.restaurant') }}</span>
+                            <span class="text-muted-foreground">{{
+                                $t('pages.myroom.roomDetails.restaurant')
+                            }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.orderTime') }}</span>
+                            <span class="text-muted-foreground">{{
+                                $t('pages.myroom.roomDetails.orderTime')
+                            }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.created') }}</span>
+                            <span class="text-muted-foreground">{{
+                                $t('pages.myroom.roomDetails.created')
+                            }}</span>
                             <Skeleton class="h-4 w-[150px]" />
                         </div>
                         <Separator class="my-2" />
                         <div class="flex justify-between pt-2">
-                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.finalTotal') }}</span>
+                            <span class="text-muted-foreground">{{
+                                $t('pages.myroom.roomDetails.finalTotal')
+                            }}</span>
                             <Skeleton class="h-6 w-[120px]" />
                         </div>
                     </CardContent>
@@ -36,20 +44,32 @@
                 <!-- Participants List Skeleton -->
                 <Card>
                     <CardHeader class="p-4">
-                        <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.participants') }}</span>
+                        <span class="text-muted-foreground">{{
+                            $t('pages.myroom.roomDetails.participants')
+                        }}</span>
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-4">
                         <!-- Participant Card Skeletons -->
                         <div class="space-y-3">
                             <div class="p-4 border rounded-lg">
-                                <div class="flex items-start justify-between gap-4">
+                                <div
+                                    class="flex items-start justify-between gap-4"
+                                >
                                     <div class="flex items-start gap-3">
-                                        <Skeleton class="h-12 w-12 rounded-full" />
+                                        <Skeleton
+                                            class="h-12 w-12 rounded-full"
+                                        />
                                         <div class="flex-1 min-w-0 space-y-2">
                                             <Skeleton class="h-4 w-[150px]" />
-                                            <div class="flex items-center gap-2">
-                                                <Skeleton class="h-4 w-[80px]" />
-                                                <Skeleton class="h-3 w-[50px]" />
+                                            <div
+                                                class="flex items-center gap-2"
+                                            >
+                                                <Skeleton
+                                                    class="h-4 w-[80px]"
+                                                />
+                                                <Skeleton
+                                                    class="h-3 w-[50px]"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -58,14 +78,24 @@
                             </div>
 
                             <div class="p-4 border rounded-lg">
-                                <div class="flex items-start justify-between gap-4">
+                                <div
+                                    class="flex items-start justify-between gap-4"
+                                >
                                     <div class="flex items-start gap-3">
-                                        <Skeleton class="h-12 w-12 rounded-full" />
+                                        <Skeleton
+                                            class="h-12 w-12 rounded-full"
+                                        />
                                         <div class="flex-1 min-w-0 space-y-2">
                                             <Skeleton class="h-4 w-[150px]" />
-                                            <div class="flex items-center gap-2">
-                                                <Skeleton class="h-4 w-[80px]" />
-                                                <Skeleton class="h-3 w-[50px]" />
+                                            <div
+                                                class="flex items-center gap-2"
+                                            >
+                                                <Skeleton
+                                                    class="h-4 w-[80px]"
+                                                />
+                                                <Skeleton
+                                                    class="h-3 w-[50px]"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -76,19 +106,29 @@
                             <!-- Summary Card Skeleton -->
                             <Card>
                                 <CardHeader class="pb-3">
-                                    <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.paymentSummary') }}</span>
+                                    <span class="text-muted-foreground">{{
+                                        $t(
+                                            'pages.myroom.roomDetails.paymentSummary'
+                                        )
+                                    }}</span>
                                 </CardHeader>
                                 <CardContent class="space-y-3">
-                                    <div class="flex justify-between items-center">
+                                    <div
+                                        class="flex justify-between items-center"
+                                    >
                                         <Skeleton class="h-4 w-[100px]" />
                                         <Skeleton class="h-4 w-[80px]" />
                                     </div>
-                                    <div class="flex justify-between items-center">
+                                    <div
+                                        class="flex justify-between items-center"
+                                    >
                                         <Skeleton class="h-4 w-[100px]" />
                                         <Skeleton class="h-4 w-[80px]" />
                                     </div>
                                     <Separator />
-                                    <div class="flex justify-between items-center">
+                                    <div
+                                        class="flex justify-between items-center"
+                                    >
                                         <Skeleton class="h-4 w-[100px]" />
                                         <Skeleton class="h-4 w-[80px]" />
                                     </div>
@@ -105,7 +145,9 @@
                 >
                     <Home class="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 class="text-lg font-semibold mb-2">{{ $t('pages.myroom.roomDetails.roomNotFound') }}</h3>
+                <h3 class="text-lg font-semibold mb-2">
+                    {{ $t('pages.myroom.roomDetails.roomNotFound') }}
+                </h3>
                 <p class="text-sm text-muted-foreground">
                     {{ $t('pages.myroom.roomDetails.roomNotFoundDescription') }}
                 </p>
@@ -127,29 +169,40 @@
                     <CardContent class="p-4 pt-0 text-sm space-y-2">
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >{{ $t('pages.myroom.roomDetails.restaurant') }}:</span
+                                >{{
+                                    $t('pages.myroom.roomDetails.restaurant')
+                                }}:</span
                             >
                             <span>{{
-                                room.restaurant || $t('pages.myroom.roomDetails.notSpecified')
+                                room.restaurant ||
+                                $t('pages.myroom.roomDetails.notSpecified')
                             }}</span>
                         </div>
 
                         <div class="flex justify-between">
                             <span class="text-muted-foreground"
-                                >{{ $t('pages.myroom.roomDetails.orderTime') }}:</span
+                                >{{
+                                    $t('pages.myroom.roomDetails.orderTime')
+                                }}:</span
                             >
                             <span>{{ formatDateTime(room.order_time) }}</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-muted-foreground">{{ $t('pages.myroom.roomDetails.created') }}:</span>
+                            <span class="text-muted-foreground"
+                                >{{
+                                    $t('pages.myroom.roomDetails.created')
+                                }}:</span
+                            >
                             <span>{{ formatDateTime(room.created_at) }}</span>
                         </div>
 
                         <Separator class="my-2" />
                         <div class="flex justify-between pt-2">
                             <span class="text-muted-foreground"
-                                >{{ $t('pages.myroom.roomDetails.finalTotal') }}:</span
+                                >{{
+                                    $t('pages.myroom.roomDetails.finalTotal')
+                                }}:</span
                             >
                             <span
                                 class="text-lg font-semibold text-green-600 dark:text-green-400"
@@ -163,9 +216,9 @@
                 <!-- Participants List -->
                 <Card>
                     <CardHeader class="p-4">
-                        <CardTitle class="text-lg font-semibold"
-                            >{{ $t('pages.myroom.roomDetails.participants') }}</CardTitle
-                        >
+                        <CardTitle class="text-lg font-semibold">{{
+                            $t('pages.myroom.roomDetails.participants')
+                        }}</CardTitle>
                     </CardHeader>
                     <CardContent class="p-4 pt-0 text-sm space-y-1">
                         <div
@@ -173,7 +226,11 @@
                             class="text-center py-4"
                         >
                             <p class="text-muted-foreground">
-                                {{ $t('pages.myroom.roomDetails.noParticipants') }}
+                                {{
+                                    $t(
+                                        'pages.myroom.roomDetails.noParticipants'
+                                    )
+                                }}
                             </p>
                         </div>
 
@@ -184,12 +241,15 @@
                                 :key="participant.id"
                                 class="p-4 border rounded-lg hover:bg-accent transition-colors"
                             >
-                                <div class="flex items-start justify-between gap-4">
+                                <div
+                                    class="flex items-start justify-between gap-4"
+                                >
                                     <!-- Participant Info -->
                                     <div class="flex items-start gap-3">
                                         <img
                                             :src="
-                                                participant.user_profile?.picture ||
+                                                participant.user_profile
+                                                    ?.picture ||
                                                 'https://placehold.co/400'
                                             "
                                             alt="User avatar"
@@ -198,73 +258,153 @@
                                         <div class="flex-1 min-w-0">
                                             <h4 class="font-medium truncate">
                                                 {{
-                                                    participant.user_profile?.display_name ||
-                                                    $t('pages.myroom.roomDetails.unknownUser')
+                                                    participant.user_profile
+                                                        ?.display_name ||
+                                                    $t(
+                                                        'pages.myroom.roomDetails.unknownUser'
+                                                    )
                                                 }}
                                             </h4>
-                                            <div class="mt-1 flex items-center gap-2">
+                                            <div
+                                                class="mt-1 flex items-center gap-2"
+                                            >
                                                 <span
                                                     class="text-sm font-medium {{ participant.paid_at ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}"
                                                 >
-                                                    {{ formatCurrency(participant.total_after_discount) }}
+                                                    {{
+                                                        formatCurrency(
+                                                            participant.total_after_discount
+                                                        )
+                                                    }}
                                                 </span>
-                                                <span
-                                                    class="text-xs"
-                                                >
-                                                {{ participant.paid_at ? $t('pages.myroom.roomDetails.paid') : $t('pages.myroom.roomDetails.pending') }}
-                                            </span>
+                                                <span class="text-xs">
+                                                    {{
+                                                        participant.paid_at
+                                                            ? $t(
+                                                                  'pages.myroom.roomDetails.paid'
+                                                              )
+                                                            : $t(
+                                                                  'pages.myroom.roomDetails.pending'
+                                                              )
+                                                    }}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Payment Method -->
                                     <div class="text-right">
                                         <Badge
-                                            :variant="!participant.paid_at ? 'secondary' : (!participant.paid_via? 'default': 'outline') "
+                                            :variant="
+                                                !participant.paid_at
+                                                    ? 'secondary'
+                                                    : !participant.paid_via
+                                                      ? 'default'
+                                                      : 'outline'
+                                            "
                                             class="text-xs"
                                         >
-                                            <template v-if="!participant.paid_at">
-                                                {{ $t('pages.myroom.roomDetails.unpaid') }}
+                                            <template
+                                                v-if="!participant.paid_at"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'pages.myroom.roomDetails.unpaid'
+                                                    )
+                                                }}
                                             </template>
-                                            <template v-else-if="participant.paid_at && !participant.paid_via">
-                                                {{ $t('pages.myroom.roomDetails.you') }}
+                                            <template
+                                                v-else-if="
+                                                    participant.paid_at &&
+                                                    !participant.paid_via
+                                                "
+                                            >
+                                                {{
+                                                    $t(
+                                                        'pages.myroom.roomDetails.you'
+                                                    )
+                                                }}
                                             </template>
                                             <template v-else>
-                                                {{ $t('pages.myroom.roomDetails.via') }} {{ participant.paid_via.tipe }}
+                                                {{
+                                                    $t(
+                                                        'pages.myroom.roomDetails.via'
+                                                    )
+                                                }}
+                                                {{ participant.paid_via.tipe }}
                                             </template>
                                         </Badge>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Summary Card -->
                             <Card>
                                 <CardHeader class="pb-3">
-                                    <CardTitle class="text-base">{{ $t('pages.myroom.roomDetails.paymentSummary') }}</CardTitle>
+                                    <CardTitle class="text-base">{{
+                                        $t(
+                                            'pages.myroom.roomDetails.paymentSummary'
+                                        )
+                                    }}</CardTitle>
                                 </CardHeader>
                                 <CardContent class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.totalPaid') }}</span>
-                                        <span class="font-medium text-green-600 dark:text-green-400">
+                                    <div
+                                        class="flex justify-between items-center"
+                                    >
+                                        <span
+                                            class="text-sm text-muted-foreground"
+                                            >{{
+                                                $t(
+                                                    'pages.myroom.roomDetails.totalPaid'
+                                                )
+                                            }}</span
+                                        >
+                                        <span
+                                            class="font-medium text-green-600 dark:text-green-400"
+                                        >
                                             {{ formatCurrency(totalPaid) }}
                                         </span>
                                     </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.totalUnpaid') }}</span>
-                                        <span class="font-medium text-red-600 dark:text-red-400">
+                                    <div
+                                        class="flex justify-between items-center"
+                                    >
+                                        <span
+                                            class="text-sm text-muted-foreground"
+                                            >{{
+                                                $t(
+                                                    'pages.myroom.roomDetails.totalUnpaid'
+                                                )
+                                            }}</span
+                                        >
+                                        <span
+                                            class="font-medium text-red-600 dark:text-red-400"
+                                        >
                                             {{ formatCurrency(totalUnpaid) }}
                                         </span>
                                     </div>
                                     <Separator />
-                                    <div class="flex justify-between items-center font-medium">
-                                        <span class="text-sm text-muted-foreground">{{ $t('pages.myroom.roomDetails.remaining') }}</span>
+                                    <div
+                                        class="flex justify-between items-center font-medium"
+                                    >
+                                        <span
+                                            class="text-sm text-muted-foreground"
+                                            >{{
+                                                $t(
+                                                    'pages.myroom.roomDetails.remaining'
+                                                )
+                                            }}</span
+                                        >
                                         <span
                                             :class="{
-                                                'text-green-600 dark:text-green-400': remainingAmount <= 0,
-                                                'text-orange-600 dark:text-orange-400': remainingAmount > 0
+                                                'text-green-600 dark:text-green-400':
+                                                    remainingAmount <= 0,
+                                                'text-orange-600 dark:text-orange-400':
+                                                    remainingAmount > 0,
                                             }"
                                         >
-                                            {{ formatCurrency(remainingAmount) }}
+                                            {{
+                                                formatCurrency(remainingAmount)
+                                            }}
                                         </span>
                                     </div>
                                 </CardContent>
@@ -293,9 +433,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Home } from 'lucide-vue-next';
 
 // Import from supabaseClient
-import {
-    fetchRoomWithParticipants
-} from '../../lib/supabaseClient';
+import { useRoomWithParticipantsQuery } from '../../lib/supabaseClient';
+import { useQuery } from '@tanstack/vue-query';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import PageHeader from '@/components/common/PageHeader.vue';
 
@@ -304,26 +443,30 @@ const route = useRoute();
 const { t } = useI18n();
 
 // State
-const room = ref(null);
-const participants = ref([]);
 const loading = ref(false);
 
 // Computed properties
 const sortedParticipants = computed(() => {
     return [...participants.value].sort((a, b) =>
-        (a.user_profile?.display_name || '').localeCompare(b.user_profile?.display_name || '')
+        (a.user_profile?.display_name || '').localeCompare(
+            b.user_profile?.display_name || ''
+        )
     );
 });
 
 const totalPaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return participant.paid_at ? sum + (participant.total_after_discount || 0) : sum;
+        return participant.paid_at
+            ? sum + (participant.total_after_discount || 0)
+            : sum;
     }, 0);
 });
 
 const totalUnpaid = computed(() => {
     return participants.value.reduce((sum, participant) => {
-        return !participant.paid_at ? sum + (participant.total_after_discount || 0) : sum;
+        return !participant.paid_at
+            ? sum + (participant.total_after_discount || 0)
+            : sum;
     }, 0);
 });
 
@@ -333,48 +476,13 @@ const remainingAmount = computed(() => {
         : 0;
 });
 
-// Fetch room details and participants
-const fetchData = async () => {
-    if (!user.value) return;
-
-    loading.value = true;
-
-    try {
-        // Fetch room details with participants and user profiles in a single query
-        const rawData = await fetchRoomWithParticipants(route.params.roomID);
-
-        if (rawData) {
-            // Use raw data directly
-            room.value = rawData;
-            participants.value = rawData.room_participants || [];
-            console.log('Raw room data:', rawData);
-        } else {
-            room.value = null;
-            participants.value = [];
-        }
-
-    } catch (error) {
-        console.error('Error fetching room details:', error);
-    } finally {
-        loading.value = false;
-    }
-};
-
-// Fetch data on mount
-onMounted(() => {
-    if (user.value) {
-        fetchData();
-    }
-});
-
-// Watch for user changes
-watch(
-    () => user.value,
-    (newUser) => {
-        if (newUser) {
-            fetchData();
-        }
-    },
-    { immediate: true }
+// Use TanStack Query for fetching room with participants
+const { data: roomData, isLoading: isRoomLoading } = useQuery(
+    useRoomWithParticipantsQuery(route.params.roomID)
 );
+
+// Extract room and participants from the query data
+const room = computed(() => roomData.value || null);
+const participants = computed(() => roomData.value?.room_participants || []);
+
 </script>

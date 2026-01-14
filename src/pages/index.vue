@@ -14,7 +14,6 @@
                     </p>
                 </div>
 
-
                 <!-- Join Room Card -->
                 <Card class="mb-6">
                     <CardHeader>
@@ -32,7 +31,9 @@
                                 @click="joinRoom"
                                 :disabled="!roomCode || isLoading"
                             >
-                                <span v-if="!isLoading">{{ $t('pages.index.go') }}</span>
+                                <span v-if="!isLoading">{{
+                                    $t('pages.index.go')
+                                }}</span>
                                 <Spinner v-else class="w-4 h-4" />
                             </Button>
                         </div>
@@ -45,12 +46,14 @@
                 <!-- Monthly Spending Tracker -->
                 <Card class="mb-6">
                     <CardHeader>
-                        <CardTitle>{{ $t('pages.index.monthlySpending') }}</CardTitle>
+                        <CardTitle>{{
+                            $t('pages.index.monthlySpending')
+                        }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div class="space-y-4 max-h-1/2 overflow-y-scroll">
                             <div
-                                v-for="month in monthlySpending"
+                                v-for="month in monthlySpendingData"
                                 :key="month.month"
                                 class="flex justify-between items-center p-3 bg-muted rounded-lg"
                             >
@@ -65,7 +68,10 @@
                                 >
                             </div>
                             <div
-                                v-if="monthlySpending.length === 0"
+                                v-if="
+                                    !monthlySpendingData ||
+                                    monthlySpendingData.length === 0
+                                "
                                 class="text-center py-4"
                             >
                                 <p class="text-sm text-muted-foreground">
@@ -78,7 +84,9 @@
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>{{ $t('pages.index.dashboardFeatures') }}</CardTitle>
+                        <CardTitle>{{
+                            $t('pages.index.dashboardFeatures')
+                        }}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div class="space-y-3">
@@ -86,25 +94,25 @@
                                 <div
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
-                                <span class="text-sm text-muted-foreground"
-                                    >{{ $t('pages.index.trackExpenses') }}</span
-                                >
+                                <span class="text-sm text-muted-foreground">{{
+                                    $t('pages.index.trackExpenses')
+                                }}</span>
                             </div>
                             <div class="flex items-center space-x-3">
                                 <div
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
-                                <span class="text-sm text-muted-foreground"
-                                    >{{ $t('pages.index.viewAnalytics') }}</span
-                                >
+                                <span class="text-sm text-muted-foreground">{{
+                                    $t('pages.index.viewAnalytics')
+                                }}</span>
                             </div>
                             <div class="flex items-center space-x-3">
                                 <div
                                     class="w-2 h-2 bg-primary rounded-full"
                                 ></div>
-                                <span class="text-sm text-muted-foreground"
-                                    >{{ $t('pages.index.manageBudgets') }}</span
-                                >
+                                <span class="text-sm text-muted-foreground">{{
+                                    $t('pages.index.manageBudgets')
+                                }}</span>
                             </div>
                         </div>
                     </CardContent>
@@ -118,7 +126,8 @@
 import { inject, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { fetchMonthlySpending } from '@/lib/supabaseClient';
+import { useMonthlySpendingQuery } from '@/lib/supabaseClient';
+import { useQuery } from '@tanstack/vue-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input/Input.vue';
 import Button from '@/components/ui/button/Button.vue';
@@ -145,17 +154,10 @@ const formatMonthYear = (dateString) => {
     return date.toLocaleDateString('id-ID', options);
 };
 
-// Fetch monthly spending data
-const loadData = async () => {
-    if (!user?.value?.id) return;
-
-    try {
-        const data = await fetchMonthlySpending(user.value.id);
-        monthlySpending.value = data;
-    } catch (error) {
-        console.error('Error fetching monthly spending:', error);
-    }
-};
+// Use TanStack Query for fetching monthly spending
+const { data: monthlySpendingData, isLoading: isSpendingLoading } = useQuery(
+    useMonthlySpendingQuery()
+);
 
 // Join room functionality
 const joinRoom = async () => {
@@ -171,8 +173,4 @@ const joinRoom = async () => {
         isLoading.value = false;
     }
 };
-
-onMounted(() => {
-    loadData();
-});
 </script>

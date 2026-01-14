@@ -12,27 +12,29 @@ precacheAndRoute(self.__WB_MANIFEST);
 
 // 3. Keep your custom Push/Sync logic here
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-data') {
-    console.log('Service Worker: Background sync triggered');
-  }
+    if (event.tag === 'sync-data') {
+        console.log('Service Worker: Background sync triggered');
+    }
 });
 
 self.addEventListener('push', (event) => {
-  if (event.data) {
-    const options = {
-      body: event.data.text(),
-      icon: '/android-chrome-192x192.png',
-      badge: '/favicon-32x32.png',
-      vibrate: [100, 50, 100],
-      data: { dateOfArrival: Date.now(), primaryKey: 1 }
-    };
-    event.waitUntil(self.registration.showNotification('Patungan', options));
-  }
+    if (event.data) {
+        const options = {
+            body: event.data.text(),
+            icon: '/android-chrome-192x192.png',
+            badge: '/favicon-32x32.png',
+            vibrate: [100, 50, 100],
+            data: { dateOfArrival: Date.now(), primaryKey: 1 },
+        };
+        event.waitUntil(
+            self.registration.showNotification('Patungan', options)
+        );
+    }
 });
 
 self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  if (event.notification.data?.url) {
-    event.waitUntil(clients.openWindow(event.notification.data.url));
-  }
+    event.notification.close();
+    if (event.notification.data?.url) {
+        event.waitUntil(clients.openWindow(event.notification.data.url));
+    }
 });

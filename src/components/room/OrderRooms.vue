@@ -7,29 +7,46 @@
         <CardHeader class="p-4 pb-1">
             <div class="flex justify-between items-start">
                 <CardTitle class="font-semibold text-lg">
-                    {{ room.title || $t('components.room.OrderRooms.untitledRoom') }}
+                    {{
+                        room.title ||
+                        $t('components.room.OrderRooms.untitledRoom')
+                    }}
                 </CardTitle>
                 <Badge variant="secondary">
-                    {{ room.platform || $t('components.room.OrderRooms.unknown') }}
+                    {{
+                        room.platform ||
+                        $t('components.room.OrderRooms.unknown')
+                    }}
                 </Badge>
             </div>
         </CardHeader>
 
         <CardContent class="p-4 pt-0 text-sm space-y-2">
             <div class="flex justify-between">
-                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.runnerLabel') }}</span>
+                <span class="text-muted-foreground">{{
+                    $t('components.room.OrderRooms.runnerLabel')
+                }}</span>
                 <span>{{
-                    room.runner_name || room.runner_full_name || $t('components.room.OrderRooms.notSpecified')
+                    room.runner_name ||
+                    room.runner_full_name ||
+                    $t('components.room.OrderRooms.notSpecified')
                 }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.restaurantLabel') }}</span>
-                <span>{{ room.restaurant || $t('components.room.OrderRooms.notSpecified') }}</span>
+                <span class="text-muted-foreground">{{
+                    $t('components.room.OrderRooms.restaurantLabel')
+                }}</span>
+                <span>{{
+                    room.restaurant ||
+                    $t('components.room.OrderRooms.notSpecified')
+                }}</span>
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.createdAtLabel') }}</span>
+                <span class="text-muted-foreground">{{
+                    $t('components.room.OrderRooms.createdAtLabel')
+                }}</span>
                 <span>{{
                     formatDate(room.room_created_at) ||
                     room.room_created_at ||
@@ -38,7 +55,9 @@
             </div>
 
             <div class="flex justify-between">
-                <span class="text-muted-foreground">{{ $t('components.room.OrderRooms.itemsOrderedLabel') }}</span>
+                <span class="text-muted-foreground">{{
+                    $t('components.room.OrderRooms.itemsOrderedLabel')
+                }}</span>
             </div>
 
             <Separator class="my-2" />
@@ -51,7 +70,8 @@
                 <div class="flex justify-between">
                     <span class="text-muted-foreground">
                         {{ item.item_name }} x {{ item.quantity }} @
-                        {{ formatCurrency(item.unit_price) }} {{ $t('components.room.OrderRooms.each') }}
+                        {{ formatCurrency(item.unit_price) }}
+                        {{ $t('components.room.OrderRooms.each') }}
                     </span>
                     <span>{{
                         formatCurrency(item.unit_price * item.quantity)
@@ -69,9 +89,9 @@
                 class="flex justify-between items-center pt-2"
                 v-if="!!room.final_total"
             >
-                <span class="text-muted-foreground font-medium"
-                    >{{ $t('components.room.OrderRooms.yourTotal') }}</span
-                >
+                <span class="text-muted-foreground font-medium">{{
+                    $t('components.room.OrderRooms.yourTotal')
+                }}</span>
 
                 <div class="text-right">
                     <span
@@ -128,7 +148,11 @@
                 v-else-if="room.user_items.length > 0 && room.paid_at"
                 class="pt-4"
             >
-                <Button variant="outline" class="w-full h-auto whitespace-normal" disabled>
+                <Button
+                    variant="outline"
+                    class="w-full h-auto whitespace-normal"
+                    disabled
+                >
                     {{ paymentStatus(room) }}
                 </Button>
             </div>
@@ -136,8 +160,8 @@
     </Card>
 
     <!-- Payment Modal -->
-    <PaymentModal 
-        :room="selectedRoom" 
+    <PaymentModal
+        :room="selectedRoom"
         :isOpen="showPaymentModal"
         @close="showPaymentModal = false"
         @payment-confirmed="handlePaymentConfirmed"
@@ -146,7 +170,8 @@
 
 <script setup>
 import { formatCurrency } from '@/lib/utils';
-import { supabase, setParticipantAsPaid } from '@/lib/supabaseClient';
+import { useSetParticipantAsPaidMutation } from '@/lib/supabaseClient';
+import { useMutation } from '@tanstack/vue-query';
 
 // SHADCN/UI COMPONENTS IMPORTS (Reduced list)
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -190,7 +215,10 @@ function totalOriginalPay(items) {
 function paymentStatus(room) {
     const date = formatDate(room.paid_at);
     if (room.paid_via) {
-        return t('components.room.OrderRooms.paidAtVia', { date, method: room.paid_via });
+        return t('components.room.OrderRooms.paidAtVia', {
+            date,
+            method: room.paid_via,
+        });
     }
     return t('components.room.OrderRooms.paidAt', { date });
 }
@@ -203,38 +231,51 @@ function handlePayment(room) {
     // Ensure room has runner_id for payment methods lookup
     const roomWithRunnerId = {
         ...room,
-        runner_id: room.runner_id || room.room_runner_id // Add fallback for different field names
+        runner_id: room.runner_id || room.room_runner_id, // Add fallback for different field names
     };
     selectedRoom.value = roomWithRunnerId;
     showPaymentModal.value = true;
 }
 
+// Set up mutation for payment confirmation
+const setParticipantAsPaidMutation = useMutation(useSetParticipantAsPaidMutation());
+
 async function handlePaymentConfirmed(paymentData) {
     try {
         // Get the current user's ID
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        
+        const {
+            data: { user },
+            error: authError,
+        } = await supabase.auth.getUser();
+
         if (authError || !user) {
             throw new Error('User not authenticated');
         }
 
-        // Call the handlePaymentConfirmed function from supabaseClient
-        await setParticipantAsPaid(
-            paymentData.roomId,
-            paymentData.paymentMethodId,
-            user.id
-        );
+        // Use the TanStack Query mutation
+        await setParticipantAsPaidMutation.mutateAsync({
+            roomID: paymentData.roomId,
+            paymentMethodID: paymentData.paymentMethodId,
+            userID: user.id
+        });
 
         console.log('Payment confirmed:', paymentData);
-        toast.success(t('components.room.OrderRooms.paymentConfirmed', { amount: formatCurrency(paymentData.amount) }));
-        
+        toast.success(
+            t('components.room.OrderRooms.paymentConfirmed', {
+                amount: formatCurrency(paymentData.amount),
+            })
+        );
+
         // Close the payment modal
         showPaymentModal.value = false;
         selectedRoom.value = null;
-        
     } catch (error) {
         console.error('Error confirming payment:', error);
-        toast.error(t('components.room.OrderRooms.paymentFailed', { error: error.message }));
+        toast.error(
+            t('components.room.OrderRooms.paymentFailed', {
+                error: error.message,
+            })
+        );
     }
 }
 </script>

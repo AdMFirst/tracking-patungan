@@ -2,7 +2,9 @@
     <Dialog :open="open" @update:open="handleOpenChange">
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
-                <DialogTitle>{{ $t('components.modals.FilterModal.title') }}</DialogTitle>
+                <DialogTitle>{{
+                    $t('components.modals.FilterModal.title')
+                }}</DialogTitle>
                 <DialogDescription>
                     {{ $t('components.modals.FilterModal.description') }}
                 </DialogDescription>
@@ -10,26 +12,42 @@
 
             <div class="space-y-4 py-2">
                 <div class="space-y-1">
-                    <Label for="search">{{ $t('components.modals.FilterModal.searchLabel') }}</Label>
+                    <Label for="search">{{
+                        $t('components.modals.FilterModal.searchLabel')
+                    }}</Label>
                     <Input
                         id="search"
                         v-model="filterForm.search"
                         type="text"
-                        :placeholder="$t('components.modals.FilterModal.searchPlaceholder')"
+                        :placeholder="
+                            $t(
+                                'components.modals.FilterModal.searchPlaceholder'
+                            )
+                        "
                     />
                 </div>
 
                 <div class="space-y-1">
-                    <Label for="platform">{{ $t('components.modals.FilterModal.platformLabel') }}</Label>
+                    <Label for="platform">{{
+                        $t('components.modals.FilterModal.platformLabel')
+                    }}</Label>
                     <Select v-model="filterForm.platform">
                         <SelectTrigger id="platform">
-                            <SelectValue :placeholder="$t('components.modals.FilterModal.platformPlaceholder')" />
+                            <SelectValue
+                                :placeholder="
+                                    $t(
+                                        'components.modals.FilterModal.platformPlaceholder'
+                                    )
+                                "
+                            />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="ALL"
-                                    >{{ $t('components.modals.FilterModal.platformPlaceholder') }}</SelectItem
-                                >
+                                <SelectItem value="ALL">{{
+                                    $t(
+                                        'components.modals.FilterModal.platformPlaceholder'
+                                    )
+                                }}</SelectItem>
                                 <SelectItem value="GrabFood"
                                     >GrabFood</SelectItem
                                 >
@@ -49,18 +67,26 @@
                 </div>
 
                 <div class="space-y-1">
-                    <Label for="restaurant">{{ $t('components.modals.FilterModal.restaurantLabel') }}</Label>
+                    <Label for="restaurant">{{
+                        $t('components.modals.FilterModal.restaurantLabel')
+                    }}</Label>
                     <Input
                         id="restaurant"
                         v-model="filterForm.restaurant"
                         type="text"
-                        :placeholder="$t('components.modals.FilterModal.restaurantPlaceholder')"
+                        :placeholder="
+                            $t(
+                                'components.modals.FilterModal.restaurantPlaceholder'
+                            )
+                        "
                     />
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-1">
-                        <Label for="dateFrom">{{ $t('components.modals.FilterModal.dateFromLabel') }}</Label>
+                        <Label for="dateFrom">{{
+                            $t('components.modals.FilterModal.dateFromLabel')
+                        }}</Label>
                         <Input
                             id="dateFrom"
                             v-model="filterForm.dateFrom"
@@ -68,7 +94,9 @@
                         />
                     </div>
                     <div class="space-y-1">
-                        <Label for="dateTo">{{ $t('components.modals.FilterModal.dateToLabel') }}</Label>
+                        <Label for="dateTo">{{
+                            $t('components.modals.FilterModal.dateToLabel')
+                        }}</Label>
                         <Input
                             id="dateTo"
                             v-model="filterForm.dateTo"

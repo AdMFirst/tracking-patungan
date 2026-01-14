@@ -2,7 +2,9 @@
     <Dialog :open="open" @update:open="$emit('update:open', $event)">
         <DialogContent class="sm:max-w-md max-h-[80vh] flex flex-col">
             <DialogHeader>
-                <DialogTitle>{{ $t('pages.profile.index.changeLanguage') }}</DialogTitle>
+                <DialogTitle>{{
+                    $t('pages.profile.index.changeLanguage')
+                }}</DialogTitle>
                 <DialogDescription>
                     {{ $t('pages.profile.index.selectPreferredLanguage') }}
                 </DialogDescription>
@@ -25,7 +27,7 @@
                             :value="lang.value"
                             v-model="selectedLanguage"
                             class="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        >
+                        />
                         <label :for="lang.value" class="flex-1 cursor-pointer">
                             <div class="font-medium">{{ lang.label }}</div>
                         </label>
@@ -77,25 +79,27 @@ const selectedLanguage = ref(locale.value);
 
 // Static list of supported languages
 const languages = [
-    { value: 'id',  label: 'Bahasa Indonesia' },
-    { value: 'jv',  label: 'Basa Jawa' },
-    { value: 'su',  label: 'Basa Sunda' },
-    { value: 'en',  label: 'English' },
+    { value: 'id', label: 'Bahasa Indonesia' },
+    { value: 'jv', label: 'Basa Jawa' },
+    { value: 'su', label: 'Basa Sunda' },
+    { value: 'en', label: 'English' },
     { value: 'mad', label: 'Basa Madura' },
     { value: 'min', label: 'Baso Minang' },
-    { value: 'ms',  label: 'Bahasa Melayu' },
-    { value: 'ar',  label: 'العربية' },
-    { value: 'zh',  label: '中文' },
-    { value: 'ja',  label: '日本語' },
-    { value: 'ko',  label: '한국어' },
+    { value: 'ms', label: 'Bahasa Melayu' },
+    { value: 'ar', label: 'العربية' },
+    { value: 'zh', label: '中文' },
+    { value: 'ja', label: '日本語' },
+    { value: 'ko', label: '한국어' },
 ];
 
-
-watch(() => props.open, (isOpen) => {
-    if (isOpen) {
-        selectedLanguage.value = locale.value;
+watch(
+    () => props.open,
+    (isOpen) => {
+        if (isOpen) {
+            selectedLanguage.value = locale.value;
+        }
     }
-});
+);
 
 const handleSaveLanguage = () => {
     locale.value = selectedLanguage.value;

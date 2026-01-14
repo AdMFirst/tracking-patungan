@@ -3,19 +3,29 @@
         <DialogContent class="sm:max-w-[425px]">
             <template v-if="!showDeleteConfirm">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('components.modals.CloseRoomModal.title') }}</DialogTitle>
+                    <DialogTitle>{{
+                        $t('components.modals.CloseRoomModal.title')
+                    }}</DialogTitle>
                     <DialogDescription>
                         {{ $t('components.modals.CloseRoomModal.description') }}
                     </DialogDescription>
                 </DialogHeader>
                 <div class="space-y-4 py-2">
                     <div class="space-y-2">
-                        <Label for="finalTotal">{{ $t('components.modals.CloseRoomModal.finalTotalLabel') }}</Label>
+                        <Label for="finalTotal">{{
+                            $t(
+                                'components.modals.CloseRoomModal.finalTotalLabel'
+                            )
+                        }}</Label>
                         <Input
                             id="finalTotal"
                             v-model="finalTotal"
                             type="number"
-                            :placeholder="$t('components.modals.CloseRoomModal.finalTotalPlaceholder')"
+                            :placeholder="
+                                $t(
+                                    'components.modals.CloseRoomModal.finalTotalPlaceholder'
+                                )
+                            "
                         />
                     </div>
                 </div>
@@ -25,30 +35,46 @@
                         variant="ghost"
                         class="w-full sm:w-auto"
                     >
-                        {{ $t('components.modals.CloseRoomModal.cancelButton') }}
+                        {{
+                            $t('components.modals.CloseRoomModal.cancelButton')
+                        }}
                     </Button>
                     <Button
                         @click="handleDelete"
                         variant="destructive"
-                        class="w-full  sm:w-auto mt-2 sm:mt-0"
+                        class="w-full sm:w-auto mt-2 sm:mt-0"
                     >
-                        {{ $t('components.modals.CloseRoomModal.deleteRoomButton') }}
+                        {{
+                            $t(
+                                'components.modals.CloseRoomModal.deleteRoomButton'
+                            )
+                        }}
                     </Button>
                     <Button
                         @click="handleSubmit"
                         class="w-full sm:w-auto mt-2 sm:mt-0"
                     >
-                        {{ $t('components.modals.CloseRoomModal.submitButton') }}
+                        {{
+                            $t('components.modals.CloseRoomModal.submitButton')
+                        }}
                     </Button>
                 </DialogFooter>
             </template>
-            
+
             <!-- Delete Confirmation -->
             <template v-else>
                 <DialogHeader>
-                    <DialogTitle>{{ $t('components.modals.CloseRoomModal.deleteConfirmTitle') }}</DialogTitle>
+                    <DialogTitle>{{
+                        $t(
+                            'components.modals.CloseRoomModal.deleteConfirmTitle'
+                        )
+                    }}</DialogTitle>
                     <DialogDescription>
-                        {{ $t('components.modals.CloseRoomModal.deleteConfirmDescription') }}
+                        {{
+                            $t(
+                                'components.modals.CloseRoomModal.deleteConfirmDescription'
+                            )
+                        }}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter class="flex sm:justify-end gap-2 pt-4">
@@ -57,14 +83,22 @@
                         variant="outline"
                         class="w-full sm:w-auto"
                     >
-                        {{ $t('components.modals.CloseRoomModal.deleteCancelButton') }}
+                        {{
+                            $t(
+                                'components.modals.CloseRoomModal.deleteCancelButton'
+                            )
+                        }}
                     </Button>
                     <Button
                         @click="confirmDelete"
                         variant="destructive"
                         class="w-full sm:w-auto"
                     >
-                        {{ $t('components.modals.CloseRoomModal.deleteConfirmButton') }}
+                        {{
+                            $t(
+                                'components.modals.CloseRoomModal.deleteConfirmButton'
+                            )
+                        }}
                     </Button>
                 </DialogFooter>
             </template>

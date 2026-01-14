@@ -34,8 +34,8 @@ const shouldShowNav = computed(() => {
 const i18nNavItems = computed(() => {
     return navItems.map((item) => ({
         ...item,
-        label: t(`components.common.BottomNav.${item.label.toLowerCase()}`)
-    }))
+        label: t(`components.common.BottomNav.${item.label.toLowerCase()}`),
+    }));
 });
 </script>
 

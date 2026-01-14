@@ -92,7 +92,10 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-foreground">
-                            {{ currentUser.user_metadata?.full_name || $t('components.UserInfo.defaultUser') }}
+                            {{
+                                currentUser.user_metadata?.full_name ||
+                                $t('components.UserInfo.defaultUser')
+                            }}
                         </h3>
                         <p class="text-sm text-muted-foreground">
                             {{ currentUser.email }}
@@ -104,12 +107,14 @@
                     <div
                         class="flex justify-between items-center py-2 border-b border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('components.UserInfo.memberSince') }}</span
-                        >
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('components.UserInfo.memberSince')
+                        }}</span>
                         <span class="text-sm text-foreground">
                             {{
-                                d(new Date(currentUser.created_at), { dateStyle: 'medium' })
+                                d(new Date(currentUser.created_at), {
+                                    dateStyle: 'medium',
+                                })
                             }}
                         </span>
                     </div>
@@ -117,31 +122,37 @@
                     <div
                         class="flex justify-between items-center py-2 border-b border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('components.UserInfo.lastSignIn') }}</span
-                        >
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('components.UserInfo.lastSignIn')
+                        }}</span>
                         <span class="text-sm text-foreground">
                             {{
-                                d(new Date(currentUser.last_sign_in_at), { dateStyle: 'medium' })
+                                d(new Date(currentUser.last_sign_in_at), {
+                                    dateStyle: 'medium',
+                                })
                             }}
                         </span>
                     </div>
 
                     <div class="flex justify-between items-center py-2">
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('components.UserInfo.accountStatus') }}</span
-                        >
-                        <span class="text-sm text-green-600">{{ $t('components.UserInfo.activeStatus') }}</span>
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('components.UserInfo.accountStatus')
+                        }}</span>
+                        <span class="text-sm text-green-600">{{
+                            $t('components.UserInfo.activeStatus')
+                        }}</span>
                     </div>
 
                     <div
                         v-if="currentUser.user_metadata?.provider === 'discord'"
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('components.UserInfo.provider') }}</span
-                        >
-                        <span class="text-sm text-blue-600">{{ $t('components.UserInfo.discord') }}</span>
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('components.UserInfo.provider')
+                        }}</span>
+                        <span class="text-sm text-blue-600">{{
+                            $t('components.UserInfo.discord')
+                        }}</span>
                     </div>
 
                     <div
@@ -151,10 +162,12 @@
                         "
                         class="flex justify-between items-center py-2 border-t border-border"
                     >
-                        <span class="text-sm text-muted-foreground"
-                            >{{ $t('components.UserInfo.provider') }}</span
-                        >
-                        <span class="text-sm text-blue-700">{{ $t('components.UserInfo.linkedIn') }}</span>
+                        <span class="text-sm text-muted-foreground">{{
+                            $t('components.UserInfo.provider')
+                        }}</span>
+                        <span class="text-sm text-blue-700">{{
+                            $t('components.UserInfo.linkedIn')
+                        }}</span>
                     </div>
                 </div>
             </div>
@@ -173,7 +186,11 @@
                 :disabled="loading"
                 class="w-full py-2 px-4 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-                {{ loading ? $t('components.UserInfo.signingOut') : $t('components.UserInfo.signOut') }}
+                {{
+                    loading
+                        ? $t('components.UserInfo.signingOut')
+                        : $t('components.UserInfo.signOut')
+                }}
             </button>
         </div>
     </div>

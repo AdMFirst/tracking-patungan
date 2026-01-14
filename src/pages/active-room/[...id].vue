@@ -10,17 +10,17 @@
                 </div>
                 <Skeleton class="h-8 w-8" />
             </div>
-            
+
             <!-- Skeleton Restaurant Info -->
             <Skeleton class="h-4 w-1/4" />
-            
+
             <!-- Skeleton Separator -->
             <Separator class="my-6" />
-            
+
             <!-- Skeleton Cart Section -->
             <div class="mb-6">
                 <Skeleton class="h-6 w-24 mb-4" />
-                
+
                 <!-- Skeleton Order Items -->
                 <div class="space-y-6">
                     <div v-for="i in 2" :key="i" class="border rounded-lg p-4">
@@ -29,9 +29,15 @@
                             <Skeleton class="h-4 w-32" />
                         </div>
                         <div class="text-sm space-y-3">
-                            <div v-for="j in 2" :key="j" class="flex justify-between items-start">
+                            <div
+                                v-for="j in 2"
+                                :key="j"
+                                class="flex justify-between items-start"
+                            >
                                 <div class="flex-1">
-                                    <div class="flex justify-between items-center mb-1">
+                                    <div
+                                        class="flex justify-between items-center mb-1"
+                                    >
                                         <Skeleton class="h-4 w-48" />
                                         <Skeleton class="h-4 w-16" />
                                     </div>
@@ -43,16 +49,21 @@
                 </div>
             </div>
         </div>
-         
+
         <!-- Error state -->
-        <div v-else-if="error" class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
-            <h2 class="text-xl font-semibold text-red-600 mb-2">{{ t('pages.activeRoom.errorTitle') }}</h2>
+        <div
+            v-else-if="error"
+            class="text-center p-6 bg-red-50 rounded-lg border border-red-200"
+        >
+            <h2 class="text-xl font-semibold text-red-600 mb-2">
+                {{ t('pages.activeRoom.errorTitle') }}
+            </h2>
             <p class="text-gray-600">{{ error }}</p>
             <Button variant="outline" class="mt-4" @click="goBack">
                 {{ t('pages.activeRoom.goBack') }}
             </Button>
         </div>
-        
+
         <!-- Join room prompt -->
         <div v-else-if="showJoinPrompt">
             <JoinRoomPrompt
@@ -62,18 +73,27 @@
                 @cancel="handleCancelJoin"
             />
         </div>
-        
+
         <!-- Invalid room state -->
-        <div v-else-if="!room && !error" class="text-center p-6 bg-yellow-50 rounded-lg border border-yellow-200">
-            <h2 class="text-xl font-semibold text-yellow-600 mb-2">{{ t('pages.activeRoom.roomNotAvailableTitle') }}</h2>
+        <div
+            v-else-if="!room && !error"
+            class="text-center p-6 bg-yellow-50 rounded-lg border border-yellow-200"
+        >
+            <h2 class="text-xl font-semibold text-yellow-600 mb-2">
+                {{ t('pages.activeRoom.roomNotAvailableTitle') }}
+            </h2>
             <p class="text-gray-600 mb-4">
-                {{ t('pages.activeRoom.roomNotAvailableDescription', { roomId: roomID }) }}
+                {{
+                    t('pages.activeRoom.roomNotAvailableDescription', {
+                        roomId: roomID,
+                    })
+                }}
             </p>
             <Button variant="outline" @click="goBack">
                 {{ t('pages.activeRoom.goBack') }}
             </Button>
         </div>
-        
+
         <!-- Main room content for participants -->
         <div v-else>
             <PageHeader :title="room.title">
@@ -89,13 +109,23 @@
             </PageHeader>
             <div class="mb-4">
                 <p class="text-muted-foreground">
-                    {{ t('pages.activeRoom.restaurantInfo', { restaurant: room.restaurant, platform: room.platform }) }}
+                    {{
+                        t('pages.activeRoom.restaurantInfo', {
+                            restaurant: room.restaurant,
+                            platform: room.platform,
+                        })
+                    }}
                 </p>
             </div>
             <Separator class="my-6" />
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-4">{{ t('pages.activeRoom.cartTitle') }}</h2>
-                <div v-if="Object.keys(groupedOrderItems).length > 0" class="space-y-6">
+                <h2 class="text-xl font-semibold mb-4">
+                    {{ t('pages.activeRoom.cartTitle') }}
+                </h2>
+                <div
+                    v-if="Object.keys(groupedOrderItems).length > 0"
+                    class="space-y-6"
+                >
                     <div
                         v-for="(userGroup, participantId) in groupedOrderItems"
                         :key="participantId"
@@ -110,7 +140,8 @@
                             />
                             <h3 class="font-semibold">
                                 {{
-                                    userCache[userGroup[0]?.user_id]?.display_name ||
+                                    userCache[userGroup[0]?.user_id]
+                                        ?.display_name ||
                                     t('pages.activeRoom.unknownUser')
                                 }}
                             </h3>
@@ -119,31 +150,45 @@
                             <template v-for="item in userGroup" :key="item.id">
                                 <div class="flex justify-between items-start">
                                     <div class="flex-1">
-                                        <div class="flex justify-between items-center">
+                                        <div
+                                            class="flex justify-between items-center"
+                                        >
                                             <span>
                                                 {{ item.item_name }} x
                                                 {{ item.quantity }}
-                                                <span class="text-muted-foreground"
+                                                <span
+                                                    class="text-muted-foreground"
                                                     >@
                                                     {{
                                                         formatCurrency(
                                                             item.unit_price
                                                         )
                                                     }}
-                                                    {{ t('pages.activeRoom.each') }}</span
+                                                    {{
+                                                        t(
+                                                            'pages.activeRoom.each'
+                                                        )
+                                                    }}</span
                                                 >
                                             </span>
                                             <span>{{
                                                 formatCurrency(
-                                                    item.unit_price * item.quantity
+                                                    item.unit_price *
+                                                        item.quantity
                                                 )
                                             }}</span>
                                         </div>
-                                        <p v-if="item.notes" class="text-muted-foreground">
+                                        <p
+                                            v-if="item.notes"
+                                            class="text-muted-foreground"
+                                        >
                                             *{{ item.notes }}
                                         </p>
                                     </div>
-                                    <div v-if="canEditItem(item)" class="flex space-x-2 ml-4">
+                                    <div
+                                        v-if="canEditItem(item)"
+                                        class="flex space-x-2 ml-4"
+                                    >
                                         <Button
                                             variant="outline"
                                             size="icon"
@@ -156,7 +201,12 @@
                                             variant="outline"
                                             size="icon"
                                             class="h-8 w-8"
-                                            @click="handleDeleteOrderItem(item.id, item.user_id)"
+                                            @click="
+                                                handleDeleteOrderItem(
+                                                    item.id,
+                                                    item.user_id
+                                                )
+                                            "
                                         >
                                             <Trash2 class="h-3 w-3" />
                                         </Button>
@@ -172,7 +222,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Add Order Item Modal -->
     <AddOrderItemModal
         :isOpen="showAddItemModal"
@@ -180,7 +230,7 @@
         @update:open="showAddItemModal = $event"
         @itemAdded="handleAddOrderItem"
     />
-    
+
     <!-- Edit Order Item Modal -->
     <EditOrderItemModal
         :isOpen="showEditItemModal"
@@ -188,21 +238,32 @@
         @update:open="showEditItemModal = $event"
         @itemUpdated="handleUpdateOrderItem"
     />
-    
+
     <!-- Floating Action Button -->
-    <FloatingButton v-if="room && isParticipant" v-show="!loading" @click="showAddItemModal = true" />
+    <FloatingButton
+        v-if="room && isParticipant"
+        v-show="!loading"
+        @click="showAddItemModal = true"
+    />
 
     <!-- Share Modal -->
     <Dialog v-model:open="showShareModal">
         <DialogContent class="sm:max-w-md">
             <DialogHeader>
-                <DialogTitle>{{ t('pages.activeRoom.shareRoomTitle') }}</DialogTitle>
+                <DialogTitle>{{
+                    t('pages.activeRoom.shareRoomTitle')
+                }}</DialogTitle>
                 <DialogDescription>
                     {{ t('pages.activeRoom.shareRoomDescription') }}
                 </DialogDescription>
             </DialogHeader>
             <div class="flex justify-center py-4">
-                <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR Code" class="w-64 h-64" />
+                <img
+                    v-if="qrCodeUrl"
+                    :src="qrCodeUrl"
+                    alt="QR Code"
+                    class="w-64 h-64"
+                />
             </div>
             <DialogFooter>
                 <Button variant="outline" @click="showShareModal = false">
@@ -256,7 +317,9 @@ import { toast } from 'vue-sonner';
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
-const roomID = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
+const roomID = Array.isArray(route.params.id)
+    ? route.params.id[0]
+    : route.params.id;
 const room = ref(null);
 const orderItems = ref([]);
 const loading = ref(true);
@@ -274,7 +337,8 @@ const qrCodeUrl = ref('');
 const participantIds = ref([]);
 
 // UUID validation regex
-const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const goBack = () => {
     router.push('/');
@@ -306,14 +370,13 @@ const handleJoinRoom = async () => {
 
         loading.value = true;
         error.value = null;
-        
+
         await joinRoom(roomID, currentUser.value.id);
         isParticipant.value = true;
         showJoinPrompt.value = false;
-        
+
         // Refresh data after joining
         await loadRoomData();
-        
     } catch (err) {
         console.error('Error joining room:', err);
         error.value = t('pages.activeRoom.errors.joinFailed');
@@ -334,19 +397,18 @@ const handleAddOrderItem = async (itemData) => {
             error.value = t('pages.activeRoom.errors.participantRequired');
             return;
         }
-        
+
         loading.value = true;
         error.value = null;
-        console.log('this is the room id',roomID)
+        console.log('this is the room id', roomID);
 
         const data = await addOrderItem(roomID, currentUser.value.id, itemData);
-        
+
         // Refresh the order items list
         await loadOrderItems();
-        
+
         // Show success message or notification could be added here
         console.log('Order item added successfully:', data);
-        
     } catch (err) {
         console.error('Error adding order item:', err);
         error.value = err.message || t('pages.activeRoom.errors.addFailed');
@@ -358,13 +420,13 @@ const handleAddOrderItem = async (itemData) => {
 // Check if current user can edit an item (either owner or runner)
 const canEditItem = (item) => {
     if (!currentUser.value) return false;
-    
+
     // Check if user is the owner of this item
     const isOwner = item.user_id === currentUser.value.id;
-    
+
     // Check if user is the runner
     const isRunnerUser = isRunner.value;
-    
+
     return isOwner || isRunnerUser;
 };
 
@@ -385,26 +447,29 @@ const handleUpdateOrderItem = async (updatedData) => {
             error.value = t('pages.activeRoom.errors.loginToUpdate');
             return;
         }
-        
+
         loading.value = true;
         error.value = null;
-        
+
         const updates = {
             item_name: updatedData.itemName,
             quantity: updatedData.quantity,
             unit_price: updatedData.unitPrice,
-            notes: updatedData.notes || null
+            notes: updatedData.notes || null,
         };
-        
-        await updateOrderItem(editingItem.value.id, updates, currentUser.value.id);
-        
+
+        await updateOrderItem(
+            editingItem.value.id,
+            updates,
+            currentUser.value.id
+        );
+
         // Refresh the order items list
         await loadOrderItems();
-        
+
         // Close the modal
         showEditItemModal.value = false;
         editingItem.value = null;
-        
     } catch (err) {
         console.error('Error updating order item:', err);
         error.value = err.message || t('pages.activeRoom.errors.updateFailed');
@@ -420,16 +485,16 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
             error.value = t('pages.activeRoom.errors.loginToDelete');
             return;
         }
-        
+
         // Check if user can delete this item
         const isOwner = itemUserId === currentUser.value.id;
         const isRunnerUser = isRunner.value;
-        
+
         if (!isOwner && !isRunnerUser) {
             error.value = t('pages.activeRoom.errors.deleteOwnItems');
             return;
         }
-        
+
         const confirmed = await new Promise((resolve) => {
             toast.warning(t('pages.activeRoom.toast.deleteConfirm'), {
                 action: {
@@ -441,20 +506,18 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
                     onClick: () => resolve(false),
                 },
                 onDismiss: () => resolve(false),
-            })
-        })
+            });
+        });
 
-        if (!confirmed) return
+        if (!confirmed) return;
 
-        
         loading.value = true;
         error.value = null;
-        
+
         await deleteOrderItem(itemId, currentUser.value.id);
-        
+
         // Refresh the order items list
         await loadOrderItems();
-        
     } catch (err) {
         console.error('Error deleting order item:', err);
         error.value = err.message || t('pages.activeRoom.errors.deleteFailed');
@@ -517,17 +580,17 @@ const loadRoomDetails = async () => {
 const loadOrderItems = async () => {
     try {
         const { items, participants } = await fetchRoomOrderItems(roomID);
-        
+
         // Get participant IDs and update reactive state
-        participantIds.value = participants.map(p => p.id);
-        
+        participantIds.value = participants.map((p) => p.id);
+
         // Build user cache from participants
-        participants.forEach(p => {
+        participants.forEach((p) => {
             if (!userCache.value[p.user_id]) {
                 userCache.value[p.user_id] = { id: p.user_id };
             }
         });
-        
+
         orderItems.value = items;
     } catch (err) {
         console.error('Error fetching order items:', err);
@@ -538,7 +601,7 @@ const loadOrderItems = async () => {
 
 const loadUserProfiles = async (userIds) => {
     if (!userIds || userIds.length === 0) return;
-    
+
     try {
         const data = await fetchUserProfiles(userIds);
         data.forEach((user) => {
@@ -554,9 +617,12 @@ const checkParticipation = async () => {
         showJoinPrompt.value = true;
         return false;
     }
-    
+
     try {
-        const participant = await checkUserParticipation(roomID, currentUser.value.id);
+        const participant = await checkUserParticipation(
+            roomID,
+            currentUser.value.id
+        );
         isParticipant.value = participant;
         showJoinPrompt.value = !participant;
         return participant;
@@ -572,7 +638,7 @@ const checkRunnerStatus = async () => {
         isRunner.value = false;
         return false;
     }
-    
+
     try {
         // Check if current user is the runner of this room
         const runner = room.value.runner_id === currentUser.value.id;
@@ -590,22 +656,25 @@ const setupRealtimeSubscription = () => {
 
     return subscribeToRoomUpdates(roomID, {
         onParticipantsChange: async (payload) => {
-                console.log('[Realtime] room_participants', payload);
-                // If a new user joined, fetch their profile
-                if (payload.event === 'INSERT' && payload.new) {
-                    const newUserId = payload.new.user_id;
-                    if (newUserId && !userCache.value[newUserId]) {
-                        console.log('New user joined, fetching profile:', newUserId);
-                        await loadUserProfiles([newUserId]);
-                    }
+            console.log('[Realtime] room_participants', payload);
+            // If a new user joined, fetch their profile
+            if (payload.event === 'INSERT' && payload.new) {
+                const newUserId = payload.new.user_id;
+                if (newUserId && !userCache.value[newUserId]) {
+                    console.log(
+                        'New user joined, fetching profile:',
+                        newUserId
+                    );
+                    await loadUserProfiles([newUserId]);
                 }
-                await loadOrderItems();
+            }
+            await loadOrderItems();
         },
         onOrderItemsChange: async (payload) => {
-                // Optional: cek apakah item ini milik room ini
-                if (participantIds.value.includes(payload.new.participant_id)) {
-                    await loadOrderItems();
-                }
+            // Optional: cek apakah item ini milik room ini
+            if (participantIds.value.includes(payload.new.participant_id)) {
+                await loadOrderItems();
+            }
         },
         onChannelError: (err) => {
             console.error('Realtime channel error:', err);
@@ -615,61 +684,68 @@ const setupRealtimeSubscription = () => {
             console.log('[Realtime status]', status);
             if (status === 'SUBSCRIBED') {
                 console.log('Successfully subscribed to realtime updates');
-            } else if (status === 'CHANNEL_ERROR' || status === 'CLOSED' || status === 'TIMED_OUT') {
-                console.error('Realtime subscription failed or disconnected:', status);
+            } else if (
+                status === 'CHANNEL_ERROR' ||
+                status === 'CLOSED' ||
+                status === 'TIMED_OUT'
+            ) {
+                console.error(
+                    'Realtime subscription failed or disconnected:',
+                    status
+                );
                 // Don't force reload on navigation/disconnection - let it reconnect naturally
                 // Only force reload for critical errors that can't be recovered
                 if (status === 'CHANNEL_ERROR') {
                     // For actual channel errors, we might want to reload, but not for normal disconnections
                     setTimeout(() => {
                         if (!realtimeChannel.value) {
-                            console.log('Attempting to re-establish realtime connection...');
+                            console.log(
+                                'Attempting to re-establish realtime connection...'
+                            );
                             realtimeChannel.value = setupRealtimeSubscription();
                         }
                     }, 3000);
                 }
             }
-        }
+        },
     });
 };
-
 
 // Optimized data loading function
 const loadRoomData = async () => {
     try {
         loading.value = true;
         error.value = null;
-        
+
         // Batch room details and participation check in parallel
         const [roomData, participationStatus] = await Promise.all([
             loadRoomDetails(),
-            checkParticipation()
+            checkParticipation(),
         ]);
-        
+
         if (!roomData || !participationStatus) {
             return;
         }
-        
+
         // Check if current user is the runner
         await checkRunnerStatus();
-        
+
         // Load order data
         await loadOrderItems();
-        
+
         // Load user profiles for all participants
         const userIds = Object.keys(userCache.value);
         if (userIds.length > 0) {
             await loadUserProfiles(userIds);
         }
-        
+
         if (!realtimeChannel.value) {
             realtimeChannel.value = setupRealtimeSubscription();
         }
-        
-        
     } catch (err) {
         console.error('Error loading room data:', err);
-        error.value = err.message || t('pages.activeRoom.errors.loadDataFailed');
+        error.value =
+            err.message || t('pages.activeRoom.errors.loadDataFailed');
     } finally {
         loading.value = false;
     }

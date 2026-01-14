@@ -21,7 +21,11 @@
                         @click="toggleAuthMode"
                         class="font-medium text-primary hover:underline"
                     >
-                        {{ isLogin ? $t('components.auth.AuthForm.signUp') : $t('components.auth.AuthForm.signIn') }}
+                        {{
+                            isLogin
+                                ? $t('components.auth.AuthForm.signUp')
+                                : $t('components.auth.AuthForm.signIn')
+                        }}
                     </button>
                 </p>
             </div>
@@ -32,9 +36,9 @@
                     <div class="w-full border-t border-border"></div>
                 </div>
                 <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-background text-muted-foreground"
-                        >{{ $t('components.auth.AuthForm.orContinueWith') }}</span
-                    >
+                    <span class="px-2 bg-background text-muted-foreground">{{
+                        $t('components.auth.AuthForm.orContinueWith')
+                    }}</span>
                 </div>
             </div>
 
@@ -90,7 +94,9 @@
                             type="email"
                             required
                             class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
-                            :placeholder="$t('components.auth.AuthForm.emailPlaceholder')"
+                            :placeholder="
+                                $t('components.auth.AuthForm.emailPlaceholder')
+                            "
                         />
                     </div>
 
@@ -107,7 +113,11 @@
                             :type="showPassword ? 'text' : 'password'"
                             required
                             class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
-                            :placeholder="$t('components.auth.AuthForm.passwordPlaceholder')"
+                            :placeholder="
+                                $t(
+                                    'components.auth.AuthForm.passwordPlaceholder'
+                                )
+                            "
                         />
                         <button
                             type="button"
@@ -115,7 +125,13 @@
                             class="mt-1 text-sm text-muted-foreground hover:text-foreground"
                         >
                             {{
-                                showPassword ? $t('components.auth.AuthForm.hidePassword') : $t('components.auth.AuthForm.showPassword')
+                                showPassword
+                                    ? $t(
+                                          'components.auth.AuthForm.hidePassword'
+                                      )
+                                    : $t(
+                                          'components.auth.AuthForm.showPassword'
+                                      )
                             }}
                         </button>
                     </div>
@@ -133,7 +149,11 @@
                             type="text"
                             required
                             class="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
-                            :placeholder="$t('components.auth.AuthForm.fullNamePlaceholder')"
+                            :placeholder="
+                                $t(
+                                    'components.auth.AuthForm.fullNamePlaceholder'
+                                )
+                            "
                         />
                     </div>
                 </div>
@@ -151,7 +171,11 @@
                     class="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                     {{
-                        loading ? $t('components.auth.AuthForm.loading') : isLogin ? $t('components.auth.AuthForm.signInButton') : $t('components.auth.AuthForm.signUpButton')
+                        loading
+                            ? $t('components.auth.AuthForm.loading')
+                            : isLogin
+                              ? $t('components.auth.AuthForm.signInButton')
+                              : $t('components.auth.AuthForm.signUpButton')
                     }}
                 </button>
             </form>
@@ -238,8 +262,7 @@ const handleDiscordLogin = async () => {
         console.log('Discord login initiated:', data);
     } catch (err) {
         error.value =
-            err.message ||
-            t('components.auth.AuthForm.discordLoginError');
+            err.message || t('components.auth.AuthForm.discordLoginError');
     } finally {
         loading.value = false;
     }
@@ -263,8 +286,7 @@ const handleLinkedInLogin = async () => {
         console.log('LinkedIn login initiated:', data);
     } catch (err) {
         error.value =
-            err.message ||
-            t('components.auth.AuthForm.linkedInLoginError');
+            err.message || t('components.auth.AuthForm.linkedInLoginError');
     } finally {
         loading.value = false;
     }

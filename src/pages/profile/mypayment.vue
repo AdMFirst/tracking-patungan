@@ -10,7 +10,7 @@
         </PageHeader>
 
         <!-- Loading State -->
-        <div v-if="loading" class="space-y-4">
+        <div v-if="isPaymentMethodsLoading" class="space-y-4">
             <!-- Payment Method Card Skeletons -->
             <Card class="p-4">
                 <div class="flex flex-col gap-3">
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else-if="paymentMethods.length === 0" class="text-center py-12">
+        <div v-else-if="!paymentMethodsData || paymentMethodsData.length === 0" class="text-center py-12">
             <div
                 class="bg-gray-100 rounded-full w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center mx-auto mb-4"
             >
@@ -65,8 +65,8 @@
         </div>
 
         <!-- Payment Methods List -->
-        <div v-else-if="paymentMethods.length > 0" class="space-y-4">
-            <Card v-for="method in paymentMethods" :key="method.id" class="p-4">
+        <div v-else-if="paymentMethodsData && paymentMethodsData.length > 0" class="space-y-4">
+            <Card v-for="method in paymentMethodsData" :key="method.id" class="p-4">
                 <div class="flex flex-col gap-3">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center justify-between w-full">
@@ -77,15 +77,15 @@
                                 {{ method.tipe }}
                             </Badge>
 
-
                             <span class="text-xs text-gray-500">
                                 {{ $t('pages.profile.mypayment.addedOn') }}
                                 {{
-                                    new Date(method.created_at).toLocaleDateString()
+                                    new Date(
+                                        method.created_at
+                                    ).toLocaleDateString()
                                 }}
                             </span>
                         </div>
-
                     </div>
                     <div class="font-medium text-center text-xl sm:text-base">
                         {{ method.norek }}
@@ -119,29 +119,50 @@
             <DialogContent class="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle
-                        >{{ editingMethod ? $t('pages.profile.mypayment.edit') : $t('pages.profile.mypayment.add') }} {{ $t('pages.profile.mypayment.paymentMethod') }}</DialogTitle
+                        >{{
+                            editingMethod
+                                ? $t('pages.profile.mypayment.edit')
+                                : $t('pages.profile.mypayment.add')
+                        }}
+                        {{
+                            $t('pages.profile.mypayment.paymentMethod')
+                        }}</DialogTitle
                     >
                 </DialogHeader>
                 <form @submit.prevent="handleSubmit" class="space-y-4">
                     <div class="grid gap-2">
-                        <Label for="paymentType">{{ $t('pages.profile.mypayment.paymentType') }}</Label>
+                        <Label for="paymentType">{{
+                            $t('pages.profile.mypayment.paymentType')
+                        }}</Label>
                         <Select v-model="formData.tipe" required>
                             <SelectTrigger id="paymentType">
                                 <SelectValue
-                                    :placeholder="$t('pages.profile.mypayment.selectPaymentType')"
+                                    :placeholder="
+                                        $t(
+                                            'pages.profile.mypayment.selectPaymentType'
+                                        )
+                                    "
                                 />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value="Bank Transfer"
-                                        >{{ $t('pages.profile.mypayment.bankTransfer') }}</SelectItem
-                                    >
-                                    <SelectItem value="GoPay">{{ $t('pages.profile.mypayment.goPay') }}</SelectItem>
-                                    <SelectItem value="OVO">{{ $t('pages.profile.mypayment.ovo') }}</SelectItem>
-                                    <SelectItem value="Dana">{{ $t('pages.profile.mypayment.dana') }}</SelectItem>
-                                    <SelectItem value="ShopeePay"
-                                        >{{ $t('pages.profile.mypayment.shopeePay') }}</SelectItem
-                                    >
+                                    <SelectItem value="Bank Transfer">{{
+                                        $t(
+                                            'pages.profile.mypayment.bankTransfer'
+                                        )
+                                    }}</SelectItem>
+                                    <SelectItem value="GoPay">{{
+                                        $t('pages.profile.mypayment.goPay')
+                                    }}</SelectItem>
+                                    <SelectItem value="OVO">{{
+                                        $t('pages.profile.mypayment.ovo')
+                                    }}</SelectItem>
+                                    <SelectItem value="Dana">{{
+                                        $t('pages.profile.mypayment.dana')
+                                    }}</SelectItem>
+                                    <SelectItem value="ShopeePay">{{
+                                        $t('pages.profile.mypayment.shopeePay')
+                                    }}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -151,21 +172,33 @@
                         v-if="formData.tipe === 'Bank Transfer'"
                         class="grid gap-2"
                     >
-                        <Label for="bankName">{{ $t('pages.profile.mypayment.bankName') }}</Label>
+                        <Label for="bankName">{{
+                            $t('pages.profile.mypayment.bankName')
+                        }}</Label>
                         <Input
                             id="bankName"
                             v-model="formData.bank_name"
-                            :placeholder="$t('pages.profile.mypayment.bankNamePlaceholder')"
+                            :placeholder="
+                                $t(
+                                    'pages.profile.mypayment.bankNamePlaceholder'
+                                )
+                            "
                             required
                         />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="accountNumber">{{ $t('pages.profile.mypayment.accountNumber') }}</Label>
+                        <Label for="accountNumber">{{
+                            $t('pages.profile.mypayment.accountNumber')
+                        }}</Label>
                         <Input
                             id="accountNumber"
                             v-model="formData.norek"
-                            :placeholder="$t('pages.profile.mypayment.accountNumberPlaceholder')"
+                            :placeholder="
+                                $t(
+                                    'pages.profile.mypayment.accountNumberPlaceholder'
+                                )
+                            "
                             required
                         />
                     </div>
@@ -179,7 +212,11 @@
                             {{ $t('pages.profile.mypayment.cancel') }}
                         </Button>
                         <Button type="submit">
-                            {{ editingMethod ? $t('pages.profile.mypayment.update') : $t('pages.profile.mypayment.save') }}
+                            {{
+                                editingMethod
+                                    ? $t('pages.profile.mypayment.update')
+                                    : $t('pages.profile.mypayment.save')
+                            }}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -193,7 +230,9 @@
         >
             <DialogContent class="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>{{ $t('pages.profile.mypayment.deletePaymentMethod') }}</DialogTitle>
+                    <DialogTitle>{{
+                        $t('pages.profile.mypayment.deletePaymentMethod')
+                    }}</DialogTitle>
                     <DialogDescription>
                         {{ $t('pages.profile.mypayment.deleteConfirm') }}
                         <div class="mt-2 p-2 bg-gray-50 rounded">
@@ -231,7 +270,8 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { supabase } from '@/lib/supabaseClient';
+import { useAllPaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/supabaseClient';
+import { useQuery, useMutation } from '@tanstack/vue-query';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -273,32 +313,19 @@ const formData = ref({
     bank_name: '',
 });
 
-// Fetch payment methods
-async function fetchPaymentMethods() {
-    loading.value = true;
-    try {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) return;
+// Get current user ID
+const { data: { user } } = await supabase.auth.getUser();
+const currentUserId = user?.id;
 
-        const { data, error } = await supabase
-            .from('payment_methods')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false });
+// Use TanStack Query for fetching payment methods
+const { data: paymentMethodsData, isLoading: isPaymentMethodsLoading } = useQuery(
+    useAllPaymentMethodsQuery(currentUserId)
+);
 
-        if (error) {
-            console.error('Error fetching payment methods:', error);
-        } else {
-            paymentMethods.value = data || [];
-        }
-    } catch (error) {
-        console.error('Error fetching payment methods:', error);
-    } finally {
-        loading.value = false;
-    }
-}
+// Set up mutations
+const addPaymentMethodMutation = useMutation(useAddPaymentMethodMutation());
+const updatePaymentMethodMutation = useMutation(useUpdatePaymentMethodMutation());
+const deletePaymentMethodMutation = useMutation(useDeletePaymentMethodMutation());
 
 // Open add dialog
 function openAddDialog() {
@@ -313,31 +340,26 @@ function openAddDialog() {
 
 function badgeClassByType(tipe) {
     const badgeMap = {
-        'gopay': 'bg-green-100 text-green-700 border border-green-200',
-        'ovo': 'bg-purple-100 text-purple-700 border border-purple-200',
-        'dana': 'bg-sky-100 text-sky-700 border border-sky-200',
-        'shopeepay': 'bg-orange-100 text-orange-700 border border-orange-200',
+        gopay: 'bg-green-100 text-green-700 border border-green-200',
+        ovo: 'bg-purple-100 text-purple-700 border border-purple-200',
+        dana: 'bg-sky-100 text-sky-700 border border-sky-200',
+        shopeepay: 'bg-orange-100 text-orange-700 border border-orange-200',
     };
 
     if (!tipe) return 'bg-gray-100 text-gray-700 border border-gray-200';
 
     const key = tipe.trim().toLowerCase();
-    return (
-        badgeMap[key] ||
-        'bg-gray-100 text-gray-700 border border-gray-200'
-    );
-
+    return badgeMap[key] || 'bg-gray-100 text-gray-700 border border-gray-200';
 }
-
 
 // Open edit dialog
 function openEditDialog(method) {
     editingMethod.value = method;
-    
+
     // Determine if this is a bank transfer (any value not in our predefined list)
     const predefinedTypes = ['GoPay', 'OVO', 'Dana', 'ShopeePay'];
     const isBankTransfer = !predefinedTypes.includes(method.tipe);
-    
+
     formData.value = {
         tipe: isBankTransfer ? 'Bank Transfer' : method.tipe,
         norek: method.norek,
@@ -360,7 +382,10 @@ async function handleSubmit() {
     if (!user) return;
 
     const payload = {
-        tipe: formData.value.tipe === 'Bank Transfer' ? formData.value.bank_name : formData.value.tipe,
+        tipe:
+            formData.value.tipe === 'Bank Transfer'
+                ? formData.value.bank_name
+                : formData.value.tipe,
         norek: formData.value.norek,
         user_id: user.id,
     };
@@ -368,27 +393,24 @@ async function handleSubmit() {
     try {
         if (editingMethod.value) {
             // Update existing method
-            const { error } = await supabase
-                .from('payment_methods')
-                .update(payload)
-                .eq('id', editingMethod.value.id);
-
-            if (error) throw error;
+            await updatePaymentMethodMutation.mutateAsync({
+                methodID: editingMethod.value.id,
+                updates: payload
+            });
         } else {
             // Add new method
-            const { error } = await supabase
-                .from('payment_methods')
-                .insert([payload]);
-
-            if (error) throw error;
+            await addPaymentMethodMutation.mutateAsync(payload);
         }
 
-        // Refresh the list
-        await fetchPaymentMethods();
+        // Mutations will automatically invalidate queries and refresh the list
         isDialogOpen.value = false;
     } catch (error) {
         console.error('Error saving payment method:', error);
-        toast.error(t('pages.profile.mypayment.errors.saveFailed', { error: error.message }));
+        toast.error(
+            t('pages.profile.mypayment.errors.saveFailed', {
+                error: error.message,
+            })
+        );
     }
 }
 
@@ -397,22 +419,18 @@ async function deletePaymentMethod() {
     if (!methodToDelete.value) return;
 
     try {
-        const { error } = await supabase
-            .from('payment_methods')
-            .delete()
-            .eq('id', methodToDelete.value.id);
+        await deletePaymentMethodMutation.mutateAsync(methodToDelete.value.id);
 
-        if (error) throw error;
-
-        // Refresh the list
-        await fetchPaymentMethods();
+        // Mutation will automatically invalidate queries and refresh the list
         isDeleteDialogOpen.value = false;
     } catch (error) {
         console.error('Error deleting payment method:', error);
-        toast.error(t('pages.profile.mypayment.errors.deleteFailed', { error: error.message }));
+        toast.error(
+            t('pages.profile.mypayment.errors.deleteFailed', {
+                error: error.message,
+            })
+        );
     }
 }
 
-// Fetch payment methods on mount
-onMounted(fetchPaymentMethods);
 </script>

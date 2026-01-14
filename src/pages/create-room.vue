@@ -17,7 +17,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { createRoom } from '@/lib/supabaseClient';
+import { useCreateRoomMutation } from '@/lib/supabaseClient';
+import { useMutation } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';
@@ -55,6 +56,9 @@ const handleDeliveryChange = (value) => {
     }
 };
 
+// Set up mutation for creating rooms
+const createRoomMutation = useMutation(useCreateRoomMutation());
+
 const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,7 +78,7 @@ const handleSubmit = async (e) => {
 
     try {
         isLoading.value = true;
-        const data = await createRoom(payload);
+        const data = await createRoomMutation.mutateAsync(payload);
 
         // 4. Sukses
         console.log('Data berhasil dimasukkan:', data);
