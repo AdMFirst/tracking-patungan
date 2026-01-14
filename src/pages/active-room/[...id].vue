@@ -658,7 +658,7 @@ const setupRealtimeSubscription = () => {
         onParticipantsChange: async (payload) => {
             console.log('[Realtime] room_participants', payload);
             // If a new user joined, fetch their profile
-            if (payload.event === 'INSERT' && payload.new) {
+            if (payload.eventType === 'INSERT' && payload.new) {
                 const newUserId = payload.new.user_id;
                 if (newUserId && !userCache.value[newUserId]) {
                     console.log(
@@ -672,7 +672,11 @@ const setupRealtimeSubscription = () => {
         },
         onOrderItemsChange: async (payload) => {
             // Optional: cek apakah item ini milik room ini
-            if (participantIds.value.includes(payload.new.participant_id)) {
+            if (
+                payload.eventType === 'DELETE' ||
+                (payload.new &&
+                    participantIds.value.includes(payload.new.participant_id))
+            ) {
                 await loadOrderItems();
             }
         },
