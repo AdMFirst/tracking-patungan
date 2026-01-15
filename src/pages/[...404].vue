@@ -12,7 +12,7 @@ const { t } = useI18n();
 const goHome = () => {
     // Navigates to the root path (homepage)
     router.push('/');
-    console.log('Action: Navigated user to the homepage using Vue Router.');
+    console.debug('Action: Navigated user to the homepage using Vue Router.');
 };
 </script>
 

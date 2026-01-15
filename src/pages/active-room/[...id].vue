@@ -400,7 +400,7 @@ const handleAddOrderItem = async (itemData) => {
 
         loading.value = true;
         error.value = null;
-        console.log('this is the room id', roomID);
+        console.debug('this is the room id', roomID);
 
         const data = await addOrderItem(roomID, currentUser.value.id, itemData);
 
@@ -408,7 +408,7 @@ const handleAddOrderItem = async (itemData) => {
         await loadOrderItems();
 
         // Show success message or notification could be added here
-        console.log('Order item added successfully:', data);
+        console.debug('Order item added successfully:', data);
     } catch (err) {
         console.error('Error adding order item:', err);
         error.value = err.message || t('pages.activeRoom.errors.addFailed');
@@ -656,12 +656,12 @@ const setupRealtimeSubscription = () => {
 
     return subscribeToRoomUpdates(roomID, {
         onParticipantsChange: async (payload) => {
-            console.log('[Realtime] room_participants', payload);
+            console.debug('[Realtime] room_participants', payload);
             // If a new user joined, fetch their profile
             if (payload.eventType === 'INSERT' && payload.new) {
                 const newUserId = payload.new.user_id;
                 if (newUserId && !userCache.value[newUserId]) {
-                    console.log(
+                    console.debug(
                         'New user joined, fetching profile:',
                         newUserId
                     );
@@ -685,9 +685,9 @@ const setupRealtimeSubscription = () => {
             // Don't force reload on channel errors, just log and let it reconnect
         },
         onStatusChange: (status) => {
-            console.log('[Realtime status]', status);
+            console.debug('[Realtime status]', status);
             if (status === 'SUBSCRIBED') {
-                console.log('Successfully subscribed to realtime updates');
+                console.debug('Successfully subscribed to realtime updates');
             } else if (
                 status === 'CHANNEL_ERROR' ||
                 status === 'CLOSED' ||
@@ -703,7 +703,7 @@ const setupRealtimeSubscription = () => {
                     // For actual channel errors, we might want to reload, but not for normal disconnections
                     setTimeout(() => {
                         if (!realtimeChannel.value) {
-                            console.log(
+                            console.debug(
                                 'Attempting to re-establish realtime connection...'
                             );
                             realtimeChannel.value = setupRealtimeSubscription();
@@ -763,7 +763,7 @@ onMounted(() => {
 onUnmounted(() => {
     if (realtimeChannel.value) {
         supabase.removeChannel(realtimeChannel.value);
-        console.log('Realtime subscription cleaned up');
+        console.debug('Realtime subscription cleaned up');
     }
 });
 </script>

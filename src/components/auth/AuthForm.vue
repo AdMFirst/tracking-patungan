@@ -252,7 +252,7 @@ const handleSubmit = async () => {
                 });
 
             if (signInError) throw signInError;
-            console.log('Sign in successful:', data);
+            console.debug('Sign in successful:', data);
         } else {
             const { data, error: signUpError } = await supabase.auth.signUp({
                 email: formData.email,
@@ -265,7 +265,7 @@ const handleSubmit = async () => {
             });
 
             if (signUpError) throw signUpError;
-            console.log('Sign up successful:', data);
+            console.debug('Sign up successful:', data);
             toast.success(t('components.auth.AuthForm.signUpSuccess'));
         }
     } catch (err) {
@@ -311,7 +311,7 @@ const handleDiscordLogin = async () => {
         );
 
         if (oauthError) throw oauthError;
-        console.log('Discord login initiated:', data);
+        console.debug('Discord login initiated:', data);
     } catch (err) {
         error.value =
             err.message || t('components.auth.AuthForm.discordLoginError');
@@ -335,7 +335,7 @@ const handleLinkedInLogin = async () => {
         );
 
         if (oauthError) throw oauthError;
-        console.log('LinkedIn login initiated:', data);
+        console.debug('LinkedIn login initiated:', data);
     } catch (err) {
         error.value =
             err.message || t('components.auth.AuthForm.linkedInLoginError');

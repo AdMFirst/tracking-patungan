@@ -13,7 +13,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // 3. Keep your custom Push/Sync logic here
 self.addEventListener('sync', (event) => {
     if (event.tag === 'sync-data') {
-        console.log('Service Worker: Background sync triggered');
+        console.debug('Service Worker: Background sync triggered');
     }
 });
 

@@ -259,7 +259,7 @@ async function handlePaymentConfirmed(paymentData) {
             userID: user.id
         });
 
-        console.log('Payment confirmed:', paymentData);
+        console.debug('Payment confirmed:', paymentData);
         toast.success(
             t('components.room.OrderRooms.paymentConfirmed', {
                 amount: formatCurrency(paymentData.amount),

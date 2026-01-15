@@ -77,14 +77,14 @@ const handleSubmit = async (e) => {
         runner_id: user.value.id,
     };
 
-    console.log('payload is', payload);
+    console.debug('payload is', payload);
 
     try {
         isLoading.value = true;
         const data = await createRoomMutation.mutateAsync(payload);
 
         // 4. Sukses
-        console.log('Data berhasil dimasukkan:', data);
+        console.debug('Data berhasil dimasukkan:', data);
         
         // Add user as participant before redirecting
         await joinRoomMutation.mutateAsync({
