@@ -1,7 +1,14 @@
 <template>
     <div
-        class="min-h-screen flex items-center justify-center bg-background p-4"
+        class="min-h-screen flex items-center justify-center bg-background p-4 relative"
     >
+        <button
+            @click="showLanguageModal = true"
+            class="absolute top-4 right-4 p-2 rounded-full bg-secondary hover:bg-muted transition-colors text-secondary-foreground"
+        >
+            <Languages class="w-5 h-5" />
+        </button>
+
         <div class="w-full max-w-md space-y-8">
             <div class="text-center">
                 <h2 class="text-2xl font-bold text-foreground">
@@ -196,6 +203,8 @@
                 </button>
             </form>
         </div>
+
+        <LanguageModal v-model:open="showLanguageModal" />
     </div>
 </template>
 
@@ -205,10 +214,13 @@ import { supabase } from '../../lib/supabaseClient';
 import { resetPassword } from '../../lib/auth';
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
+import LanguageModal from '../modals/LanguageModal.vue';
+import { Languages } from 'lucide-vue-next';
 
 const { t } = useI18n();
 
 const isLogin = ref(true);
+const showLanguageModal = ref(false);
 const loading = ref(false);
 const showPassword = ref(false);
 const error = ref('');
