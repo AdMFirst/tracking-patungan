@@ -428,7 +428,7 @@ const en = {
                 bankName: 'Bank Name',
                 bankNamePlaceholder: 'e.g., HSBC, Barclays, Lloyds Bank',
                 accountNumber: 'Account Number',
-                accountNumberPlaceholder: 'Enter account number',
+                accountNumberPlaceholder: 'Enter account number (Optional)',
                 cancel: 'Cancel',
                 update: 'Update',
                 save: 'Save',

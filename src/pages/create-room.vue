@@ -31,6 +31,8 @@ const DeliveryTypes = [
     'Traveloka Eats',
     'Maxim Food & Goods Delivery',
     'Tokopedia NOW!',
+    'Dine In',
+    'Take Away',
     'Custom', // Pilihan yang membuka field baru
 ];
 

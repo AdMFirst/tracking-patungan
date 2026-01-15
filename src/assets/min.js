@@ -421,7 +421,7 @@ const min = {
                 bankName: 'Namo Bank',
                 bankNamePlaceholder: 'cth., BCA, BNI, Mandiri',
                 accountNumber: 'Nomor Rekening',
-                accountNumberPlaceholder: 'Masuakkan nomor rekening',
+                accountNumberPlaceholder: 'Masuakkan nomor rekening (opsional)',
                 cancel: 'Batal',
                 update: 'Parbarui',
                 save: 'Simpan',

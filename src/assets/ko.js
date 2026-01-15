@@ -425,7 +425,7 @@ const ko = {
                 bankName: '은행 이름',
                 bankNamePlaceholder: '예: 국민은행, 신한은행, 우리은행',
                 accountNumber: '계좌 번호',
-                accountNumberPlaceholder: '계좌 번호 입력',
+                accountNumberPlaceholder: '계좌 번호 입력 (선택)',
                 cancel: '취소',
                 update: '업데이트',
                 save: '저장',

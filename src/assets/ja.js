@@ -430,7 +430,7 @@ const ja = {
                 bankName: '銀行名',
                 bankNamePlaceholder: '例: 三菱UFJ, 三井住友, みずほ',
                 accountNumber: '口座番号',
-                accountNumberPlaceholder: '口座番号を入力',
+                accountNumberPlaceholder: '口座番号を入力（任意）',
                 cancel: 'キャンセル',
                 update: '更新',
                 save: '保存',

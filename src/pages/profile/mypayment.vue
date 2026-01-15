@@ -199,7 +199,7 @@
                                     'pages.profile.mypayment.accountNumberPlaceholder'
                                 )
                             "
-                            required
+                            
                         />
                     </div>
 
@@ -267,8 +267,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAllPaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/supabaseClient';
 import { useQuery, useMutation } from '@tanstack/vue-query';
@@ -299,9 +298,6 @@ import { toast } from 'vue-sonner';
 import PageHeader from '@/components/common/PageHeader.vue';
 
 const { t } = useI18n();
-const router = useRouter();
-const paymentMethods = ref([]);
-const loading = ref(false);
 const isDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const editingMethod = ref(null);
@@ -313,9 +309,8 @@ const formData = ref({
     bank_name: '',
 });
 
-// Get current user ID
-const { data: { user } } = await supabase.auth.getUser();
-const currentUserId = user?.id;
+const user = inject('user');
+const currentUserId = user.value?.id;
 
 // Use TanStack Query for fetching payment methods
 const { data: paymentMethodsData, isLoading: isPaymentMethodsLoading } = useQuery(
@@ -376,10 +371,7 @@ function openDeleteDialog(method) {
 
 // Handle form submission
 async function handleSubmit() {
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user.value) return;
 
     const payload = {
         tipe:
@@ -387,7 +379,7 @@ async function handleSubmit() {
                 ? formData.value.bank_name
                 : formData.value.tipe,
         norek: formData.value.norek,
-        user_id: user.id,
+        user_id: user.value.id,
     };
 
     try {

@@ -420,7 +420,7 @@ const ar = {
                 bankName: 'اسم البنك',
                 bankNamePlaceholder: 'مثال: الراجحي، الأهلي، الإنماء',
                 accountNumber: 'رقم الحساب',
-                accountNumberPlaceholder: 'أدخل رقم الحساب',
+                accountNumberPlaceholder: 'أدخل رقم الحساب (اختياري)',
                 cancel: 'إلغاء',
                 update: 'تحديث',
                 save: 'حفظ',

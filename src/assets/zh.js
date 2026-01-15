@@ -414,7 +414,7 @@ const zh = {
                 bankName: '银行名称',
                 bankNamePlaceholder: '例如，中国银行，工商银行',
                 accountNumber: '账号',
-                accountNumberPlaceholder: '输入账号',
+                accountNumberPlaceholder: '输入账号 (选填)',
                 cancel: '取消',
                 update: '更新',
                 save: '保存',

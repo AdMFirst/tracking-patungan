@@ -436,7 +436,7 @@ const ms = {
                 bankName: 'Nama Bank',
                 bankNamePlaceholder: 'cth., Maybank, CIMB, Public Bank',
                 accountNumber: 'Nombor Akaun',
-                accountNumberPlaceholder: 'Masukkan nombor akaun',
+                accountNumberPlaceholder: 'Masukkan nombor akaun (opsional)',
                 cancel: 'Batal',
                 update: 'Kemas Kini',
                 save: 'Simpan',

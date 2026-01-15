@@ -436,7 +436,7 @@ const id = {
                 bankName: 'Nama Bank',
                 bankNamePlaceholder: 'cth., BCA, BNI, Mandiri',
                 accountNumber: 'Nomor Rekening',
-                accountNumberPlaceholder: 'Masukkan nomor rekening',
+                accountNumberPlaceholder: 'Masukkan nomor rekening (Opsional)',
                 cancel: 'Batal',
                 update: 'Perbarui',
                 save: 'Simpan',

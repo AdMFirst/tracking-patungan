@@ -424,7 +424,7 @@ const su = {
                 bankName: 'Nami Bank',
                 bankNamePlaceholder: 'cth., BCA, BNI, Mandiri',
                 accountNumber: 'Nomer Rekening',
-                accountNumberPlaceholder: 'Lebetkeun nomer rekening',
+                accountNumberPlaceholder: 'Lebetkeun nomer rekening (opsional)',
                 cancel: 'Batal',
                 update: 'Perbarui',
                 save: 'Simpen',

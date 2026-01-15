@@ -421,7 +421,7 @@ const mad = {
                 bankName: 'Nyama Bank',
                 bankNamePlaceholder: 'cth., BCA, BNI, Mandiri',
                 accountNumber: 'Nomer Rekening',
-                accountNumberPlaceholder: 'Masokaghi nomer rekening',
+                accountNumberPlaceholder: 'Masokaghi nomer rekening (opsional)',
                 cancel: 'Batal',
                 update: 'Perbarui',
                 save: 'Simpen',

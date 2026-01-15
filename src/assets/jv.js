@@ -428,7 +428,7 @@ const jv = {
                 bankName: 'Nama Bank',
                 bankNamePlaceholder: 'cth., BCA, BNI, Mandiri',
                 accountNumber: 'Nomer Rekening',
-                accountNumberPlaceholder: 'Lebetaken nomer rekening',
+                accountNumberPlaceholder: 'Lebetaken nomer rekening (opsional)',
                 cancel: 'Batal',
                 update: 'Perbarui',
                 save: 'Simpen',
