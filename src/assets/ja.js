@@ -176,6 +176,7 @@ const ja = {
             PaymentModal: {
                 title: '支払い方法',
                 description: '支払い方法を選択して支払いを確定してください',
+                warning: 'この支払いのみに使用してください',
                 availablePaymentMethods: '利用可能な支払い方法:',
                 loadingPaymentMethods: '支払い方法を読み込み中...',
                 noPaymentMethods: 'このランナーの支払い方法が見つかりません。',
@@ -436,6 +437,8 @@ const ja = {
                 save: '保存',
                 deletePaymentMethod: '支払い方法を削除',
                 deleteConfirm: 'この支払い方法を削除してもよろしいですか？',
+                encryptedInfo:
+                    'ご安心ください。支払い番号は暗号化されており、あなたまたはあなたが運営するルームの参加者にのみ表示されます。',
                 errors: {
                     saveFailed: '支払い方法の保存に失敗しました: {error}',
                     deleteFailed: '支払い方法の削除に失敗しました: {error}',

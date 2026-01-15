@@ -176,6 +176,7 @@ const ko = {
             PaymentModal: {
                 title: '결제 수단',
                 description: '결제 수단을 선택하고 결제를 확인하세요',
+                warning: '이 결제에만 사용하세요',
                 availablePaymentMethods: '사용 가능한 결제 수단:',
                 loadingPaymentMethods: '결제 수단 로딩 중...',
                 noPaymentMethods:
@@ -431,6 +432,8 @@ const ko = {
                 save: '저장',
                 deletePaymentMethod: '결제 수단 삭제',
                 deleteConfirm: '이 결제 수단을 삭제하시겠습니까?',
+                encryptedInfo:
+                    '걱정하지 마세요. 결제 번호는 암호화되어 귀하 또는 귀하가 운영하는 방의 참여자에게만 표시됩니다.',
                 errors: {
                     saveFailed: '결제 수단 저장 실패: {error}',
                     deleteFailed: '결제 수단 삭제 실패: {error}',

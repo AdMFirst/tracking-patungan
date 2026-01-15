@@ -174,6 +174,7 @@ const jv = {
             PaymentModal: {
                 title: 'Metode Pambayaran',
                 description: 'Pilih metode pambayaran lan konfirmasi',
+                warning: 'Namung gunakaken niki kangge pambayaran niki',
                 availablePaymentMethods: 'Metode Pambayaran:',
                 loadingPaymentMethods: 'Muat metode pambayaran...',
                 noPaymentMethods: 'Mboten wonten metode pambayaran.',
@@ -434,6 +435,8 @@ const jv = {
                 save: 'Simpen',
                 deletePaymentMethod: 'Hapus Metode Pambayaran',
                 deleteConfirm: 'Yakin badhe mbusak metode pambayaran niki?',
+                encryptedInfo:
+                    'Ampun kuwatir, nomer pambayaran panjenengan dienkripsi lan namung dipuntingalaken dhumateng panjenengan utawi peserta kamar ingkang panjenengan kelola.',
                 errors: {
                     saveFailed: 'Gagal nyimpen metode pambayaran: {error}',
                     deleteFailed: 'Gagal mbusak metode pambayaran: {error}',

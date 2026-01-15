@@ -178,6 +178,7 @@ const ms = {
                 title: 'Kaedah Pembayaran',
                 description:
                     'Pilih kaedah pembayaran anda dan sahkan pembayaran',
+                warning: 'Hanya gunakan ini untuk pembayaran ini',
                 availablePaymentMethods: 'Kaedah Pembayaran Tersedia:',
                 loadingPaymentMethods: 'Memuatkan kaedah pembayaran...',
                 noPaymentMethods:
@@ -443,6 +444,8 @@ const ms = {
                 deletePaymentMethod: 'Padam Kaedah Pembayaran',
                 deleteConfirm:
                     'Adakah anda pasti mahu memadam kaedah pembayaran ini?',
+                encryptedInfo:
+                    'Jangan risau, nombor pembayaran anda disulitkan dan hanya ditunjukkan kepada anda atau peserta bilik yang anda kendalikan.',
                 errors: {
                     saveFailed: 'Gagal menyimpan kaedah pembayaran: {error}',
                     deleteFailed: 'Gagal memadam kaedah pembayaran: {error}',

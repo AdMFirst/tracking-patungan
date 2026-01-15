@@ -174,6 +174,7 @@ const mad = {
             PaymentModal: {
                 title: 'Metode Pambayaran',
                 description: 'Pile metode pambayaran ban konfirmasi',
+                warning: 'Coma gunaaghi kaangguy pambayaran reya',
                 availablePaymentMethods: 'Metode Pambayaran:',
                 loadingPaymentMethods: 'Ngamuat metode pambayaran...',
                 noPaymentMethods: "Ta' adha' metode pambayaran.",
@@ -427,6 +428,8 @@ const mad = {
                 save: 'Simpen',
                 deletePaymentMethod: 'Hapus Metode Pambayaran',
                 deleteConfirm: 'Yakin terro ngaposa metode pambayaran reya?',
+                encryptedInfo:
+                    "Ja' kuwatir, nomer pambayaran sampeyan enkripsi ban coma etuduhaghi ka sampeyan otaba peserta kamar se sampeyan atur.",
                 errors: {
                     saveFailed: 'Gagal nyimpen metode pambayaran: {error}',
                     deleteFailed: 'Gagal ngaposa metode pambayaran: {error}',

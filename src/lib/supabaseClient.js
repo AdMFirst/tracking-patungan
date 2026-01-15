@@ -968,17 +968,12 @@ export function useUserProfilesQuery(userIds) {
 // Payment Method Functions
 
 /**
- * Fetch payment methods for a user
+ * Fetch payment methods for a user by login info
  *
- * @param {string} userID - The ID of the user
  * @returns {Promise<Array>} Array of payment method objects
  */
-export async function fetchPaymentMethods(userID) {
-    const { data, error } = await supabase
-        .from('payment_methods')
-        .select('id, tipe, norek')
-        .eq('user_id', userID)
-        .order('created_at', { ascending: false });
+export async function fetchPaymentMethods() {
+    const { data, error } = await supabase.rpc('list_payment_methods');
 
     if (error) {
         console.error('Error fetching payment methods:', error);
@@ -988,17 +983,15 @@ export async function fetchPaymentMethods(userID) {
 }
 
 /**
- * Fetch all payment methods for a user (with full details)
+ * Fetch payment methods for a user by room id
  *
- * @param {string} userID - The ID of the user
- * @returns {Promise<Array>} Array of payment method objects with full details
+ * @param {string} RoomID - The ID of the room to check the runner payment method
+ * @returns {Promise<Array>} Array of payment method objects
  */
-export async function fetchAllPaymentMethods(userID) {
-    const { data, error } = await supabase
-        .from('payment_methods')
-        .select('*')
-        .eq('user_id', userID)
-        .order('created_at', { ascending: false });
+export async function fetchPaymentMethodsByRoomID(RoomID) {
+    const { data, error } = await supabase.rpc('get_runner_payment_methods', {
+        p_room_id: RoomID
+    });
 
     if (error) {
         console.error('Error fetching payment methods:', error);
@@ -1006,6 +999,7 @@ export async function fetchAllPaymentMethods(userID) {
     }
     return data || [];
 }
+
 
 /**
  * Add a new payment method
@@ -1014,11 +1008,10 @@ export async function fetchAllPaymentMethods(userID) {
  * @returns {Promise<Object>} Created payment method object
  */
 export async function addPaymentMethod(paymentData) {
-    const { data, error } = await supabase
-        .from('payment_methods')
-        .insert([paymentData])
-        .select()
-        .maybeSingle();
+    const { data, error } = await supabase.rpc('create_payment_method', {
+        p_tipe: paymentData.tipe,
+        p_norek: paymentData.norek
+    });
 
     if (error) {
         console.error('Error adding payment method:', error);
@@ -1035,12 +1028,11 @@ export async function addPaymentMethod(paymentData) {
  * @returns {Promise<Object>} Updated payment method object
  */
 export async function updatePaymentMethod(methodID, updates) {
-    const { data, error } = await supabase
-        .from('payment_methods')
-        .update(updates)
-        .eq('id', methodID)
-        .select()
-        .maybeSingle();
+    const { data, error } = await supabase.rpc('update_payment_method', {
+        p_id: methodID,
+        p_tipe: updates.tipe,
+        p_norek: updates.norek
+    })
 
     if (error) {
         console.error('Error updating payment method:', error);
@@ -1056,6 +1048,7 @@ export async function updatePaymentMethod(methodID, updates) {
  * @returns {Promise<void>} Resolves when payment method is successfully deleted
  */
 export async function deletePaymentMethod(methodID) {
+    // don't need to rpc since nothing is decrypted on delete
     const { error } = await supabase
         .from('payment_methods')
         .delete()
@@ -1072,22 +1065,21 @@ export async function deletePaymentMethod(methodID) {
 /**
  * Query for fetching payment methods with TanStack Query
  */
-export function usePaymentMethodsQuery(userID) {
+export function usePaymentMethodsQuery() {
     return {
-        queryKey: ['paymentMethods', userID],
-        queryFn: () => fetchPaymentMethods(userID),
-        enabled: !!userID,
+        queryKey: ['myPaymentMethods'],
+        queryFn: () => fetchPaymentMethods()
     };
 }
 
 /**
- * Query for fetching all payment methods with TanStack Query
+ * Query for fetching payment methods with TanStack Query
  */
-export function useAllPaymentMethodsQuery(userID) {
+export function usePaymentMethodsByRoomIDQuery(RoomID) {
     return {
-        queryKey: ['allPaymentMethods', userID],
-        queryFn: () => fetchAllPaymentMethods(userID),
-        enabled: !!userID,
+        queryKey: ['myPaymentMethods'],
+        queryFn: () => fetchPaymentMethodsByRoomID(RoomID),
+        enabled: !!RoomID,
     };
 }
 
@@ -1098,8 +1090,7 @@ export function useAddPaymentMethodMutation() {
     return {
         mutationFn: addPaymentMethod,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['paymentMethods'] });
-            queryClient.invalidateQueries({ queryKey: ['allPaymentMethods'] });
+            queryClient.invalidateQueries({ queryKey: ['myPaymentMethods'] });
         },
     };
 }
@@ -1111,8 +1102,7 @@ export function useUpdatePaymentMethodMutation() {
     return {
         mutationFn: ({ methodID, updates }) => updatePaymentMethod(methodID, updates),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['paymentMethods'] });
-            queryClient.invalidateQueries({ queryKey: ['allPaymentMethods'] });
+            queryClient.invalidateQueries({ queryKey: ['myPaymentMethods'] });
         },
     };
 }
@@ -1124,8 +1114,7 @@ export function useDeletePaymentMethodMutation() {
     return {
         mutationFn: deletePaymentMethod,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['paymentMethods'] });
-            queryClient.invalidateQueries({ queryKey: ['allPaymentMethods'] });
+            queryClient.invalidateQueries({ queryKey: ['myPaymentMethods'] });
         },
     };
 }

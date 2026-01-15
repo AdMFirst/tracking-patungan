@@ -176,6 +176,7 @@ const en = {
             PaymentModal: {
                 title: 'Payment Method',
                 description: 'Select your payment method and confirm payment',
+                warning: 'Only use this for this payment',
                 availablePaymentMethods: 'Available Payment Methods:',
                 loadingPaymentMethods: 'Loading payment methods...',
                 noPaymentMethods: 'No payment methods found for this runner.',
@@ -435,6 +436,8 @@ const en = {
                 deletePaymentMethod: 'Delete Payment Method',
                 deleteConfirm:
                     'Are you sure you want to delete this payment method?',
+                encryptedInfo:
+                    "Don't worry, your payment number is encrypted and only shown to you or participants of the room you run.",
                 errors: {
                     saveFailed: 'Failed to save payment method: {error}',
                     deleteFailed: 'Failed to delete payment method: {error}',

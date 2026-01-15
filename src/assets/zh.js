@@ -173,6 +173,7 @@ const zh = {
             PaymentModal: {
                 title: '支付方式',
                 description: '选择您的支付方式并确认支付',
+                warning: '仅限此次支付使用',
                 availablePaymentMethods: '可用支付方式：',
                 loadingPaymentMethods: '正在加载支付方式...',
                 noPaymentMethods: '未找到此跑腿的支付方式。',
@@ -420,6 +421,8 @@ const zh = {
                 save: '保存',
                 deletePaymentMethod: '删除支付方式',
                 deleteConfirm: '您确定要删除此支付方式吗？',
+                encryptedInfo:
+                    '别担心，您的支付号码已加密，仅对您或您管理的房间的参与者可见。',
                 errors: {
                     saveFailed: '保存支付方式失败：{error}',
                     deleteFailed: '删除支付方式失败：{error}',

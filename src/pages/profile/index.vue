@@ -175,7 +175,6 @@ const providerLabel = computed(() => {
     return 'Email';
 });
 
-console.log(user.value);
 const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : '—');
 
 const navigateToMyPayment = () => {

@@ -175,6 +175,7 @@ const su = {
             PaymentModal: {
                 title: 'Metode Pamayaran',
                 description: 'Pilih metode pamayaran sareng konfirmasi',
+                warning: 'Mung anggo ieu kanggo pamayaran ieu',
                 availablePaymentMethods: 'Metode Pamayaran:',
                 loadingPaymentMethods: 'Ngamuat metode pamayaran...',
                 noPaymentMethods: 'Teu aya metode pamayaran.',
@@ -430,6 +431,8 @@ const su = {
                 save: 'Simpen',
                 deletePaymentMethod: 'Hapus Metode Pamayaran',
                 deleteConfirm: 'Yakin bade ngahapus metode pamayaran ieu?',
+                encryptedInfo:
+                    'Tong hariwang, nomer pamayaran anjeun dienkripsi sareng mung dipidangkeun ka anjeun atanapi pamilon kamar nu anjeun kelola.',
                 errors: {
                     saveFailed: 'Gagal nyimpen metode pamayaran: {error}',
                     deleteFailed: 'Gagal ngahapus metode pamayaran: {error}',

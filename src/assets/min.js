@@ -174,6 +174,7 @@ const min = {
             PaymentModal: {
                 title: 'Metode Pambayaran',
                 description: 'Pilih metode pambayaran dan konfirmasi',
+                warning: 'Hanyo gunokan iko untuak pambayaran iko',
                 availablePaymentMethods: 'Metode Pambayaran:',
                 loadingPaymentMethods: 'Memuat metode pambayaran...',
                 noPaymentMethods: 'Indak ado metode pambayaran.',
@@ -427,6 +428,8 @@ const min = {
                 save: 'Simpan',
                 deletePaymentMethod: 'Hapus Metode Pambayaran',
                 deleteConfirm: 'Yakin nio menghapus metode pambayaran iko?',
+                encryptedInfo:
+                    'Jan cameh, nomor pambayaran Sanak dienkripsi dan hanyo dicaliakkan ka Sanak atau peserta bilik nan Sanak atur.',
                 errors: {
                     saveFailed: 'Gagal manyimpan metode pambayaran: {error}',
                     deleteFailed: 'Gagal menghapus metode pambayaran: {error}',

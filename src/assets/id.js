@@ -103,7 +103,7 @@ const id = {
                 restaurantLabel: 'Restoran:',
                 createdAtLabel: 'Dibuat pada:',
                 itemsOrderedLabel: 'Item Dipesan:',
-                each: 'masing-masing',
+                each: 'per-item',
                 paidAt: 'Dibayar pada {date}',
                 paidAtVia: 'Dibayar pada {date} via {method}',
                 paymentConfirmed:
@@ -179,6 +179,7 @@ const id = {
                 title: 'Metode Pembayaran',
                 description:
                     'Pilih metode pembayaran Anda dan konfirmasi pembayaran',
+                warning: 'Hanya gunakan ini untuk pembayaran ini',
                 availablePaymentMethods: 'Metode Pembayaran Tersedia:',
                 loadingPaymentMethods: 'Memuat metode pembayaran...',
                 noPaymentMethods:
@@ -342,7 +343,7 @@ const id = {
             restaurantInfo: '{restaurant} via {platform}',
             cartTitle: 'Keranjang',
             unknownUser: 'Pengguna Tidak Diketahui',
-            each: 'masing-masing',
+            each: 'per-item',
             noOrderItems: 'Belum ada item pesanan.',
             shareRoomTitle: 'Bagikan Room',
             shareRoomDescription:
@@ -443,6 +444,8 @@ const id = {
                 deletePaymentMethod: 'Hapus Metode Pembayaran',
                 deleteConfirm:
                     'Apakah Anda yakin ingin menghapus metode pembayaran ini?',
+                encryptedInfo:
+                    'Jangan khawatir, nomor pembayaran Anda dienkripsi dan hanya ditampilkan kepada Anda atau peserta room yang Anda kelola.',
                 errors: {
                     saveFailed: 'Gagal menyimpan metode pembayaran: {error}',
                     deleteFailed: 'Gagal menghapus metode pembayaran: {error}',

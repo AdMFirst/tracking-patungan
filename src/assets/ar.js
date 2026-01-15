@@ -176,6 +176,7 @@ const ar = {
             PaymentModal: {
                 title: 'طريقة الدفع',
                 description: 'اختر طريقة الدفع وتأكيد الدفع',
+                warning: 'استخدم هذا فقط لهذا الدفع',
                 availablePaymentMethods: 'طرق الدفع المتاحة:',
                 loadingPaymentMethods: 'جاري تحميل طرق الدفع...',
                 noPaymentMethods: 'لم يتم العثور على طرق دفع لهذا العداء.',
@@ -426,6 +427,8 @@ const ar = {
                 save: 'حفظ',
                 deletePaymentMethod: 'حذف طريقة الدفع',
                 deleteConfirm: 'هل أنت متأكد أنك تريد حذف طريقة الدفع هذه؟',
+                encryptedInfo:
+                    'لا تقلق، رقم الدفع الخاص بك مشفر ويظهر فقط لك أو للمشاركين في الغرفة التي تديرها.',
                 errors: {
                     saveFailed: 'فشل حفظ طريقة الدفع: {error}',
                     deleteFailed: 'فشل حذف طريقة الدفع: {error}',

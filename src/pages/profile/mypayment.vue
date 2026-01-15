@@ -114,6 +114,18 @@
             </Card>
         </div>
 
+        <!-- Privacy Note -->
+        <div v-if="!isPaymentMethodsLoading" class="mt-8 mb-18 flex items-center gap-4">
+            <div class="h-[1px] flex-1 bg-muted"></div>
+            <div class="flex items-center gap-2">
+                <ShieldCheck class="text-muted-foreground w-24" />
+                <span class="text-[10px] tracking-widest text-muted-foreground font-semibold">
+                    {{ $t('pages.profile.mypayment.encryptedInfo') }}
+                </span>
+            </div>
+            <div class="h-[1px] flex-1 bg-muted"></div>
+        </div>
+
         <!-- Add/Edit Payment Method Dialog -->
         <Dialog :open="isDialogOpen" @update:open="isDialogOpen = $event">
             <DialogContent class="sm:max-w-[425px]">
@@ -269,7 +281,7 @@
 <script setup>
 import { ref, onMounted, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useAllPaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/supabaseClient';
+import { usePaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/supabaseClient';
 import { useQuery, useMutation } from '@tanstack/vue-query';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -293,7 +305,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Plus, Pencil, Trash2, CreditCard } from 'lucide-vue-next';
+import { Plus, Pencil, Trash2, CreditCard, ShieldCheck } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 import PageHeader from '@/components/common/PageHeader.vue';
 
@@ -310,11 +322,10 @@ const formData = ref({
 });
 
 const user = inject('user');
-const currentUserId = user.value?.id;
 
 // Use TanStack Query for fetching payment methods
 const { data: paymentMethodsData, isLoading: isPaymentMethodsLoading } = useQuery(
-    useAllPaymentMethodsQuery(currentUserId)
+    usePaymentMethodsQuery()
 );
 
 // Set up mutations

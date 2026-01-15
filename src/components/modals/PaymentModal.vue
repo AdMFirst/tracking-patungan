@@ -12,7 +12,14 @@
             </DialogHeader>
 
             <!-- 🔧 min-h-0 added -->
-            <div class="flex-1 flex flex-col min-h-0">
+            <div class="flex-1 flex flex-col min-h-0 transition-all duration-200" :class="{ 'blur-sm select-none opacity-50': !isWindowFocused }">
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                    <div class="flex items-center">
+                        <AlertTriangle class="h-4 w-4 text-yellow-400 mr-2" />
+                        <p class="text-sm text-yellow-700">{{ $t('components.modals.PaymentModal.warning') }}</p>
+                    </div>
+                </div>
+
                 <div class="text-sm font-medium mb-2">
                     {{
                         $t(
@@ -88,7 +95,7 @@
 
             <DialogFooter class="sm:flex-col sm:space-x-0 gap-2">
                 <Button variant="outline" @click="handleClose" class="w-full">
-                    {{ $t('components.modals.PaymentModal.cancelButton') }}
+                    {{ $t('components.modals.PaymentModal.cancelButton') }} ({{ countdown }})
                 </Button>
                 <Button
                     :disabled="!canPay"
@@ -107,7 +114,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { AlertTriangle } from 'lucide-vue-next';
+import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import {
     Dialog,
     DialogContent,
@@ -135,6 +143,9 @@ const paymentMethods = ref([]);
 const loadingMethods = ref(false);
 const selectedMethod = ref(null);
 const confirmed = ref(false);
+const isWindowFocused = ref(true);
+const countdown = ref(30);
+let timer = null;
 
 const canPay = computed(() => {
     return selectedMethod.value && confirmed.value;
@@ -142,12 +153,53 @@ const canPay = computed(() => {
 
 // Use TanStack Query for fetching payment methods
 const { data: paymentMethodsData, isLoading: isPaymentMethodsLoading } = useQuery(
-    usePaymentMethodsQuery(props.room?.runner_id)
+    computed(() => usePaymentMethodsByRoomIDQuery(props.room?.id))
 );
 
 watch(paymentMethodsData, (newData) => {
     paymentMethods.value = newData || [];
 }, { immediate: true });
+
+const handleFocus = () => { isWindowFocused.value = true; };
+const handleBlur = () => { isWindowFocused.value = false; };
+
+const stopTimer = () => {
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
+    }
+};
+
+const startTimer = () => {
+    stopTimer();
+    countdown.value = 30;
+    timer = setInterval(() => {
+        countdown.value--;
+        if (countdown.value <= 0) {
+            stopTimer();
+            handleClose();
+        }
+    }, 1000);
+};
+
+watch(() => props.isOpen, (val) => {
+    if (val) {
+        window.addEventListener('focus', handleFocus);
+        window.addEventListener('blur', handleBlur);
+        isWindowFocused.value = document.hasFocus();
+        startTimer();
+    } else {
+        window.removeEventListener('focus', handleFocus);
+        window.removeEventListener('blur', handleBlur);
+        stopTimer();
+    }
+}, { immediate: true });
+
+onBeforeUnmount(() => {
+    window.removeEventListener('focus', handleFocus);
+    window.removeEventListener('blur', handleBlur);
+    stopTimer();
+});
 
 const handleMethodSelect = (method) => {
     selectedMethod.value = method.id;
