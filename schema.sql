@@ -1,6 +1,14 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
+CREATE TABLE public.notification (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  type character varying DEFAULT ''::character varying, -- info, warning, etc. default null
+  tittle character varying DEFAULT 'Notification'::character varying, 
+  message character varying,
+  CONSTRAINT notification_pkey PRIMARY KEY (id)
+);
 CREATE TABLE public.order_items (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   participant_id uuid,
@@ -20,6 +28,17 @@ CREATE TABLE public.payment_methods (
   user_id uuid NOT NULL,
   CONSTRAINT payment_methods_pkey PRIMARY KEY (id),
   CONSTRAINT payment_methods_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.ping_logs ( -- unused, only for backend logging
+  id integer NOT NULL DEFAULT nextval('ping_logs_id_seq'::regclass),
+  host character varying NOT NULL,
+  ip_address character varying,
+  latency_ms numeric,
+  status_code integer,
+  is_reachable boolean DEFAULT false,
+  error_message text,
+  created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT ping_logs_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.room_participants (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
