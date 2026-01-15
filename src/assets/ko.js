@@ -27,6 +27,7 @@ const ko = {
                 loading: '로딩 중...',
                 signInButton: '로그인',
                 signUpButton: '가입하기',
+                signUpSuccess: '가입이 완료되었습니다! 이메일을 확인하여 계정을 인증해주세요.',
                 genericError: '오류가 발생했습니다. 다시 시도해주세요.',
                 discordLoginError:
                     'Discord 로그인을 시작하지 못했습니다. 다시 시도해주세요.',

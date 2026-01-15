@@ -59,30 +59,34 @@
                 </CardContent>
             </Card>
 
-            <Button @click="openSettingsModal" class="w-full mb-4">
-                <User class="mr-2 h-4 w-4" />
-                {{ $t('pages.profile.index.changeUsername') }}
-            </Button>
-
             <Button @click="navigateToMyPayment" class="w-full mb-4">
                 <CreditCard class="mr-2 h-4 w-4" />
                 {{ $t('pages.profile.index.managePaymentMethods') }}
-            </Button>
-
-            <Button v-if="provider === 'email'" @click="navigateToUpdatePassword" class="w-full mb-4">
-                <Lock class="mr-2 h-4 w-4" />
-                {{ $t('pages.profile.index.changePassword') }}
-            </Button>
-
-            <Button v-if="provider === 'email'" @click="navigateToUpdateEmail" class="w-full mb-4">
-                <Mail class="mr-2 h-4 w-4" />
-                {{ $t('pages.profile.index.changeEmail') }}
             </Button>
 
             <Button @click="openLanguageModal" class="w-full mb-4">
                 <Languages class="mr-2 h-4 w-4" />
                 {{ $t('pages.profile.index.changeLanguage') }}
             </Button>
+
+            <Separator />
+
+            <Button @click="openSettingsModal" class="w-full mb-4">
+                <User class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeUsername') }}
+            </Button>
+
+            <Button v-if="provider === 'email'" @click="openUpdateEmailModal" class="w-full mb-4">
+                <Mail class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changeEmail') }}
+            </Button>
+
+            <Button v-if="provider === 'email'" @click="openUpdatePasswordModal" class="w-full mb-4">
+                <Lock class="mr-2 h-4 w-4" />
+                {{ $t('pages.profile.index.changePassword') }}
+            </Button>
+
+            <Separator />
 
             <Button
                 @click="handleSignOut"
@@ -112,6 +116,16 @@
             :open="isLanguageModalOpen"
             @update:open="isLanguageModalOpen = $event"
         />
+
+        <UpdateEmailModal
+            :open="isUpdateEmailModalOpen"
+            @update:open="isUpdateEmailModalOpen = $event"
+        />
+
+        <UpdatePasswordModal
+            :open="isUpdatePasswordModalOpen"
+            @update:open="isUpdatePasswordModalOpen = $event"
+        />
     </div>
 </template>
 
@@ -119,26 +133,33 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useRouter } from 'vue-router';
+import { Separator } from '@/components/ui/separator';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
-import { ref, inject, computed } from 'vue';
+import { ref, inject, computed, onMounted, watch } from 'vue';
 import UserAvatar from '@/components/common/UserAvatar.vue';
 import SettingsModal from '@/components/modals/SettingsModal.vue';
 import LanguageModal from '@/components/modals/LanguageModal.vue';
+import UpdateEmailModal from '@/components/modals/UpdateEmailModal.vue';
+import UpdatePasswordModal from '@/components/modals/UpdatePasswordModal.vue';
 import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 
 // Import icons from lucide-vue-next
 import { User, CreditCard, Languages, LogOut, Loader2, Lock, Mail } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 
 const { t } = useI18n();
 const user = inject('user');
 const router = useRouter();
+const route = useRoute();
 
 const loading = ref(false);
 const isSettingsModalOpen = ref(false);
 const isLanguageModalOpen = ref(false);
+const isUpdateEmailModalOpen = ref(false);
+const isUpdatePasswordModalOpen = ref(false);
 
 // User data for the settings modal
 const userData = computed(() => ({
@@ -161,12 +182,12 @@ const navigateToMyPayment = () => {
     router.push('/profile/mypayment');
 };
 
-const navigateToUpdatePassword = () => {
-    router.push('/profile/update-password');
+const openUpdatePasswordModal = () => {
+    isUpdatePasswordModalOpen.value = true;
 };
 
-const navigateToUpdateEmail = () => {
-    router.push('/profile/update-email');
+const openUpdateEmailModal = () => {
+    isUpdateEmailModalOpen.value = true;
 };
 
 const openSettingsModal = () => {
@@ -189,9 +210,30 @@ const handleSaveSettings = async (updatedUser) => {
 const handleSignOut = async () => {
     loading.value = true;
     try {
-        await signOut();
+        const error = await signOut();
+
+        if (error) {
+            toast.error(error.message);
+        } else {
+            router.push('/login');
+        }
     } finally {
         loading.value = false;
     }
 };
+
+const checkHash = () => {
+    const hash = route.hash;
+    if (hash === '#update-password') {
+        isUpdatePasswordModalOpen.value = true;
+    } else if (hash === '#update-email') {
+        isUpdateEmailModalOpen.value = true;
+    }
+};
+
+onMounted(() => {
+    checkHash();
+});
+
+watch(() => route.hash, checkHash);
 </script>

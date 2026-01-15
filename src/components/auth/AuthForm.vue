@@ -254,6 +254,7 @@ const handleSubmit = async () => {
 
             if (signUpError) throw signUpError;
             console.log('Sign up successful:', data);
+            toast.success(t('components.auth.AuthForm.signUpSuccess'));
         }
     } catch (err) {
         error.value = err.message || t('components.auth.AuthForm.genericError');
