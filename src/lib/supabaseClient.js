@@ -1176,7 +1176,7 @@ export async function checkAndDisplaySystemNotifications() {
         // Show notifications if any exist
         if (notifications && notifications.length > 0) {
             notifications.forEach((n) => {
-                const type = n.type?.toLowerCase() || 'info';
+                const type = n.type?.toLowerCase();
                 const title = n.tittle || 'Notification';
                 const description = n.message;
                 const toastOptions = {
