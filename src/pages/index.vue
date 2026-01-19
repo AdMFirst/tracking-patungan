@@ -52,32 +52,40 @@
                     </CardHeader>
                     <CardContent>
                         <div class="space-y-4 max-h-1/2 overflow-y-scroll">
-                            <div
-                                v-for="month in monthlySpendingData"
-                                :key="month.month"
-                                class="flex justify-between items-center p-3 bg-muted rounded-lg"
-                            >
-                                <span class="text-sm font-medium">{{
-                                    formatMonthYear(month.month)
-                                }}</span>
-                                <span class="text-sm font-bold"
-                                    >Rp
-                                    {{
-                                        formatCurrency(month.total_spent)
-                                    }}</span
+                            <template v-if="isSpendingLoading">
+                                <div v-for="i in 3" :key="i" class="flex justify-between items-center p-3 bg-muted rounded-lg">
+                                    <Skeleton class="h-4 w-24" />
+                                    <Skeleton class="h-4 w-16" />
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div
+                                    v-for="month in monthlySpendingData"
+                                    :key="month.month"
+                                    class="flex justify-between items-center p-3 bg-muted rounded-lg"
                                 >
-                            </div>
-                            <div
-                                v-if="
-                                    !monthlySpendingData ||
-                                    monthlySpendingData.length === 0
-                                "
-                                class="text-center py-4"
-                            >
-                                <p class="text-sm text-muted-foreground">
-                                    {{ $t('pages.index.noSpendingData') }}
-                                </p>
-                            </div>
+                                    <span class="text-sm font-medium">{{
+                                        formatMonthYear(month.month)
+                                    }}</span>
+                                    <span class="text-sm font-bold"
+                                        >Rp
+                                        {{
+                                            formatCurrency(month.total_spent)
+                                        }}</span
+                                    >
+                                </div>
+                                <div
+                                    v-if="
+                                        !monthlySpendingData ||
+                                        monthlySpendingData.length === 0
+                                    "
+                                    class="text-center py-4"
+                                >
+                                    <p class="text-sm text-muted-foreground">
+                                        {{ $t('pages.index.noSpendingData') }}
+                                    </p>
+                                </div>
+                            </template>
                         </div>
                     </CardContent>
                 </Card>
@@ -133,6 +141,7 @@ import Input from '@/components/ui/input/Input.vue';
 import Button from '@/components/ui/button/Button.vue';
 import Spinner from '@/components/ui/spinner/Spinner.vue';
 import QRScanDialog from '@/components/room/QRScanDialog.vue';
+import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 const user = inject('user');
 const router = useRouter();
@@ -174,5 +183,5 @@ const joinRoom = async () => {
     }
 };
 
-onMounted(checkAndDisplaySystemNotifications())
+onMounted(checkAndDisplaySystemNotifications)
 </script>
