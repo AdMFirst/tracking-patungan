@@ -126,7 +126,7 @@
 import { inject, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { useMonthlySpendingQuery } from '@/lib/supabaseClient';
+import { checkAndDisplaySystemNotifications, useMonthlySpendingQuery } from '@/lib/supabaseClient';
 import { useQuery } from '@tanstack/vue-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Input from '@/components/ui/input/Input.vue';
@@ -173,4 +173,6 @@ const joinRoom = async () => {
         isLoading.value = false;
     }
 };
+
+onMounted(checkAndDisplaySystemNotifications())
 </script>

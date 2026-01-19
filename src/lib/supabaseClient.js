@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { QueryClient } from '@tanstack/vue-query';
+import { toast } from 'vue-sonner';
 
 const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY;
@@ -1117,6 +1118,99 @@ export function useDeletePaymentMethodMutation() {
             queryClient.invalidateQueries({ queryKey: ['myPaymentMethods'] });
         },
     };
+}
+
+/**
+ * Fetch system notifications
+ *
+ * @param {string} lastCheckDate - ISO date string
+ * @returns {Promise<Array>} Array of notifications
+ */
+export async function fetchSystemNotifications(lastCheckDate) {
+    const { data, error } = await supabase
+        .from('notification')
+        .select('*')
+        .gt('created_at', lastCheckDate)
+        .order('created_at', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+}
+
+/**
+ * Check and display system notifications
+ * This function handles the complete notification workflow:
+ * 1. Gets the last check time from localStorage
+ * 2. Only checks if more than 6 hours have passed since last check
+ * 3. Fetches new notifications since that time
+ * 4. Displays them using toast notifications
+ * 5. Updates the last check time
+ *
+ * @returns {Promise<void>}
+ */
+export async function checkAndDisplaySystemNotifications() {
+    const STORAGE_KEY = 'talangin_last_notif_check';
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const now = new Date();
+    const nowISO = now.toISOString();
+
+    // If first time (no stored value), just mark current time and exit
+    if (!stored) {
+        localStorage.setItem(STORAGE_KEY, nowISO);
+        return;
+    }
+
+    // Check if less than 6 hours have passed since last check
+    const lastCheckDate = new Date(stored);
+    const hoursSinceLastCheck = (now - lastCheckDate) / (1000 * 60 * 60);
+    
+    if (hoursSinceLastCheck < 6) {
+        // Don't bother checking again if less than 6 hours have passed
+        return;
+    }
+
+    try {
+        // Fetch notifications created after the last check
+        const notifications = await fetchSystemNotifications(stored);
+
+        // Show notifications if any exist
+        if (notifications && notifications.length > 0) {
+            notifications.forEach((n) => {
+                const type = n.type?.toLowerCase() || 'info';
+                const title = n.tittle || 'Notification';
+                const description = n.message;
+                const toastOptions = {
+                    description,
+                    duration: 5000,
+                };
+
+                // Show appropriate toast based on notification type
+                switch (type) {
+                    case 'success':
+                        toast.success(title, toastOptions);
+                        break;
+                    case 'warning':
+                        toast.warning(title, toastOptions);
+                        break;
+                    case 'error':
+                        toast.error(title, toastOptions);
+                        break;
+                    case 'info':
+                        toast.info(title, toastOptions);
+                        break;
+                    default:
+                        toast(title, toastOptions);
+                        break;
+                }
+            });
+        }
+
+        // Update the last check time to current time
+        localStorage.setItem(STORAGE_KEY, nowISO);
+
+    } catch (err) {
+        console.error('Error fetching system notifications:', err);
+    }
 }
 
 // Create and export QueryClient instance
