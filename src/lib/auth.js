@@ -63,3 +63,41 @@ export async function updateUserPassword(password) {
     }
     return data;
 }
+
+export async function signIn(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+    if (error) {
+        throw error;
+    }
+    return data;
+}
+
+export async function signUp(email, password, metaData) {
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: metaData,
+        },
+    });
+    if (error) {
+        throw error;
+    }
+    return data;
+}
+
+export async function signInWithOAuth(provider) {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+            redirectTo: window.location.origin,
+        },
+    });
+    if (error) {
+        throw error;
+    }
+    return data;
+}

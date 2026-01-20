@@ -210,14 +210,15 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { supabase } from '../../lib/supabaseClient';
-import { resetPassword } from '../../lib/auth';
+import { useRouter } from 'vue-router';
+import { resetPassword, signIn, signUp, signInWithOAuth } from '../../lib/auth';
 import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 import LanguageModal from '../modals/LanguageModal.vue';
 import { Languages } from 'lucide-vue-next';
 
 const { t } = useI18n();
+const router = useRouter();
 
 const isLogin = ref(true);
 const showLanguageModal = ref(false);
@@ -245,27 +246,31 @@ const handleSubmit = async () => {
 
     try {
         if (isLogin.value) {
-            const { data, error: signInError } =
-                await supabase.auth.signInWithPassword({
-                    email: formData.email,
-                    password: formData.password,
-                });
-
-            if (signInError) throw signInError;
+            const data = await signIn(formData.email, formData.password);
             console.debug('Sign in successful:', data);
+
+            if (window.goatcounter) {
+                window.goatcounter.count({
+                    path: 'login-success',
+                    title: 'Login Success',
+                    event: true,
+                });
+            }
+            router.push('/');
         } else {
-            const { data, error: signUpError } = await supabase.auth.signUp({
-                email: formData.email,
-                password: formData.password,
-                options: {
-                    data: {
-                        full_name: formData.name,
-                    },
-                },
+            const data = await signUp(formData.email, formData.password, {
+                full_name: formData.name,
             });
 
-            if (signUpError) throw signUpError;
             console.debug('Sign up successful:', data);
+
+            if (window.goatcounter) {
+                window.goatcounter.count({
+                    path: 'signup-success',
+                    title: 'Signup Success',
+                    event: true,
+                });
+            }
             toast.success(t('components.auth.AuthForm.signUpSuccess'));
         }
     } catch (err) {
@@ -301,16 +306,14 @@ const handleDiscordLogin = async () => {
     error.value = '';
 
     try {
-        const { data, error: oauthError } = await supabase.auth.signInWithOAuth(
-            {
-                provider: 'discord',
-                options: {
-                    redirectTo: window.location.origin,
-                },
-            }
-        );
-
-        if (oauthError) throw oauthError;
+        if (window.goatcounter) {
+            window.goatcounter.count({
+                path: 'login-discord',
+                title: 'Login Discord',
+                event: true,
+            });
+        }
+        const data = await signInWithOAuth('discord');
         console.debug('Discord login initiated:', data);
     } catch (err) {
         error.value =
@@ -325,16 +328,14 @@ const handleLinkedInLogin = async () => {
     error.value = '';
 
     try {
-        const { data, error: oauthError } = await supabase.auth.signInWithOAuth(
-            {
-                provider: 'linkedin_oidc',
-                options: {
-                    redirectTo: window.location.origin,
-                },
-            }
-        );
-
-        if (oauthError) throw oauthError;
+        if (window.goatcounter) {
+            window.goatcounter.count({
+                path: 'login-linkedin',
+                title: 'Login LinkedIn',
+                event: true,
+            });
+        }
+        const data = await signInWithOAuth('linkedin_oidc');
         console.debug('LinkedIn login initiated:', data);
     } catch (err) {
         error.value =
