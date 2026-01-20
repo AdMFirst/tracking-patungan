@@ -34,9 +34,15 @@ router.beforeEach(async (to, from, next) => {
 
 // Ensure SPA route changes are tracked reliably
 router.afterEach((to) => {
+    if (localStorage.getItem('goatcounter_dont_count') === 'true') return;
+
     if (window.goatcounter && window.goatcounter.count) {
+        let path = to.path;
+        path = path.replace(/\/active-room\/[^/]+/, '/active-room/{uuid}');
+        path = path.replace(/\/myroom\/[^/]+/, '/myroom/{uuid}');
+
         window.goatcounter.count({
-            path: to.path,
+            path,
             event: false
         });
     }
