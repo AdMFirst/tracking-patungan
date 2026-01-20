@@ -32,6 +32,16 @@ router.beforeEach(async (to, from, next) => {
     }
 });
 
+// Ensure SPA route changes are tracked reliably
+router.afterEach((to) => {
+    if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({
+            path: to.path,
+            event: false
+        });
+    }
+});
+
 export default router;
 
 export const navItems = [
