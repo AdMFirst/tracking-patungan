@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="jv">
 
 <head>
     <meta charset="UTF-8" />
@@ -8,25 +8,25 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4a5568" />
-    <title>Talangin - Group Food Delivery Made Easy</title>
+    <title>Talangin - Patungan Dhaharan Dados Langkung Gampil</title>
     <meta name="description"
-        content="Make splitting bills transparent & organized. Talangin helps you track group food deliveries, manage orders, and handle payments efficiently." />
+        content="Damel patungan dados transparan & teratur. Talangin mbantu panjenengan nglacak pesenen dhaharan barengan, ngatur orderan, lan urusan bayar-mbayar kanthi efisien." />
     <link rel="canonical" href="https://talangin.web.id" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://talangin.web.id" />
-    <meta property="og:title" content="Talangin - Group Food Delivery Made Easy" />
+    <meta property="og:title" content="Talangin - Patungan Dhaharan Dados Langkung Gampil" />
     <meta property="og:description"
-        content="Make splitting bills transparent & organized. Talangin helps you track group food deliveries, manage orders, and handle payments efficiently." />
+        content="Damel patungan dados transparan & teratur. Talangin mbantu panjenengan nglacak pesenen dhaharan barengan, ngatur orderan, lan urusan bayar-mbayar kanthi efisien." />
     <meta property="og:image" content="https://talangin.web.id/mockup-dashboard.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://talangin.web.id" />
-    <meta property="twitter:title" content="Talangin - Group Food Delivery Made Easy" />
+    <meta property="twitter:title" content="Talangin - Patungan Dhaharan Dados Langkung Gampil" />
     <meta property="twitter:description"
-        content="Make splitting bills transparent & organized. Talangin helps you track group food deliveries, manage orders, and handle payments efficiently." />
+        content="Damel patungan dados transparan & teratur. Talangin mbantu panjenengan nglacak pesenen dhaharan barengan, ngatur orderan, lan urusan bayar-mbayar kanthi efisien." />
     <meta property="twitter:image" content="https://talangin.web.id/mockup-dashboard.png" />
 
     <!-- Schema Markup -->
@@ -42,55 +42,18 @@
         "price": "0",
         "priceCurrency": "IDR"
       },
-      "description": "Make splitting bills transparent & organized. Talangin helps you track group food deliveries, manage orders, and handle payments efficiently."
+      "description": "Damel patungan dados transparan & teratur. Talangin mbantu panjenengan nglacak pesenen dhaharan barengan, ngatur orderan, lan urusan bayar-mbayar kanthi efisien."
     }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style type="text/tailwindcss">
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', sans-serif; }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
-    <script>
-        // List of supported languages
-        const supportedLanguages = ['en', 'id', 'ja', 'jv', 'ko', 'ms', 'su', 'zh', 'ar'];
-
-        // Function to get the user's preferred language
-        function getPreferredLanguage() {
-            const browserLanguages = navigator.languages || [navigator.language];
-            for (const lang of browserLanguages) {
-                const languageCode = lang.split('-')[0]; // Extract the base language code (e.g., 'en' from 'en-US')
-                if (supportedLanguages.includes(languageCode)) {
-                    return languageCode;
-                }
-            }
-            return 'en'; // Default to English if no supported language is found
-        }
-
-        // Redirect to the preferred language
-        const preferredLanguage = getPreferredLanguage();
-        window.location.href = `/${preferredLanguage}/`;
-    </script>
-    <noscript>
-        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-            <p class="font-bold">JavaScript is disabled in your browser.</p>
-            <p>This page requires JavaScript to automatically redirect you to your preferred language. Below is the default English version. To view this page in another language, please select one:</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-                <a href="/en/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">English</a>
-                <a href="/id/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Indonesian</a>
-                <a href="/ja/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Japanese</a>
-                <a href="/jv/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Javanese</a>
-                <a href="/ko/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Korean</a>
-                <a href="/ms/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Malay</a>
-                <a href="/su/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Sundanese</a>
-                <a href="/zh/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Chinese</a>
-                <a href="/ar/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Arabic</a>
-            </div>
-        </div>
-    </noscript>
     <!-- Navbar -->
     <nav class="bg-gray-800 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +65,7 @@
                     <a href="https://app.talangin.web.id"
                         onclick="window.goatcounter?.count({path: 'click-launch-app-navbar', title: 'Launch App Navbar', event: true})"
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        Launch App
+                        Bikak Aplikasi
                     </a>
                 </div>
             </div>
@@ -116,27 +79,26 @@
                 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
                     <div class="sm:text-center lg:text-left">
                         <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            <span class="block xl:inline">Make splitting bills</span>
-                            <span class="block text-green-600 xl:inline">transparent & organized</span>
+                            <span class="block xl:inline">Damel patungan dados</span>
+                            <span class="block text-green-600 xl:inline">transparan & teratur</span>
                         </h1>
                         <p
                             class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            No more lost receipts or confusing chat logs. Just clear tracking of who ordered what and
-                            who owes what for your group food deliveries.
+                            Mboten wonten malih struk ical utawi chat ingkang damel mumet. Cukup lacak sinten pesen punapa lan sinten mbayar pinten kagem pesenen dhaharan barengan panjenengan.
                         </p>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                             <div class="rounded-md shadow">
                                 <a href="https://app.talangin.web.id"
                                     onclick="window.goatcounter?.count({path: 'click-get-started-hero', title: 'Get Started Hero', event: true})"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 md:py-4 md:text-lg">
-                                    Get Started
+                                    Mulai Sakniki
                                 </a>
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-3">
                                 <a href="#features"
                                     onclick="window.goatcounter?.count({path: 'click-learn-more-hero', title: 'Learn More Hero', event: true})"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 md:py-4 md:text-lg">
-                                    Learn More
+                                    Sinau Langkung Jangkep
                                 </a>
                             </div>
                         </div>
@@ -154,12 +116,12 @@
     <div id="features" class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:text-center">
-                <h2 class="text-base text-green-600 font-semibold tracking-wide uppercase">Features</h2>
+                <h2 class="text-base text-green-600 font-semibold tracking-wide uppercase">Fitur</h2>
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    Everything you need for group orders
+                    Sedaya ingkang panjenengan betahaken kagem pesenen barengan
                 </p>
                 <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                    Optimized for mobile use, Talangin helps you manage group orders quickly and efficiently.
+                    Pas sanget kagem HP, Talangin mbantu panjenengan ngatur pesenen barengan kanthi cepet lan efisien.
                 </p>
             </div>
 
@@ -173,11 +135,10 @@
                                 <!-- Icon -->
                                 <i class="fa-solid fa-door-open text-2xl"></i>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Room Management</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Atur Kamar</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Create rooms with restaurant details. Join via code or QR scan. View active and closed
-                            rooms.
+                            Damel kamar mawi rincian restoran. Gabung mawi kode utawi scan QR. Tingali kamar ingkang aktif lan sampun ditutup.
                         </dd>
                     </div>
 
@@ -188,11 +149,10 @@
                                 class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
                                 <i class="fa-solid fa-clipboard-list text-2xl"></i>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Order Tracking</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Lacak Pesenen</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Add items with notes. View grouped items by participant with automatic totals. Real-time
-                            updates.
+                            Tambah item mawi cathetan. Tingali item per peserta mawi total otomatis. Update kanthi real-time.
                         </dd>
                     </div>
 
@@ -203,10 +163,10 @@
                                 class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
                                 <i class="fa-solid fa-money-bill-wave text-2xl"></i>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Payment Tracking</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Lacak Pambayaran</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Manage payment methods. Participants can confirm payments. Runners can track who has paid.
+                            Atur metode pambayaran. Peserta saged konfirmasi pambayaran. Pelari saged nglacak sinten ingkang sampun bayar.
                         </dd>
                     </div>
 
@@ -217,10 +177,10 @@
                                 class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
                                 <i class="fa-solid fa-qrcode text-2xl"></i>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">QR Sharing</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Bagiaken QR</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Generate QR codes for instant room sharing. Built-in QR scanner to join rooms quickly.
+                            Damel kode QR kagem mbagikaken kamar kanthi instan. Wonten scanner QR kagem gabung kamar kanthi cepet.
                         </dd>
                     </div>
 
@@ -231,10 +191,10 @@
                                 class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
                                 <i class="fa-solid fa-lock text-2xl"></i>
                             </div>
-                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Secure Encryption</p>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Enkripsi Aman</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            We use AES-256 encryption to protect your personal data. Bank numbers are encrypted and only stored if you decide to provide them.
+                            Kita ngginakaken enkripsi AES-256 kagem njagi data pribadi panjenengan. Nomer rekening dipun-enkripsi lan namung dipunsimpen menawi panjenengan kersa.
                         </dd>
                     </div>
                 </dl>
@@ -246,22 +206,22 @@
     <div class="bg-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-extrabold text-gray-900">See it in action</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900">Tingali cara kerjanipun</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="flex flex-col items-center">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Dashboard</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Dasbor</h3>
                     <img src="/mockup-dashboard.png" alt="Dashboard"
                         class="rounded-xl shadow-lg border border-gray-200 max-h-[600px]">
                 </div>
                 <div class="flex flex-col items-center">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Active Room</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Kamar Aktif</h3>
                     <img src="/mockup-active-room.png" alt="Active Room"
                         class="rounded-xl shadow-lg border border-gray-200 max-h-[600px]">
                 </div>
                 <div class="flex flex-col items-center">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Summary</h3>
-                    <img src="/mockup-manage-closed-room.png" alt="Payment Summary"
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Ringkesan Pambayaran</h3>
+                    <img src="/mockup-manage-closed-room.png" alt="Ringkesan Pambayaran"
                         class="rounded-xl shadow-lg border border-gray-200 max-h-[600px]">
                 </div>
             </div>
@@ -272,26 +232,26 @@
     <div class="bg-gray-700 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-extrabold text-white">How it works</h2>
+                <h2 class="text-3xl font-extrabold text-white">Cara kerjanipun</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-white">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">For the Runner (Order Creator)</h3>
+                    <h3 class="text-xl font-bold mb-4">Kagem Pelari (Ingkang Damel Pesenen)</h3>
                     <ol class="list-decimal list-inside space-y-2">
-                        <li>Create a room with order details</li>
-                        <li>Share room code or QR code with friends</li>
-                        <li>Add your own items to the order</li>
-                        <li>Close the room when everyone is ready</li>
-                        <li>Record who has paid</li>
+                        <li>Damel kamar mawi rincian pesenen</li>
+                        <li>Bagiaken kode kamar utawi QR dhateng kanca-kanca</li>
+                        <li>Tambahaken pesenen panjenengan piyambak</li>
+                        <li>Tutup kamar menawi sedaya sampun siyap</li>
+                        <li>Cathet sinten ingkang sampun bayar</li>
                     </ol>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold mb-4">For Participants (Joiners)</h3>
+                    <h3 class="text-xl font-bold mb-4">Kagem Peserta (Ingkang Gabung)</h3>
                     <ol class="list-decimal list-inside space-y-2">
-                        <li>Join room via code or QR scan</li>
-                        <li>Add your meal items</li>
-                        <li>Mark payment as done (select runner's payment method)</li>
-                        <li>View your total and payment status</li>
+                        <li>Gabung kamar mawi kode utawi scan QR</li>
+                        <li>Tambahaken menu dhaharan panjenengan</li>
+                        <li>Tandhani pambayaran sampun rampung (pilih metode pambayaran pelari)</li>
+                        <li>Tingali total tagihan lan status pambayaran panjenengan</li>
                     </ol>
                 </div>
             </div>
@@ -300,33 +260,51 @@
 
     <!-- Footer -->
     <footer class="bg-white">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
-                <div class="flex space-x-6 md:order-2">
-                    <a href="https://github.com/AdMFirst/tracking-patungan" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-github', title: 'GitHub Link', event: true})">
-                        <span class="sr-only">GitHub</span>
-                        <i class="fa-brands fa-github text-2xl"></i>
-                    </a>
-                    <a href="https://trakteer.id/AdMFirst/tip?open=true" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-trakteer', title: 'Trakteer Link', event: true})">
-                        <span class="sr-only">Trakteer</span>
-                        <i class="fa-solid fa-heart text-2xl"></i>
-                    </a>
-                    <a href="https://sociabuzz.com/admfirst/tribe" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-sociabuzz', title: 'Sociabuzz Link', event: true})">
-                        <span class="sr-only">Sociabuzz</span>
-                        <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/admfirst/" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-linkedin', title: 'LinkedIn Link', event: true})">
-                        <span class="sr-only">LinkedIn</span>
-                        <i class="fa-brands fa-linkedin text-2xl"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@AdMFirstDevVlog" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-youtube', title: 'YouTube Link', event: true})">
-                        <span class="sr-only">YouTube</span>
-                        <i class="fa-brands fa-youtube text-2xl"></i>
-                    </a>
+        <div class="max-w-7xl mx-auto">
+            <div class="border-t border-gray-200">
+                <!-- Language Options Row -->
+                <div class="flex flex-wrap gap-4 justify-center my-8">
+                    <a href="/en/" class="text-gray-400 hover:text-gray-500">English</a>
+                    <a href="/id/" class="text-gray-400 hover:text-gray-500">Indonesia</a>
+                    <a href="/ja/" class="text-gray-400 hover:text-gray-500">日本語</a>
+                    <a href="/jv/" class="text-green-600 font-bold">Basa Jawa</a>
+                    <a href="/ko/" class="text-gray-400 hover:text-gray-500">한국어</a>
+                    <a href="/ms/" class="text-gray-400 hover:text-gray-500">Bahasa Melayu</a>
+                    <a href="/su/" class="text-gray-400 hover:text-gray-500">Basa Sunda</a>
+                    <a href="/zh/" class="text-gray-400 hover:text-gray-500">中文</a>
+                    <a href="/ar/" class="text-gray-400 hover:text-gray-500">العربية</a>
                 </div>
-                <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-                    &copy; 2026 Talangin. Built with ❤️ for group food ordering chaos.
-                </p>
+                
+                <!-- Second Row: Copyright and Social -->
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center pb-6 px-6 gap-4 sm:gap-0">
+                    <p class="text-base text-gray-400">
+                        &copy; 2026 AdMFirst
+                    </p>
+
+                    <div class="flex space-x-6 justify-center mb-8 sm:mb-0">
+                        <a href="https://github.com/AdMFirst/tracking-patungan" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-github', title: 'GitHub Link', event: true})">
+                            <span class="sr-only">GitHub</span>
+                            <i class="fa-brands fa-github text-2xl"></i>
+                        </a>
+                        <a href="https://trakteer.id/AdMFirst/tip?open=true" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-trakteer', title: 'Trakteer Link', event: true})">
+                            <span class="sr-only">Trakteer</span>
+                            <i class="fa-solid fa-heart text-2xl"></i>
+                        </a>
+                        <a href="https://sociabuzz.com/admfirst/tribe" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-sociabuzz', title: 'Sociabuzz Link', event: true})">
+                            <span class="sr-only">Sociabuzz</span>
+                            <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/admfirst/" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-linkedin', title: 'LinkedIn Link', event: true})">
+                            <span class="sr-only">LinkedIn</span>
+                            <i class="fa-brands fa-linkedin text-2xl"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@AdMFirstDevVlog" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-youtube', title: 'YouTube Link', event: true})">
+                            <span class="sr-only">YouTube</span>
+                            <i class="fa-brands fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </footer>

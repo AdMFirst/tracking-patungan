@@ -47,50 +47,13 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style type="text/tailwindcss">
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', sans-serif; }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
-    <script>
-        // List of supported languages
-        const supportedLanguages = ['en', 'id', 'ja', 'jv', 'ko', 'ms', 'su', 'zh', 'ar'];
-
-        // Function to get the user's preferred language
-        function getPreferredLanguage() {
-            const browserLanguages = navigator.languages || [navigator.language];
-            for (const lang of browserLanguages) {
-                const languageCode = lang.split('-')[0]; // Extract the base language code (e.g., 'en' from 'en-US')
-                if (supportedLanguages.includes(languageCode)) {
-                    return languageCode;
-                }
-            }
-            return 'en'; // Default to English if no supported language is found
-        }
-
-        // Redirect to the preferred language
-        const preferredLanguage = getPreferredLanguage();
-        window.location.href = `/${preferredLanguage}/`;
-    </script>
-    <noscript>
-        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-            <p class="font-bold">JavaScript is disabled in your browser.</p>
-            <p>This page requires JavaScript to automatically redirect you to your preferred language. Below is the default English version. To view this page in another language, please select one:</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-                <a href="/en/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">English</a>
-                <a href="/id/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Indonesian</a>
-                <a href="/ja/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Japanese</a>
-                <a href="/jv/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Javanese</a>
-                <a href="/ko/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Korean</a>
-                <a href="/ms/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Malay</a>
-                <a href="/su/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Sundanese</a>
-                <a href="/zh/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Chinese</a>
-                <a href="/ar/" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Arabic</a>
-            </div>
-        </div>
-    </noscript>
     <!-- Navbar -->
     <nav class="bg-gray-800 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -300,33 +263,51 @@
 
     <!-- Footer -->
     <footer class="bg-white">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
-                <div class="flex space-x-6 md:order-2">
-                    <a href="https://github.com/AdMFirst/tracking-patungan" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-github', title: 'GitHub Link', event: true})">
-                        <span class="sr-only">GitHub</span>
-                        <i class="fa-brands fa-github text-2xl"></i>
-                    </a>
-                    <a href="https://trakteer.id/AdMFirst/tip?open=true" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-trakteer', title: 'Trakteer Link', event: true})">
-                        <span class="sr-only">Trakteer</span>
-                        <i class="fa-solid fa-heart text-2xl"></i>
-                    </a>
-                    <a href="https://sociabuzz.com/admfirst/tribe" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-sociabuzz', title: 'Sociabuzz Link', event: true})">
-                        <span class="sr-only">Sociabuzz</span>
-                        <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/admfirst/" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-linkedin', title: 'LinkedIn Link', event: true})">
-                        <span class="sr-only">LinkedIn</span>
-                        <i class="fa-brands fa-linkedin text-2xl"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@AdMFirstDevVlog" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-youtube', title: 'YouTube Link', event: true})">
-                        <span class="sr-only">YouTube</span>
-                        <i class="fa-brands fa-youtube text-2xl"></i>
-                    </a>
+        <div class="max-w-7xl mx-auto">
+            <div class="border-t border-gray-200">
+                <!-- Language Options Row -->
+                <div class="flex flex-wrap gap-4 justify-center my-8">
+                    <a href="/en/" class="text-green-600 font-bold">English</a>
+                    <a href="/id/" class="text-gray-400 hover:text-gray-500">Indonesia</a>
+                    <a href="/ja/" class="text-gray-400 hover:text-gray-500">日本語</a>
+                    <a href="/jv/" class="text-gray-400 hover:text-gray-500">Basa Jawa</a>
+                    <a href="/ko/" class="text-gray-400 hover:text-gray-500">한국어</a>
+                    <a href="/ms/" class="text-gray-400 hover:text-gray-500">Bahasa Melayu</a>
+                    <a href="/su/" class="text-gray-400 hover:text-gray-500">Basa Sunda</a>
+                    <a href="/zh/" class="text-gray-400 hover:text-gray-500">中文</a>
+                    <a href="/ar/" class="text-gray-400 hover:text-gray-500">العربية</a>
                 </div>
-                <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-                    &copy; 2026 Talangin. Built with ❤️ for group food ordering chaos.
-                </p>
+                
+                <!-- Second Row: Copyright and Social -->
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center pb-6 px-6 gap-4 sm:gap-0">
+                    <p class="text-base text-gray-400">
+                        &copy; 2026 AdMFirst
+                    </p>
+
+                    <div class="flex space-x-6 justify-center mb-8 sm:mb-0">
+                        <a href="https://github.com/AdMFirst/tracking-patungan" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-github', title: 'GitHub Link', event: true})">
+                            <span class="sr-only">GitHub</span>
+                            <i class="fa-brands fa-github text-2xl"></i>
+                        </a>
+                        <a href="https://trakteer.id/AdMFirst/tip?open=true" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-trakteer', title: 'Trakteer Link', event: true})">
+                            <span class="sr-only">Trakteer</span>
+                            <i class="fa-solid fa-heart text-2xl"></i>
+                        </a>
+                        <a href="https://sociabuzz.com/admfirst/tribe" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-sociabuzz', title: 'Sociabuzz Link', event: true})">
+                            <span class="sr-only">Sociabuzz</span>
+                            <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/admfirst/" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-linkedin', title: 'LinkedIn Link', event: true})">
+                            <span class="sr-only">LinkedIn</span>
+                            <i class="fa-brands fa-linkedin text-2xl"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@AdMFirstDevVlog" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-youtube', title: 'YouTube Link', event: true})">
+                            <span class="sr-only">YouTube</span>
+                            <i class="fa-brands fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </footer>

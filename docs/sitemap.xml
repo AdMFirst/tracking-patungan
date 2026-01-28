@@ -1,8 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Root (Redirect) -->
   <url>
     <loc>https://talangin.web.id/</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
   </url>
+
+  <!-- English -->
+  <url>
+    <loc>https://talangin.web.id/en/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Indonesian -->
+  <url>
+    <loc>https://talangin.web.id/id/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Arabic -->
+  <url>
+    <loc>https://talangin.web.id/ar/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Japanese -->
+  <url>
+    <loc>https://talangin.web.id/ja/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Javanese -->
+  <url>
+    <loc>https://talangin.web.id/jv/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Korean -->
+  <url>
+    <loc>https://talangin.web.id/ko/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Malay -->
+  <url>
+    <loc>https://talangin.web.id/ms/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Sundanese -->
+  <url>
+    <loc>https://talangin.web.id/su/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
+  <!-- Chinese -->
+  <url>
+    <loc>https://talangin.web.id/zh/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://talangin.web.id/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <xhtml:link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <xhtml:link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <xhtml:link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <xhtml:link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+  </url>
+
 </urlset>
