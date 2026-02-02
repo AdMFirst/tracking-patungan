@@ -11,7 +11,21 @@
     <title>Talangin - Group Food Delivery Made Easy</title>
     <meta name="description"
         content="Make splitting bills transparent & organized. Talangin helps you track group food deliveries, manage orders, and handle payments efficiently." />
-    <link rel="canonical" href="https://talangin.web.id" />
+    <link rel="canonical" href="https://talangin.web.id/en/" />
+    
+    <!-- Hreflang tags for language versions -->
+    <link rel="alternate" hreflang="en" href="https://talangin.web.id/en/" />
+    <link rel="alternate" hreflang="id" href="https://talangin.web.id/id/" />
+    <link rel="alternate" hreflang="ja" href="https://talangin.web.id/ja/" />
+    <link rel="alternate" hreflang="jv" href="https://talangin.web.id/jv/" />
+    <link rel="alternate" hreflang="ko" href="https://talangin.web.id/ko/" />
+    <link rel="alternate" hreflang="ms" href="https://talangin.web.id/ms/" />
+    <link rel="alternate" hreflang="su" href="https://talangin.web.id/su/" />
+    <link rel="alternate" hreflang="zh" href="https://talangin.web.id/zh/" />
+    <link rel="alternate" hreflang="ar" href="https://talangin.web.id/ar/" />
+    
+    <!-- Hreflang x-default for language negotiation -->
+    <link rel="alternate" hreflang="x-default" href="https://talangin.web.id/en/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -47,9 +61,9 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style type="text/tailwindcss">
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', sans-serif; }
     </style>
 </head>
 
@@ -70,9 +84,55 @@
             return 'en'; // Default to English if no supported language is found
         }
 
-        // Redirect to the preferred language
+        // Get the user's preferred language
         const preferredLanguage = getPreferredLanguage();
-        window.location.href = `/${preferredLanguage}/`;
+        
+        // Check if the user is already on their preferred language page
+        const currentPath = window.location.pathname;
+        const isOnPreferredLanguage = currentPath === `/${preferredLanguage}/` ||
+                                     currentPath === `/${preferredLanguage}` ||
+                                     currentPath === '/';
+        
+        // If not on preferred language page, show a small notification in bottom right
+        if (!isOnPreferredLanguage) {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Create a small notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed bottom-4 right-4 z-50 p-4 bg-white rounded-lg shadow-lg border border-gray-200 max-w-sm';
+                notification.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-globe text-green-600 text-2xl"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">We support your language!</p>
+                            <p class="text-xs text-gray-600">View in ${getLanguageName(preferredLanguage)}?</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.location.href = '/${preferredLanguage}/'" class="px-3 py-1 text-green-600 hover:text-green-700 text-xs font-medium border border-green-300 rounded">Yes</button>
+                            <button onclick="this.closest('.fixed').remove()" class="px-3 py-1 text-gray-600 hover:text-gray-700 text-xs font-medium border border-gray-300 rounded">No</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add to body
+                document.body.appendChild(notification);
+            });
+        }
+        
+        // Helper function to get language name
+        function getLanguageName(code) {
+            const languageNames = {
+                'en': 'English',
+                'id': 'Indonesian',
+                'ja': 'Japanese',
+                'jv': 'Javanese',
+                'ko': 'Korean',
+                'ms': 'Malay',
+                'su': 'Sundanese',
+                'zh': 'Chinese',
+                'ar': 'Arabic'
+            };
+            return languageNames[code] || code;
+        }
     </script>
     <noscript>
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
@@ -300,33 +360,25 @@
 
     <!-- Footer -->
     <footer class="bg-white">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
-                <div class="flex space-x-6 md:order-2">
-                    <a href="https://github.com/AdMFirst/tracking-patungan" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-github', title: 'GitHub Link', event: true})">
-                        <span class="sr-only">GitHub</span>
-                        <i class="fa-brands fa-github text-2xl"></i>
-                    </a>
-                    <a href="https://trakteer.id/AdMFirst/tip?open=true" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-trakteer', title: 'Trakteer Link', event: true})">
-                        <span class="sr-only">Trakteer</span>
-                        <i class="fa-solid fa-heart text-2xl"></i>
-                    </a>
-                    <a href="https://sociabuzz.com/admfirst/tribe" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-sociabuzz', title: 'Sociabuzz Link', event: true})">
-                        <span class="sr-only">Sociabuzz</span>
-                        <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/admfirst/" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-linkedin', title: 'LinkedIn Link', event: true})">
-                        <span class="sr-only">LinkedIn</span>
-                        <i class="fa-brands fa-linkedin text-2xl"></i>
-                    </a>
-                    <a href="https://www.youtube.com/@AdMFirstDevVlog" class="text-gray-400 hover:text-gray-500" onclick="window.goatcounter?.count({path: 'click-youtube', title: 'YouTube Link', event: true})">
-                        <span class="sr-only">YouTube</span>
-                        <i class="fa-brands fa-youtube text-2xl"></i>
-                    </a>
+        <div class="max-w-7xl mx-auto">
+            <div class="border-t border-gray-200">
+                <!-- Language Options Row -->
+                <div class="flex flex-wrap gap-4 justify-center my-8">
+                    <a href="/en/" class="text-green-600 font-bold">English</a>
+                    <a href="/id/" class="text-gray-400 hover:text-gray-500">Indonesia</a>
+                    <a href="/ja/" class="text-gray-400 hover:text-gray-500">日本語</a>
+                    <a href="/jv/" class="text-gray-400 hover:text-gray-500">Basa Jawa</a>
+                    <a href="/ko/" class="text-gray-400 hover:text-gray-500">한국어</a>
+                    <a href="/ms/" class="text-gray-400 hover:text-gray-500">Bahasa Melayu</a>
+                    <a href="/su/" class="text-gray-400 hover:text-gray-500">Basa Sunda</a>
+                    <a href="/zh/" class="text-gray-400 hover:text-gray-500">中文</a>
+                    <a href="/ar/" class="text-gray-400 hover:text-gray-500">العربية</a>
                 </div>
-                <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-                    &copy; 2026 Talangin. Built with ❤️ for group food ordering chaos.
-                </p>
+                <!-- Second Row: Copyright and Social -->
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center pb-6 px-6 gap-4 sm:gap-0">
+                    <p class="text-base text-gray-400">
+                        &copy; 2026 AdMFirst
+                    </p></div>
             </div>
         </div>
     </footer>
