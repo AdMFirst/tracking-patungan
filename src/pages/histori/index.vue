@@ -81,7 +81,7 @@ import { useI18n } from 'vue-i18n';
 import { Home } from 'lucide-vue-next';
 
 // Assume this is imported from your project setup
-import { useJoinedRoomsQuery } from '../../lib/supabaseClient';
+import { useJoinedRoomsQuery } from '../../lib/tanstackQueries';
 import { useQuery } from '@tanstack/vue-query';
 import OrderRooms from '@/components/room/OrderRooms.vue';
 import OrderRoomSkeleton from '@/components/room/OrderRoomSkeleton.vue';

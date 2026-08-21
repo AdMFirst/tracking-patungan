@@ -4,7 +4,7 @@ import App from './App.vue';
 import router from '@/lib/router';
 import { user } from '@/lib/auth';
 import { VueQueryPlugin } from '@tanstack/vue-query';
-import { queryClient } from './lib/supabaseClient';
+import { queryClient } from './lib/tanstackQueries';
 import Vue3Lottie from 'vue3-lottie';
 import { createI18n } from 'vue-i18n';
 

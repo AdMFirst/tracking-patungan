@@ -125,7 +125,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import Button from '@/components/ui/button/Button.vue';
-import { usePaymentMethodsQuery } from '../../lib/supabaseClient';
+import { usePaymentMethodsQuery } from '../../lib/tanstackQueries';
 import { useQuery } from '@tanstack/vue-query';
 import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';

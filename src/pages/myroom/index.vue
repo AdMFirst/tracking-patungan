@@ -189,9 +189,9 @@ import {
     useUserRoomsQuery,
     useUpdateRoomMutation,
     useDeleteRoomMutation,
-} from '../../lib/supabaseClient';
+} from '../../lib/tanstackQueries';
 import { useQuery, useMutation } from '@tanstack/vue-query';
-import { queryClient } from '../../lib/supabaseClient';
+import { queryClient } from '../../lib/tanstackQueries';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import CloseRoomModal from '@/components/modals/CloseRoomModal.vue';
 import FilterModal from '@/components/modals/FilterModal.vue';

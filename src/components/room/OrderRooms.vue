@@ -170,7 +170,7 @@
 
 <script setup>
 import { formatCurrency } from '@/lib/utils';
-import { useSetParticipantAsPaidMutation } from '@/lib/supabaseClient';
+import { useSetParticipantAsPaidMutation } from '@/lib/tanstackQueries';
 import { useMutation } from '@tanstack/vue-query';
 
 // SHADCN/UI COMPONENTS IMPORTS (Reduced list)
