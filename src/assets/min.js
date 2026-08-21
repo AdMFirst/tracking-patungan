@@ -38,6 +38,9 @@ const min = {
             },
         },
         common: {
+            refreshing: 'Manmanyegarkan...',
+            releaseToRefresh: 'Lapeh untuak manyegarkan',
+            pullToRefresh: 'Tariak untuak manyegarkan',
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',

@@ -39,6 +39,9 @@ const su = {
             },
         },
         common: {
+            refreshing: 'Nyegerkeun...',
+            releaseToRefresh: 'Leupaskeun pikeun nyegerkeun',
+            pullToRefresh: 'Tarik pikeun nyegerkeun',
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',

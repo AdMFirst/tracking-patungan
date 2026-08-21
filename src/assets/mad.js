@@ -38,6 +38,9 @@ const mad = {
             },
         },
         common: {
+            refreshing: 'Nyanggeraghi...',
+            releaseToRefresh: 'Lepas kaangguy nyanggeraghi',
+            pullToRefresh: 'Tarik kaangguy nyanggeraghi',
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',

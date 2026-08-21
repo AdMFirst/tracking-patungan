@@ -40,6 +40,9 @@ const ja = {
             },
         },
         common: {
+            refreshing: '更新中...',
+            releaseToRefresh: '離して更新',
+            pullToRefresh: '引っ張って更新',
             BottomNav: {
                 home: 'ホーム',
                 histori: '履歴',

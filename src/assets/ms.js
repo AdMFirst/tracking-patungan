@@ -40,6 +40,9 @@ const ms = {
             },
         },
         common: {
+            refreshing: 'Menyegarkan...',
+            releaseToRefresh: 'Lepaskan untuk menyegarkan',
+            pullToRefresh: 'Tarik untuk menyegarkan',
             BottomNav: {
                 home: 'Utama',
                 histori: 'Sejarah',

@@ -38,6 +38,9 @@ const jv = {
             },
         },
         common: {
+            refreshing: 'Lagi nyegeraké...',
+            releaseToRefresh: 'Lepas kanggo nyegeraké',
+            pullToRefresh: 'Tarik kanggo nyegeraké',
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',

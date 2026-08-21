@@ -71,6 +71,9 @@ const ar = {
                 emailPassword: 'بريد إلكتروني/كلمة مرور',
                 unknown: 'غير معروف',
             },
+            refreshing: 'جارٍ التحديث...',
+            releaseToRefresh: 'أفلت للتحديث',
+            pullToRefresh: 'اسحب للتحديث',
         },
         qr: {
             QRScanner: {

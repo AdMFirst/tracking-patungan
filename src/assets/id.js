@@ -40,6 +40,9 @@ const id = {
             },
         },
         common: {
+            refreshing: 'Menyegarkan...',
+            releaseToRefresh: 'Lepaskan untuk menyegarkan',
+            pullToRefresh: 'Tarik untuk menyegarkan',
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',
