@@ -148,6 +148,9 @@ const id = {
                     'Tindakan ini tidak dapat dibatalkan. Semua data room akan dihapus secara permanen.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhir harus lebih besar dari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Edit Item Pesanan',

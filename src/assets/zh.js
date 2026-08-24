@@ -144,6 +144,9 @@ const zh = {
                     '此操作无法撤销。所有房间数据将被永久删除。',
                 deleteCancelButton: '取消',
                 deleteConfirmButton: '删除',
+                errors: {
+                    greaterThanZero: '最终总额必须大于 0',
+                }
             },
             EditOrderItemModal: {
                 title: '编辑订单项目',

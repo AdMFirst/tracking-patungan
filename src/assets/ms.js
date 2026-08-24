@@ -148,6 +148,9 @@ const ms = {
                     'Tindakan ini tidak boleh dibuat asal. Semua data bilik akan dipadamkan secara kekal.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Padam',
+                errors: {
+                    greaterThanZero: 'Jumlah akhir mesti lebih besar daripada 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Edit Item Pesanan',

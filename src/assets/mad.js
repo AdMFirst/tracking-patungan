@@ -145,6 +145,9 @@ const mad = {
                     "Tindakan reya ta' bisa dibatalaghi. Sadaja data kamar bakal elang.",
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhér koddhu lebbi raje dhari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Uba Item Pesenen',

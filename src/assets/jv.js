@@ -145,6 +145,9 @@ const jv = {
                     'Tindakan niki mboten saged dibatalaken. Sedaya data kamar badhe ical.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total pungkasan kudu luwih saka 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Ubah Item Pesenen',

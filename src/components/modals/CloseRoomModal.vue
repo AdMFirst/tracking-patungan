@@ -27,6 +27,9 @@
                                 )
                             "
                         />
+                        <p v-if="errorMessage" class="text-sm text-destructive font-medium">
+                            {{ errorMessage }}
+                        </p>
                     </div>
                 </div>
                 <DialogFooter class="flex sm:justify-between pt-4">
@@ -107,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -119,7 +122,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -132,12 +134,25 @@ const props = defineProps({
 const emit = defineEmits(['update:open', 'submit', 'delete']);
 
 const finalTotal = ref('');
+const errorMessage = ref('');
 const showDeleteConfirm = ref(false);
 
+const parsedTotal = computed(() => parseFloat(finalTotal.value));
+
+const isValidTotal = computed(() => {
+    return !isNaN(parsedTotal.value) && parsedTotal.value > 0;
+});
+
 const handleSubmit = () => {
+    if (!isValidTotal.value) {
+        errorMessage.value = t('components.modals.CloseRoomModal.errors.greaterThanZero');
+        return;
+    }
+
+    errorMessage.value = '';
     emit('submit', {
         roomId: props.roomId,
-        finalTotal: finalTotal.value,
+        finalTotal: parsedTotal.value,
     });
     finalTotal.value = '';
 };
@@ -157,7 +172,15 @@ watch(
     (isShowing) => {
         if (!isShowing) {
             finalTotal.value = '';
+            errorMessage.value = '';
+            showDeleteConfirm.value = false;
         }
     }
 );
+
+watch(finalTotal, () => {
+    if (errorMessage.value) {
+        errorMessage.value = '';
+    }
+});
 </script>

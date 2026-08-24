@@ -145,6 +145,9 @@ const min = {
                     'Tindakan iko indak bisa dibatalkan. Sadonyo data bilik akan hilang.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhia harus labiah dari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Ubah Item Pasanan',

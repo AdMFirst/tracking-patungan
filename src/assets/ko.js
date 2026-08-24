@@ -147,6 +147,9 @@ const ko = {
                     '이 작업은 취소할 수 없습니다. 모든 방 데이터가 영구적으로 삭제됩니다.',
                 deleteCancelButton: '취소',
                 deleteConfirmButton: '삭제',
+                errors: {
+                    greaterThanZero: '최종 합계는 0보다 커야 합니다',
+                }
             },
             EditOrderItemModal: {
                 title: '주문 항목 수정',

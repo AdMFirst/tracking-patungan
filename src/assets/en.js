@@ -147,6 +147,9 @@ const en = {
                     'This action cannot be undone. All room data will be permanently deleted.',
                 deleteCancelButton: 'Cancel',
                 deleteConfirmButton: 'Delete',
+                errors: {
+                    greaterThanZero: 'Final total must be greater than 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Edit Order Item',

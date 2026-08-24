@@ -423,7 +423,6 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 // SHADCN/UI COMPONENTS IMPORTS
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -432,8 +431,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 // ICON IMPORTS (Requires 'lucide-vue-next' or similar icon library)
 import { Home } from 'lucide-vue-next';
 
-// Import from supabaseClient
-import { useRoomWithParticipantsQuery } from '../../lib/supabaseClient';
+// Import from utils
+import { useRoomWithParticipantsQuery } from '../../lib/tanstackQueries';
 import { useQuery } from '@tanstack/vue-query';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import PageHeader from '@/components/common/PageHeader.vue';

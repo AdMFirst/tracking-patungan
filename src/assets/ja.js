@@ -147,6 +147,9 @@ const ja = {
                     'この操作は取り消せません。すべてのルームデータは完全に削除されます。',
                 deleteCancelButton: 'キャンセル',
                 deleteConfirmButton: '削除',
+                errors: {
+                    greaterThanZero: '最終合計は0より大きくする必要があります',
+                }
             },
             EditOrderItemModal: {
                 title: '注文アイテムを編集',

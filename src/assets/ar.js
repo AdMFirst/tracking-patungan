@@ -147,6 +147,9 @@ const ar = {
                     'لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع بيانات الغرفة بشكل دائم.',
                 deleteCancelButton: 'إلغاء',
                 deleteConfirmButton: 'حذف',
+                errors: {
+                    greaterThanZero: 'يجب أن يكون الإجمالي النهائي أكبر من 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'تعديل عنصر الطلب',

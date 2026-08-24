@@ -146,6 +146,9 @@ const su = {
                     'Tindakan ieu teu tiasa dibatalkeun. Sadaya data kamar bakal ical.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhir kudu leuwih ti 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Ubah Item Pesenan',
