@@ -71,9 +71,11 @@ const en = {
                 emailPassword: 'Email/Password',
                 unknown: 'Unknown',
             },
-            refreshing: 'Refreshing...',
-            releaseToRefresh: 'Release to refresh',
-            pullToRefresh: 'Pull to refresh',
+            PullToRefresh: {
+                refreshing: 'Refreshing...',
+                releaseToRefresh: 'Release to refresh',
+                pullToRefresh: 'Pull to refresh',
+            }
         },
         qr: {
             QRScanner: {

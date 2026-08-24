@@ -40,9 +40,11 @@ const ko = {
             },
         },
         common: {
-            refreshing: '새로 고치는 중...',
-            releaseToRefresh: '놓아서 새로 고치기',
-            pullToRefresh: '당겨서 새로 고치기',
+            PullToRefresh: {
+                refreshing: '새로 고치는 중...',
+                releaseToRefresh: '놓아서 새로 고치기',
+                pullToRefresh: '당겨서 새로 고치기',
+            },
             BottomNav: {
                 home: '홈',
                 histori: '기록',

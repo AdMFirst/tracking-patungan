@@ -38,9 +38,11 @@ const zh = {
             },
         },
         common: {
-            refreshing: '刷新中...',
-            releaseToRefresh: '松开刷新',
-            pullToRefresh: '下拉刷新',
+            PullToRefresh: {
+                refreshing: '刷新中...',
+                releaseToRefresh: '松开刷新',
+                pullToRefresh: '下拉刷新', 
+            },
             BottomNav: {
                 home: '首页',
                 histori: '历史',
