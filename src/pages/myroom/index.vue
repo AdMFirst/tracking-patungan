@@ -1,168 +1,193 @@
 <template>
     <div class="min-h-screen p-4 pb-20">
-        <div class="max-w-md mx-auto">
-            <div class="text-center py-0 mb-6">
-                <h1 class="text-2xl font-bold">
-                    {{ $t('pages.myroom.index.title') }}
-                </h1>
-            </div>
-
-            <div class="mb-6">
-                <Button
-                    @click="showFilters = true"
-                    variant="outline"
-                    class="w-full h-auto py-3 justify-center"
-                >
-                    <Filter class="w-5 h-5 mr-2" />
-                    <span>{{ $t('pages.myroom.index.openFilters') }}</span>
-                </Button>
-            </div>
-
-            <div v-if="isLoading" class="text-center space-y-4">
-                <Card v-for="i in 5" :key="i">
-                    <CardHeader class="p-4 pb-3">
-                        <div class="flex justify-between items-start">
-                            <Skeleton class="h-4 w-[150px]" />
-                            <Skeleton class="h-4 w-[50px]" />
-                        </div>
-                    </CardHeader>
-                    <CardContent class="p-4 pt-0 text-sm space-y-2">
-                        <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[50px]" />
-                            <Skeleton class="h-4 w-[180px]" />
-                        </div>
-                        <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[50px]" />
-                            <Skeleton class="h-4 w-[180px]" />
-                        </div>
-                        <div class="flex justify-between">
-                            <Skeleton class="h-4 w-[50px]" />
-                            <Skeleton class="h-4 w-[180px]" />
-                        </div>
-                        <Separator class="my-2" />
-                        <div class="flex justify-between pt-2">
-                            <Skeleton class="h-4 w-[50px]" />
-                            <Skeleton class="h-7 w-[140px]" />
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            <div
-                v-else-if="!roomsData || roomsData.length === 0"
-                class="text-center py-8"
-            >
-                <div
-                    class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4"
-                >
-                    <Home class="w-8 h-8 text-muted-foreground" />
+        <PullToRefresh :on-refresh="handleRefresh">
+            <div class="max-w-md mx-auto">
+                <div class="text-center py-0 mb-6">
+                    <h1 class="text-2xl font-bold">
+                        {{ $t('pages.myroom.index.title') }}
+                    </h1>
                 </div>
-                <h3 class="text-lg font-semibold mb-2">
-                    {{ $t('pages.myroom.index.noRoomsFound') }}
-                </h3>
-                <p class="text-sm text-muted-foreground">
-                    {{
-                        hasActiveFilters
-                            ? $t('pages.myroom.index.noRoomsMatchFilters')
-                            : $t('pages.myroom.index.noRoomsCreated')
-                    }}
-                </p>
-            </div>
 
-            <div v-else class="space-y-4">
-                <Card
-                    v-for="room in roomsData"
-                    :key="room.id"
-                    class="transition-shadow"
-                >
-                    <CardHeader class="p-4 pb-3">
-                        <div class="flex justify-between items-start">
-                            <CardTitle class="text-lg font-semibold">
-                                {{
-                                    room.title ||
-                                    $t('pages.myroom.index.untitledRoom')
-                                }}
-                            </CardTitle>
-                            <Badge variant="secondary">
-                                {{
-                                    room.platform ||
-                                    $t('pages.myroom.index.unknown')
-                                }}
-                            </Badge>
-                        </div>
-                    </CardHeader>
-                    <CardContent class="p-4 pt-0 text-sm space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-muted-foreground">
-                                {{ $t('pages.myroom.index.restaurantLabel') }}
-                            </span>
-                            <span>
-                                {{
-                                    room.restaurant ||
-                                    $t('pages.myroom.index.notSpecified')
-                                }}
-                            </span>
-                        </div>
+                <div class="mb-6 flex gap-2 items-center justify-center">
+                    <Button
+                        @click="showFilters = true"
+                        variant="none"
+                        class="h-auto py-3 justify-center"
+                    >
+                        <Filter class="w-5 h-5 mr-2" />
+                        <span>{{ $t('pages.myroom.index.openFilters') }}</span>
+                    </Button>
 
-                        <div class="flex justify-between">
-                            <span class="text-muted-foreground">
-                                {{ $t('pages.myroom.index.orderTimeLabel') }}
-                            </span>
-                            <span>{{ formatDateTime(room.order_time) }}</span>
-                        </div>
-
-                        <div class="flex justify-between">
-                            <span class="text-muted-foreground">
-                                {{ $t('pages.myroom.index.createdLabel') }}
-                            </span>
-                            <span>{{ formatDateTime(room.created_at) }}</span>
-                        </div>
-
-                        <Separator class="my-2" />
-                        <div
-                            v-if="room.final_total"
-                            class="flex flex-col gap-2 pt-2"
+                    <div class="relative inline-flex items-center">
+                        <Button
+                            variant="none"
+                            class="pointer-events-none"
                         >
-                            <div class="flex justify-between flex-row">
+                            <SortAscIcon class="w-5 h-5 mr-2" />
+                            <span class="text-md">Sort by:</span>
+                            <span class="text-md capitalize">{{ sortOptions.find(opt => opt.value === sortBy)?.label }}</span>
+                        </Button>
+                        <select
+                            v-model="sortBy"
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        >
+                            <option
+                                v-for="option in sortOptions"
+                                :key="option.value"
+                                :value="option.value"
+                            >
+                                {{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div v-if="isLoading" class="text-center space-y-4">
+                    <Card v-for="i in 5" :key="i">
+                        <CardHeader class="p-4 pb-3">
+                            <div class="flex justify-between items-start">
+                                <Skeleton class="h-4 w-[150px]" />
+                                <Skeleton class="h-4 w-[50px]" />
+                            </div>
+                        </CardHeader>
+                        <CardContent class="p-4 pt-0 text-sm space-y-2">
+                            <div class="flex justify-between">
+                                <Skeleton class="h-4 w-[50px]" />
+                                <Skeleton class="h-4 w-[180px]" />
+                            </div>
+                            <div class="flex justify-between">
+                                <Skeleton class="h-4 w-[50px]" />
+                                <Skeleton class="h-4 w-[180px]" />
+                            </div>
+                            <div class="flex justify-between">
+                                <Skeleton class="h-4 w-[50px]" />
+                                <Skeleton class="h-4 w-[180px]" />
+                            </div>
+                            <Separator class="my-2" />
+                            <div class="flex justify-between pt-2">
+                                <Skeleton class="h-4 w-[50px]" />
+                                <Skeleton class="h-7 w-[140px]" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div
+                    v-else-if="!sortedRooms || sortedRooms.length === 0"
+                    class="text-center py-8"
+                >
+                    <div
+                        class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4"
+                    >
+                        <Home class="w-8 h-8 text-muted-foreground" />
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">
+                        {{ $t('pages.myroom.index.noRoomsFound') }}
+                    </h3>
+                    <p class="text-sm text-muted-foreground">
+                        {{
+                            hasActiveFilters
+                                ? $t('pages.myroom.index.noRoomsMatchFilters')
+                                : $t('pages.myroom.index.noRoomsCreated')
+                        }}
+                    </p>
+                </div>
+
+                <div v-else class="space-y-4">
+                    <Card
+                        v-for="room in sortedRooms"
+                        :key="room.id"
+                        class="transition-shadow"
+                    >
+                        <CardHeader class="p-4 pb-3">
+                            <div class="flex justify-between items-start">
+                                <CardTitle class="text-lg font-semibold">
+                                    {{
+                                        room.title ||
+                                        $t('pages.myroom.index.untitledRoom')
+                                    }}
+                                </CardTitle>
+                                <Badge variant="secondary">
+                                    {{
+                                        room.platform ||
+                                        $t('pages.myroom.index.unknown')
+                                    }}
+                                </Badge>
+                            </div>
+                        </CardHeader>
+                        <CardContent class="p-4 pt-0 text-sm space-y-2">
+                            <div class="flex justify-between">
                                 <span class="text-muted-foreground">
-                                    {{ $t('pages.myroom.index.finalTotalLabel') }}
+                                    {{ $t('pages.myroom.index.restaurantLabel') }}
                                 </span>
-                                <span
-                                    class="text-lg font-semibold text-green-600 dark:text-green-400"
-                                >
-                                    {{ formatCurrency(room.final_total) }}
+                                <span>
+                                    {{
+                                        room.restaurant ||
+                                        $t('pages.myroom.index.notSpecified')
+                                    }}
                                 </span>
                             </div>
 
-                            <Button @click="openRoom(room)">
-                                {{ $t('pages.myroom.index.manageRoom') }}
-                            </Button>
-                        </div>
-                        <div v-else class="flex flex-col pt-2">
-                            <span class="text-muted-foreground font-semibold">
-                                {{ $t('pages.myroom.index.roomStillOpen') }}
-                            </span>
-                            <div class="w-full flex flex-row gap-2 mt-2">
-                                <Button
-                                    @click="openCloseRoomModal(room)"
-                                    variant="destructive"
-                                    class="flex-1"
-                                >
-                                    {{ $t('pages.myroom.index.closeRoom') }}
-                                </Button>
-                                <Button
-                                    @click="openRoom(room)"
-                                    variant="default"
-                                    class="flex-1"
-                                >
-                                    {{ $t('pages.myroom.index.openRoom') }}
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">
+                                    {{ $t('pages.myroom.index.orderTimeLabel') }}
+                                </span>
+                                <span>{{ formatDateTime(room.order_time) }}</span>
+                            </div>
+
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">
+                                    {{ $t('pages.myroom.index.createdLabel') }}
+                                </span>
+                                <span>{{ formatDateTime(room.created_at) }}</span>
+                            </div>
+
+                            <Separator class="my-2" />
+                            <div
+                                v-if="room.final_total"
+                                class="flex flex-col gap-2 pt-2"
+                            >
+                                <div class="flex justify-between flex-row">
+                                    <span class="text-muted-foreground">
+                                        {{ $t('pages.myroom.index.finalTotalLabel') }}
+                                    </span>
+                                    <span
+                                        class="text-lg font-semibold text-green-600 dark:text-green-400"
+                                    >
+                                        {{ formatCurrency(room.final_total) }}
+                                    </span>
+                                </div>
+
+                                <Button @click="openRoom(room)">
+                                    {{ $t('pages.myroom.index.manageRoom') }}
                                 </Button>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                            <div v-else class="flex flex-col pt-2">
+                                <span class="text-muted-foreground font-semibold">
+                                    {{ $t('pages.myroom.index.roomStillOpen') }}
+                                </span>
+                                <div class="w-full flex flex-row gap-2 mt-2">
+                                    <Button
+                                        @click="openCloseRoomModal(room)"
+                                        variant="destructive"
+                                        class="flex-1"
+                                    >
+                                        {{ $t('pages.myroom.index.closeRoom') }}
+                                    </Button>
+                                    <Button
+                                        @click="openRoom(room)"
+                                        variant="default"
+                                        class="flex-1"
+                                    >
+                                        {{ $t('pages.myroom.index.openRoom') }}
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-        </div>
+        </PullToRefresh>
 
         <FilterModal
             v-model:open="showFilters"
@@ -191,7 +216,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Filter, Home } from 'lucide-vue-next';
+import { Filter, Home, SortAscIcon } from 'lucide-vue-next';
 import {
     useUserRoomsQuery,
     useUpdateRoomMutation,
@@ -200,6 +225,7 @@ import {
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 import CloseRoomModal from '@/components/modals/CloseRoomModal.vue';
 import FilterModal from '@/components/modals/FilterModal.vue';
+import PullToRefresh from '@/components/common/PullToRefresh.vue';
 
 const { t } = useI18n();
 const user = inject('user');
@@ -208,6 +234,14 @@ const router = useRouter();
 const showFilters = ref(false);
 const showCloseRoomModal = ref(false);
 const currentRoomId = ref(null);
+
+const sortBy = ref('date_latest');
+const sortOptions = [
+    { label: 'Created date latest', value: 'date_latest' },
+    { label: 'Created date oldest', value: 'date_oldest' },
+    { label: 'Title (A-Z)', value: 'title_asc' },
+    { label: 'Title (Z-A)', value: 'title_desc' },
+];
 
 const filters = ref({
     search: '',
@@ -221,9 +255,36 @@ const hasActiveFilters = computed(() => {
     return Object.values(filters.value).some((val) => val !== '');
 });
 
-const { data: roomsData, isLoading } = useQuery(
+const { data: roomsData, isLoading, refetch } = useQuery(
     useUserRoomsQuery(user.value?.id, filters.value)
 );
+
+const sortedRooms = computed(() => {
+    if (!roomsData.value) return [];
+    return [...roomsData.value].sort((a, b) => {
+        if (sortBy.value === 'date_latest') {
+            return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        }
+        if (sortBy.value === 'date_oldest') {
+            return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+        }
+        if (sortBy.value === 'title_asc') {
+            return (a.title || '').localeCompare(b.title || '');
+        }
+        if (sortBy.value === 'title_desc') {
+            return (b.title || '').localeCompare(a.title || '');
+        }
+        return 0;
+    });
+});
+
+const handleRefresh = async () => {
+    try {
+        await refetch();
+    } catch (error) {
+        console.error('Error refreshing rooms data:', error);
+    }
+};
 
 const handleLiveFilterUpdate = (newFormState) => {
     filters.value.search = newFormState.search;
