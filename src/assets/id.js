@@ -111,9 +111,6 @@ const id = {
                 each: 'per-item',
                 paidAt: 'Dibayar pada {date}',
                 paidAtVia: 'Dibayar pada {date} via {method}',
-                paymentConfirmed:
-                    'Pembayaran dikonfirmasi sebesar {amount} menggunakan metode pembayaran yang dipilih. Room telah ditandai sebagai lunas.',
-                paymentFailed: 'Gagal mengonfirmasi pembayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -404,6 +401,11 @@ const id = {
                 closedDescription:
                     'Anda belum berpartisipasi dalam room yang ditutup apa pun.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pembayaran dikonfirmasi sebesar {amount} menggunakan metode pembayaran yang dipilih. Room telah ditandai sebagai lunas.',
+                paymentFailed: 'Gagal mengonfirmasi pembayaran: {error}',
+            }
         },
         profile: {
             index: {

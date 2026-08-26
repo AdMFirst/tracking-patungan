@@ -111,9 +111,6 @@ const ko = {
                 each: '개당',
                 paidAt: '{date}에 결제됨',
                 paidAtVia: '{date}에 {method}로 결제됨',
-                paymentConfirmed:
-                    '선택한 결제 수단으로 {amount} 결제가 확인되었습니다. 방이 결제 완료로 표시되었습니다.',
-                paymentFailed: '결제 확인 실패: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'QR 스캔',
@@ -370,6 +367,11 @@ const ko = {
                 activeDescription: '아직 활성 방에 참여하지 않았습니다.',
                 closedDescription: '아직 닫힌 방에 참여하지 않았습니다.',
             },
+            message: {
+                paymentConfirmed:
+                    '선택한 결제 수단으로 {amount} 결제가 확인되었습니다. 방이 결제 완료로 표시되었습니다.',
+                paymentFailed: '결제 확인 실패: {error}',
+            }
         },
         profile: {
             index: {

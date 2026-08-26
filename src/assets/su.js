@@ -110,9 +110,6 @@ const su = {
                 each: 'hiji',
                 paidAt: 'Dibayar tanggal {date}',
                 paidAtVia: 'Dibayar tanggal {date} via {method}',
-                paymentConfirmed:
-                    'Pamayaran dikonfirmasi {amount} nganggo metode nu dipilih. Kamar parantos lunas.',
-                paymentFailed: 'Gagal konfirmasi pamayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -392,6 +389,11 @@ const su = {
                 closedDescription:
                     'Anjeun teu acan gabung kamar nu parantos ditutup.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pamayaran dikonfirmasi {amount} nganggo metode nu dipilih. Kamar parantos lunas.',
+                paymentFailed: 'Gagal konfirmasi pamayaran: {error}',
+            }
         },
         profile: {
             index: {

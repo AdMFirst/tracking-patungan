@@ -111,9 +111,6 @@ const en = {
                 each: 'each',
                 paidAt: 'Paid at {date}',
                 paidAtVia: 'Paid at {date} via {method}',
-                paymentConfirmed:
-                    'Payment confirmed for {amount} using selected payment method. Room has been marked as paid.',
-                paymentFailed: 'Failed to confirm payment: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Scan QR',
@@ -396,6 +393,11 @@ const en = {
                 closedDescription:
                     "You haven't participated in any closed rooms yet.",
             },
+            message: {
+                paymentConfirmed:
+                    'Payment confirmed for {amount} using selected payment method. Room has been marked as paid.',
+                paymentFailed: 'Failed to confirm payment: {error}',
+            }
         },
         profile: {
             index: {

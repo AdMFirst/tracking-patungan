@@ -109,9 +109,6 @@ const jv = {
                 each: 'saben',
                 paidAt: 'Dibayar tanggal {date}',
                 paidAtVia: 'Dibayar tanggal {date} via {method}',
-                paymentConfirmed:
-                    'Pambayaran dikonfirmasi {amount} ngginakaken metode ingkang dipilih. Kamar sampun lunas.',
-                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -395,6 +392,11 @@ const jv = {
                 closedDescription:
                     'Panjenengan dereng gabung kamar ingkang sampun ditutup.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pambayaran dikonfirmasi {amount} ngginakaken metode ingkang dipilih. Kamar sampun lunas.',
+                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
+            }
         },
         profile: {
             index: {

@@ -108,9 +108,6 @@ const zh = {
                 each: '每个',
                 paidAt: '支付于 {date}',
                 paidAtVia: '通过 {method} 支付于 {date}',
-                paymentConfirmed:
-                    '已确认使用所选支付方式支付 {amount}。房间已标记为已支付。',
-                paymentFailed: '确认支付失败：{error}',
             },
             QRScanDialog: {
                 scanQRButton: '扫描二维码',
@@ -383,6 +380,11 @@ const zh = {
                 activeDescription: '您尚未参与任何活跃房间。',
                 closedDescription: '您尚未参与任何已关闭房间。',
             },
+            message: {
+                paymentConfirmed:
+                    '已确认使用所选支付方式支付 {amount}。房间已标记为已支付。',
+                paymentFailed: '确认支付失败：{error}',
+            }
         },
         profile: {
             index: {

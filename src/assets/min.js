@@ -109,9 +109,6 @@ const min = {
                 each: 'satiok',
                 paidAt: 'Dibayar pado {date}',
                 paidAtVia: 'Dibayar pado {date} via {method}',
-                paymentConfirmed:
-                    'Pambayaran dikonfirmasi {amount} pakai metode nan dipiliah. Bilik alah lunas.',
-                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -389,6 +386,11 @@ const min = {
                 closedDescription:
                     'Sanak alun gabuang bilik nan alah ditutuik.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pambayaran dikonfirmasi {amount} pakai metode nan dipiliah. Bilik alah lunas.',
+                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
+            }
         },
         profile: {
             index: {

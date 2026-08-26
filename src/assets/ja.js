@@ -111,9 +111,6 @@ const ja = {
                 each: '各',
                 paidAt: '{date}に支払い済み',
                 paidAtVia: '{date}に{method}経由で支払い済み',
-                paymentConfirmed:
-                    '選択された支払い方法で{amount}の支払いが確認されました。ルームは支払い済みとしてマークされました。',
-                paymentFailed: '支払いの確認に失敗しました: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'QRスキャン',
@@ -398,6 +395,11 @@ const ja = {
                 activeDescription: 'まだアクティブなルームに参加していません。',
                 closedDescription: 'まだ閉鎖されたルームに参加していません。',
             },
+            message: {
+                paymentConfirmed:
+                    '選択された支払い方法で{amount}の支払いが確認されました。ルームは支払い済みとしてマークされました。',
+                paymentFailed: '支払いの確認に失敗しました: {error}',
+            }
         },
         profile: {
             index: {

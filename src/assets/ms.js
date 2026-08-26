@@ -111,9 +111,6 @@ const ms = {
                 each: 'setiap satu',
                 paidAt: 'Dibayar pada {date}',
                 paidAtVia: 'Dibayar pada {date} melalui {method}',
-                paymentConfirmed:
-                    'Pembayaran disahkan sebanyak {amount} menggunakan kaedah pembayaran yang dipilih. Bilik telah ditandakan sebagai dibayar.',
-                paymentFailed: 'Gagal mengesahkan pembayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Imbas QR',
@@ -404,6 +401,11 @@ const ms = {
                 closedDescription:
                     'Anda belum menyertai sebarang bilik yang ditutup lagi.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pembayaran disahkan sebanyak {amount} menggunakan kaedah pembayaran yang dipilih. Bilik telah ditandakan sebagai dibayar.',
+                paymentFailed: 'Gagal mengesahkan pembayaran: {error}',
+            }
         },
         profile: {
             index: {

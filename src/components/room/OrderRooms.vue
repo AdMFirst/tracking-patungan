@@ -158,20 +158,10 @@
             </div>
         </CardContent>
     </Card>
-
-    <!-- Payment Modal -->
-    <PaymentModal
-        :room="selectedRoom"
-        :isOpen="showPaymentModal"
-        @close="showPaymentModal = false"
-        @payment-confirmed="handlePaymentConfirmed"
-    />
 </template>
 
 <script setup>
 import { formatCurrency } from '@/lib/utils';
-import { useSetParticipantAsPaidMutation } from '@/lib/tanstackQueries';
-import { useMutation } from '@tanstack/vue-query';
 
 // SHADCN/UI COMPONENTS IMPORTS (Reduced list)
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -179,21 +169,16 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Button from '@/components/ui/button/Button.vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
-import PaymentModal from '@/components/modals/PaymentModal.vue';
-import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const { t, d } = useI18n();
 
 const props = defineProps({
-    rooms: Object, // <- this is rooms.value exactly as fetched
+    rooms: Object,
 });
 
-// State for payment modal
-const showPaymentModal = ref(false);
-const selectedRoom = ref(null);
+const emit = defineEmits(['pay-room']);
 
 const formatDate = (dateString) => {
     return d(new Date(dateString), {
@@ -228,54 +213,10 @@ function handleOpenRoom(room) {
 }
 
 function handlePayment(room) {
-    // Ensure room has runner_id for payment methods lookup
     const roomWithRunnerId = {
         ...room,
-        runner_id: room.runner_id || room.room_runner_id, // Add fallback for different field names
+        runner_id: room.runner_id || room.room_runner_id,
     };
-    selectedRoom.value = roomWithRunnerId;
-    showPaymentModal.value = true;
-}
-
-// Set up mutation for payment confirmation
-const setParticipantAsPaidMutation = useMutation(useSetParticipantAsPaidMutation());
-
-async function handlePaymentConfirmed(paymentData) {
-    try {
-        // Get the current user's ID
-        const {
-            data: { user },
-            error: authError,
-        } = await supabase.auth.getUser();
-
-        if (authError || !user) {
-            throw new Error('User not authenticated');
-        }
-
-        // Use the TanStack Query mutation
-        await setParticipantAsPaidMutation.mutateAsync({
-            roomID: paymentData.roomId,
-            paymentMethodID: paymentData.paymentMethodId,
-            userID: user.id
-        });
-
-        console.debug('Payment confirmed:', paymentData);
-        toast.success(
-            t('components.room.OrderRooms.paymentConfirmed', {
-                amount: formatCurrency(paymentData.amount),
-            })
-        );
-
-        // Close the payment modal
-        showPaymentModal.value = false;
-        selectedRoom.value = null;
-    } catch (error) {
-        console.error('Error confirming payment:', error);
-        toast.error(
-            t('components.room.OrderRooms.paymentFailed', {
-                error: error.message,
-            })
-        );
-    }
+    emit('pay-room', roomWithRunnerId);
 }
 </script>

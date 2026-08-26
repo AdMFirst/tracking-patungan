@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen p-4 pb-20 relative">
-        <PullToRefresh :on-refresh="handleRefresh">
+        <PullToRefresh :on-refresh="handleRefresh" :disabled="showPaymentModal">
             <div class="max-w-md mx-auto">
                 <div class="text-center py-0 mb-6">
                     <h1 class="text-2xl font-bold">
@@ -68,32 +68,46 @@
                 </div>
 
                 <div v-else class="space-y-4">
-                    <OrderRooms :rooms="filteredRooms" />
+                    <OrderRooms :rooms="filteredRooms" @pay-room="openPaymentModal" />
                 </div>
             </div>
         </PullToRefresh>
+
+        <!-- Payment Modal -->
+        <PaymentModal
+            :room="selectedRoom"
+            :isOpen="showPaymentModal"
+            @close="closePaymentModal"
+            @payment-confirmed="handlePaymentConfirmed"
+        />
     </div>
 </template>
 
 <script setup>
 import { ref, inject, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { toast } from 'vue-sonner';
+import { formatCurrency } from '@/lib/utils';
+
 
 // ICON IMPORTS
 import { Home } from 'lucide-vue-next';
 
 // Queries & Custom Components
-import { useJoinedRoomsQuery } from '../../lib/tanstackQueries';
-import { useQuery } from '@tanstack/vue-query';
+import { useJoinedRoomsQuery, useSetParticipantAsPaidMutation } from '../../lib/tanstackQueries';
+import { useQuery, useMutation } from '@tanstack/vue-query';
 import OrderRooms from '@/components/room/OrderRooms.vue';
 import OrderRoomSkeleton from '@/components/room/OrderRoomSkeleton.vue';
 import PullToRefresh from '@/components/common/PullToRefresh.vue';
+import PaymentModal from '@/components/modals/PaymentModal.vue';
 
 const { t } = useI18n();
 const user = inject('user');
 
 // State
 const activeTab = ref('active');
+const showPaymentModal = ref(false);
+const selectedRoom = ref(null);
 
 // --- Fetching Logic ---
 const { data: joinedRoomsData, isLoading: isRoomsLoading, refetch } = useQuery(
@@ -167,4 +181,53 @@ const filteredRooms = computed(() => {
 const handleRefresh = async () => {
     await refetch();
 };
+
+// --- Modal & Payment Logic ---
+const setParticipantAsPaidMutation = useMutation(useSetParticipantAsPaidMutation());
+
+function openPaymentModal(room) {
+    selectedRoom.value = room;
+    showPaymentModal.value = true;
+}
+
+function closePaymentModal() {
+    showPaymentModal.value = false;
+    selectedRoom.value = null;
+}
+
+async function handlePaymentConfirmed(paymentData) {
+    try {
+        // make sure user is logged in
+        var _user = user.value
+        if (!_user) {
+            throw new Error('User not authenticated');
+        }
+
+        console.debug(paymentData, _user.id)
+
+        // Use the TanStack Query mutation
+        await setParticipantAsPaidMutation.mutateAsync({
+            roomID: paymentData.roomId,
+            paymentMethodID: paymentData.paymentMethodId,
+            userID: _user.id
+        });
+
+        console.debug('Payment confirmed:', paymentData);
+        toast.success(
+            t('pages.histori.message.paymentConfirmed', {
+                amount: formatCurrency(paymentData.amount),
+            })
+        );
+
+        closePaymentModal();
+        await refetch();
+    } catch (error) {
+        console.error('Error confirming payment:', error);
+        toast.error(
+            t('pages.histori.message.paymentFailed', {
+                error: error.message,
+            })
+        );
+    }
+}
 </script>

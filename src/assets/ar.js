@@ -111,9 +111,6 @@ const ar = {
                 each: 'لكل',
                 paidAt: 'تم الدفع في {date}',
                 paidAtVia: 'تم الدفع في {date} عبر {method}',
-                paymentConfirmed:
-                    'تم تأكيد الدفع بمبلغ {amount} باستخدام طريقة الدفع المختارة. تم وضع علامة على الغرفة كمدفوعة.',
-                paymentFailed: 'فشل تأكيد الدفع: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'مسح QR',
@@ -388,6 +385,11 @@ const ar = {
                 activeDescription: 'لم تشارك في أي غرف نشطة بعد.',
                 closedDescription: 'لم تشارك في أي غرف مغلقة بعد.',
             },
+            message: {
+                paymentConfirmed:
+                    'تم تأكيد الدفع بمبلغ {amount} باستخدام طريقة الدفع المختارة. تم وضع علامة على الغرفة كمدفوعة.',
+                paymentFailed: 'فشل تأكيد الدفع: {error}',
+            }
         },
         profile: {
             index: {
