@@ -34,12 +34,12 @@
                         v-for="method in paymentMethods"
                         :key="method.id"
                         class="flex items-center space-x-3 mb-2 p-3 border rounded-lg cursor-pointer hover:bg-muted transition-colors"
+                        @click="handleMethodSelect(method)"
                     >
                         <input
                             type="radio"
                             :id="method.id"
                             :value="method.id"
-                            @change="handleMethodSelect(method)"
                             v-model="selectedMethod"
                             class="w-4 h-4 text-blue-600 focus:ring-blue-500"
                         />
@@ -63,7 +63,7 @@
                     </div>
 
                     <div
-                        v-if="!loadingMethods && paymentMethods.length === 0"
+                        v-if="!isPaymentMethodsLoading && paymentMethods.length === 0"
                         class="text-center py-4 text-sm text-muted-foreground"
                     >
                         {{
@@ -140,7 +140,6 @@ const props = defineProps({
 const emit = defineEmits(['close', 'payment-confirmed']);
 
 const paymentMethods = ref([]);
-const loadingMethods = ref(false);
 const selectedMethod = ref(null);
 const confirmed = ref(false);
 const isWindowFocused = ref(true);
@@ -151,11 +150,13 @@ const canPay = computed(() => {
     return selectedMethod.value && confirmed.value;
 });
 
-// Use TanStack Query for fetching payment methods
+// Pass a reactive getter object to useQuery so it resolves the actual string ID dynamically
 const { data: paymentMethodsData, isLoading: isPaymentMethodsLoading } = useQuery(
-    computed(() => usePaymentMethodsByRoomIDQuery(props.room?.id))
+    computed(() => ({
+        ...usePaymentMethodsByRoomIDQuery(props.room?.id || props.room?.room_id),
+        enabled: !!(props.room?.id || props.room?.room_id) && props.isOpen,
+    }))
 );
-
 watch(paymentMethodsData, (newData) => {
     paymentMethods.value = newData || [];
 }, { immediate: true });
@@ -216,9 +217,9 @@ const handleConfirmPayment = () => {
     if (!canPay.value) return;
 
     emit('payment-confirmed', {
-        roomId: props.room.room_id,
+        roomId: props.room?.id || props.room?.room_id,
         paymentMethodId: selectedMethod.value,
-        amount: props.room.final_total,
+        amount: props.room?.final_total,
     });
 };
 
@@ -227,5 +228,4 @@ const handleClose = () => {
     selectedMethod.value = null;
     confirmed.value = false;
 };
-
 </script>

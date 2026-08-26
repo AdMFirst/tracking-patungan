@@ -599,6 +599,7 @@ export async function fetchPaymentMethodsByRoomID(roomID) {
 
     if (error) {
         console.error('Error fetching payment methods:', error);
+        console.debug(roomID)
         throw error;
     }
     return data || [];
