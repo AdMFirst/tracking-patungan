@@ -1,20 +1,20 @@
 <template>
     <div class="min-h-screen p-4 pb-20">
-        <PullToRefresh :on-refresh="handleRefresh">
+        <PullToRefresh :on-refresh="handleRefresh" :disabled="showFilters || showCloseRoomModal">
             <div class="max-w-md mx-auto">
-                <div class="text-center py-0 mb-6">
+                <div class="text-center py-0 mb-4">
                     <h1 class="text-2xl font-bold">
                         {{ $t('pages.myroom.index.title') }}
                     </h1>
                 </div>
 
-                <div class="mb-6 flex gap-2 items-center justify-center">
+                <div class="mb-4 flex gap-2 items-center justify-center">
                     <Button
                         @click="showFilters = true"
                         variant="none"
                         class="h-auto py-3 justify-center"
                     >
-                        <Filter class="w-5 h-5 mr-2" />
+                        <Filter class="w-5 h-5" />
                         <span>{{ $t('pages.myroom.index.openFilters') }}</span>
                     </Button>
 
@@ -23,7 +23,7 @@
                             variant="none"
                             class="pointer-events-none"
                         >
-                            <SortAscIcon class="w-5 h-5 mr-2" />
+                            <SortDescIcon class="w-5 h-5" />
                             <span class="text-md">Sort by:</span>
                             <span class="text-md capitalize">{{ sortOptions.find(opt => opt.value === sortBy)?.label }}</span>
                         </Button>
@@ -216,7 +216,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Filter, Home, SortAscIcon } from 'lucide-vue-next';
+import { Filter, Home, SortDescIcon } from 'lucide-vue-next';
 import {
     useUserRoomsQuery,
     useUpdateRoomMutation,

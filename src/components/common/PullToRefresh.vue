@@ -48,6 +48,10 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     threshold: {
         type: Number,
         default: 80,
@@ -71,7 +75,7 @@ const contentOffset = ref(0);
 
 // --- Internal Refresh Handler ---
 const triggerRefresh = async () => {
-    if (isRefreshing.value) return;
+    if (isRefreshing.value || props.disabled) return;
 
     isRefreshing.value = true;
     isPulling.value = false;
@@ -95,6 +99,8 @@ let touchStartY = 0;
 let isTouchDragging = false;
 
 const handleTouchStart = (e) => {
+    if (props.disabled) return;
+
     if (window.scrollY === 0) {
         touchStartY = e.touches[0].clientY;
         isTouchDragging = true;
@@ -102,7 +108,7 @@ const handleTouchStart = (e) => {
 };
 
 const handleTouchMove = (e) => {
-    if (!isTouchDragging || isRefreshing.value) return;
+    if (!isTouchDragging || isRefreshing.value || props.disabled) return;
 
     const currentY = e.touches[0].clientY;
     const diff = currentY - touchStartY;
@@ -120,6 +126,14 @@ const handleTouchMove = (e) => {
 const handleTouchEnd = (e) => {
     if (!isTouchDragging) return;
     isTouchDragging = false;
+
+    if (props.disabled) {
+        isPulling.value = false;
+        pullDistance.value = 0;
+        contentOffset.value = 0;
+        touchStartY = 0;
+        return;
+    }
 
     const currentY = e.changedTouches[0].clientY;
     const diff = currentY - touchStartY;
@@ -141,6 +155,8 @@ let mouseStartY = 0;
 let isMouseDragging = false;
 
 const handleMouseDown = (e) => {
+    if (props.disabled) return;
+
     if (window.scrollY === 0 && !isRefreshing.value) {
         mouseStartY = e.clientY;
         isMouseDragging = true;
@@ -148,7 +164,7 @@ const handleMouseDown = (e) => {
 };
 
 const handleMouseMove = (e) => {
-    if (!isMouseDragging || isRefreshing.value) return;
+    if (!isMouseDragging || isRefreshing.value || props.disabled) return;
 
     const diff = e.clientY - mouseStartY;
 
@@ -164,6 +180,14 @@ const handleMouseMove = (e) => {
 const handleMouseUp = (e) => {
     if (!isMouseDragging) return;
     isMouseDragging = false;
+
+    if (props.disabled) {
+        isPulling.value = false;
+        pullDistance.value = 0;
+        contentOffset.value = 0;
+        mouseStartY = 0;
+        return;
+    }
 
     const diff = e.clientY - mouseStartY;
     const pullDistanceValue = Math.min(diff * props.resistance, props.maxPullDistance);
