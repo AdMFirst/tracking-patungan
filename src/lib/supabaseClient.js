@@ -717,7 +717,7 @@ export async function fetchSystemNotifications(lastCheckDate) {
  * @param {Object} callbacks - Callbacks for events
  * @returns {Object} The realtime channel
  */
-export function subscribeToRoomUpdates(roomID, callbacks) {
+export function subscribeToRoomUpdates(roomID, callbacks = {}) {
     const channel = supabase.channel(`room-${roomID}`);
 
     channel
@@ -730,8 +730,9 @@ export function subscribeToRoomUpdates(roomID, callbacks) {
                 filter: `room_id=eq.${roomID}`,
             },
             (payload) => {
-                if (callbacks.onParticipantsChange)
+                if (callbacks.onParticipantsChange) {
                     callbacks.onParticipantsChange(payload);
+                }
             }
         )
         .on(
@@ -742,15 +743,19 @@ export function subscribeToRoomUpdates(roomID, callbacks) {
                 table: 'order_items',
             },
             (payload) => {
-                if (callbacks.onOrderItemsChange)
+                if (callbacks.onOrderItemsChange) {
                     callbacks.onOrderItemsChange(payload);
+                }
             }
         )
-        .on('channel_error', (err) => {
-            if (callbacks.onChannelError) callbacks.onChannelError(err);
-        })
-        .subscribe((status) => {
-            if (callbacks.onStatusChange) callbacks.onStatusChange(status);
+        .subscribe((status, err) => {
+            if (callbacks.onStatusChange) {
+                callbacks.onStatusChange(status);
+            }
+
+            if (err && callbacks.onChannelError) {
+                callbacks.onChannelError(err);
+            }
         });
 
     return channel;

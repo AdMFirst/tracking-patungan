@@ -338,6 +338,7 @@ const showEditItemModal = ref(false);
 const editingItem = ref(null);
 const qrCodeUrl = ref('');
 const participantIds = ref([]);
+let isFetchingData = false // flag to prevent edge case race condition in loading subscription
 
 // UUID validation regex
 const uuidRegex =
@@ -733,6 +734,12 @@ const checkRunnerStatus = async () => {
 const setupRealtimeSubscription = () => {
     if (!currentUser.value) return null;
 
+    // Clean up existing channel if one already exists
+    if (realtimeChannel.value) {
+        supabase.removeChannel(realtimeChannel.value);
+        realtimeChannel.value = null;
+    }
+
     return subscribeToRoomUpdates(roomID, {
         onParticipantsChange: async (payload) => {
             console.debug('[Realtime] room_participants', payload);
@@ -776,19 +783,7 @@ const setupRealtimeSubscription = () => {
                     'Realtime subscription failed or disconnected:',
                     status
                 );
-                // Don't force reload on navigation/disconnection - let it reconnect naturally
-                // Only force reload for critical errors that can't be recovered
-                if (status === 'CHANNEL_ERROR') {
-                    // For actual channel errors, we might want to reload, but not for normal disconnections
-                    setTimeout(() => {
-                        if (!realtimeChannel.value) {
-                            console.debug(
-                                'Attempting to re-establish realtime connection...'
-                            );
-                            realtimeChannel.value = setupRealtimeSubscription();
-                        }
-                    }, 3000);
-                }
+                // we dont subscribe again since supabase has its own way to handle network disconnections and will try to reconnect automatically, so we just log it
             }
         },
     });
@@ -796,6 +791,11 @@ const setupRealtimeSubscription = () => {
 
 // Optimized data loading function
 const loadRoomData = async () => {
+
+    // prevent race condition
+    if (isFetchingData) return;
+    isFetchingData = true;
+
     try {
         loading.value = true;
         error.value = null;
@@ -821,16 +821,15 @@ const loadRoomData = async () => {
         if (userIds.length > 0) {
             await loadUserProfiles(userIds);
         }
-
-        if (!realtimeChannel.value) {
-            realtimeChannel.value = setupRealtimeSubscription();
-        }
+        
+        realtimeChannel.value = setupRealtimeSubscription();
     } catch (err) {
         console.error('Error loading room data:', err);
         error.value =
             err.message || t('pages.activeRoom.errors.loadDataFailed');
     } finally {
         loading.value = false;
+        isFetchingData = false; // release the lock
     }
 };
 
