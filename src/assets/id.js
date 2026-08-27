@@ -40,6 +40,23 @@ const id = {
             },
         },
         common: {
+            sort: {
+                label: "Urutan:",
+                options: {
+                    "titleAsc": "Judul (A-Z)",
+                    "titleDesc": "Judul (Z-A)",
+                    "restaurantAsc": "Restoran (A-Z)",
+                    "restaurantDesc": "Restoran (Z-A)",
+                    "platformAsc": "Platform (A-Z)",
+                    "platformDesc": "Platform (Z-A)",
+                    "totalDesc": "Total akhir (tertinggi)",
+                    "totalAsc": "Total akhir (terendah)",
+                    "createdLatest": "Dibuat (terbaru)",
+                    "createdOldest": "Dibuat (terlama)",
+                    "orderTimeLatest": "Waktu pesanan (terbaru)",
+                    "orderTimeOldest": "Waktu pesanan (terlama)"
+                },
+            },
             PullToRefresh: {
                 refreshing: 'Menyegarkan...',
                 releaseToRefresh: 'Lepaskan untuk menyegarkan',

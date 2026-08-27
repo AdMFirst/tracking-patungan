@@ -39,6 +39,23 @@ const su = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutkeun dumasar:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total ahir (Pangluhurna)',
+                    totalAsc: 'Total ahir (Panghandapna)',
+                    createdLatest: 'Waktu dijieun (Panganyarna)',
+                    createdOldest: 'Waktu dijieun (Pangheubeulna)',
+                    orderTimeLatest: 'Waktu mesen (Panganyarna)',
+                    orderTimeOldest: 'Waktu mesen (Pangheubeulna)',
+                }
+            },
             PullToRefresh: {
                 refreshing: 'Nyegerkeun...',
                 releaseToRefresh: 'Leupaskeun pikeun nyegerkeun',

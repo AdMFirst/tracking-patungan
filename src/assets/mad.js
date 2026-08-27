@@ -38,6 +38,23 @@ const mad = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutaghi manot:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total akhir (Paling tenggi)',
+                    totalAsc: 'Total akhir (Paling rendha)',
+                    createdLatest: 'Wektu ebhuten (Paling anyar)',
+                    createdOldest: 'Wektu ebhuten (Paling laos)',
+                    orderTimeLatest: 'Wektu mesen (Paling anyar)',
+                    orderTimeOldest: 'Wektu mesen (Paling laos)',
+                }
+            },
             PullToRefresh: {
                 refreshing: 'Nyanggeraghi...',
                 releaseToRefresh: 'Lepas kaangguy nyanggeraghi',

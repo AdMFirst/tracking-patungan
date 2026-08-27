@@ -40,6 +40,23 @@ const en = {
             },
         },
         common: {
+            sort: {
+                label: 'Sort by:',
+                options: {
+                    titleAsc: 'Title (A-Z)',
+                    titleDesc: 'Title (Z-A)',
+                    restaurantAsc: 'Restaurant (A-Z)',
+                    restaurantDesc: 'Restaurant (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Final total (highest)',
+                    totalAsc: 'Final total (lowest)',
+                    createdLatest: 'Created (newest)',
+                    createdOldest: 'Created (oldest)',
+                    orderTimeLatest: 'Order time (latest)',
+                    orderTimeOldest: 'Order time (oldest)',
+                }
+            },
             BottomNav: {
                 home: 'Home',
                 histori: 'Histori',

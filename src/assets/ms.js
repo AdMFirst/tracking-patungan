@@ -40,6 +40,23 @@ const ms = {
             },
         },
         common: {
+            sort: {
+                label: 'Isih mengikut:',
+                options: {
+                    titleAsc: 'Tajuk (A-Z)',
+                    titleDesc: 'Tajuk (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Jumlah akhir (Tertinggi)',
+                    totalAsc: 'Jumlah akhir (Terendah)',
+                    createdLatest: 'Masa dicipta (Terbaru)',
+                    createdOldest: 'Masa dicipta (Terlama)',
+                    orderTimeLatest: 'Masa pesanan (Terbaru)',
+                    orderTimeOldest: 'Masa pesanan (Terlama)',
+                }
+            },
             PullToRefresh: {
                 refreshing: 'Menyegarkan...',
                 releaseToRefresh: 'Lepaskan untuk menyegarkan',

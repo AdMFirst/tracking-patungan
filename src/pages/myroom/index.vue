@@ -24,7 +24,7 @@
                             class="pointer-events-none"
                         >
                             <SortDescIcon class="w-5 h-5" />
-                            <span class="text-md">Sort by:</span>
+                            <span class="text-md">{{ $t('components.common.sort.label') }}</span>
                             <span class="text-md capitalize">{{ sortOptions.find(opt => opt.value === sortBy)?.label }}</span>
                         </Button>
                         <select
@@ -235,14 +235,6 @@ const showFilters = ref(false);
 const showCloseRoomModal = ref(false);
 const currentRoomId = ref(null);
 
-const sortBy = ref('date_latest');
-const sortOptions = [
-    { label: 'Created date latest', value: 'date_latest' },
-    { label: 'Created date oldest', value: 'date_oldest' },
-    { label: 'Title (A-Z)', value: 'title_asc' },
-    { label: 'Title (Z-A)', value: 'title_desc' },
-];
-
 const filters = ref({
     search: '',
     platform: '',
@@ -259,22 +251,54 @@ const { data: roomsData, isLoading, refetch } = useQuery(
     useUserRoomsQuery(user.value?.id, filters.value)
 );
 
+const sortBy = ref('created_at_desc');
+const sortOptions = computed(() => [
+    { label: t('components.common.sort.options.createdLatest'), value: 'created_at_desc' },
+    { label: t('components.common.sort.options.createdOldest'), value: 'created_at_asc' },
+    { label: t('components.common.sort.options.orderTimeLatest'), value: 'order_time_desc' },
+    { label: t('components.common.sort.options.orderTimeOldest'), value: 'order_time_asc' },
+    { label: t('components.common.sort.options.titleAsc'), value: 'title_asc' },
+    { label: t('components.common.sort.options.titleDesc'), value: 'title_desc' },
+    { label: t('components.common.sort.options.platformAsc'), value: 'platform_asc' },
+    { label: t('components.common.sort.options.platformDesc'), value: 'platform_desc' },
+    { label: t('components.common.sort.options.restaurantAsc'), value: 'restaurant_asc' },
+    { label: t('components.common.sort.options.restaurantDesc'), value: 'restaurant_desc' },
+    { label: t('components.common.sort.options.totalDesc'), value: 'final_total_desc' },
+    { label: t('components.common.sort.options.totalAsc'), value: 'final_total_asc' },
+]);
+
+
 const sortedRooms = computed(() => {
     if (!roomsData.value) return [];
     return [...roomsData.value].sort((a, b) => {
-        if (sortBy.value === 'date_latest') {
-            return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        switch (sortBy.value) {
+            case 'title_asc':
+                return (a.title || '').localeCompare(b.title || '');
+            case 'title_desc':
+                return (b.title || '').localeCompare(a.title || '');
+            case 'platform_asc':
+                return (a.platform || '').localeCompare(b.platform || '');
+            case 'platform_desc':
+                return (b.platform || '').localeCompare(a.platform || '');
+            case 'restaurant_asc':
+                return (a.restaurant || '').localeCompare(b.restaurant || '');
+            case 'restaurant_desc':
+                return (b.restaurant || '').localeCompare(a.restaurant || '');
+            case 'final_total_desc':
+                return (Number(b.final_total) || 0) - (Number(a.final_total) || 0);
+            case 'final_total_asc':
+                return (Number(a.final_total) || 0) - (Number(b.final_total) || 0);
+            case 'created_at_desc':
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+            case 'created_at_asc':
+                return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+            case 'order_time_desc':
+                return new Date(b.order_time || 0) - new Date(a.order_time || 0);
+            case 'order_time_asc':
+                return new Date(a.order_time || 0) - new Date(b.order_time || 0);
+            default:
+                return 0;
         }
-        if (sortBy.value === 'date_oldest') {
-            return new Date(a.created_at || 0) - new Date(b.created_at || 0);
-        }
-        if (sortBy.value === 'title_asc') {
-            return (a.title || '').localeCompare(b.title || '');
-        }
-        if (sortBy.value === 'title_desc') {
-            return (b.title || '').localeCompare(a.title || '');
-        }
-        return 0;
     });
 });
 

@@ -38,6 +38,23 @@ const jv = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutake miturut:',
+                options: {
+                    titleAsc: 'Irah-irahan (A-Z)',
+                    titleDesc: 'Irah-irahan (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total pungkasan (Paling dhuwur)',
+                    totalAsc: 'Total pungkasan (Paling endhek)',
+                    createdLatest: 'Wektu digawe (Paling anyar)',
+                    createdOldest: 'Wektu digawe (Paling lawas)',
+                    orderTimeLatest: 'Wektu pesenan (Paling anyar)',
+                    orderTimeOldest: 'Wektu pesenan (Paling lawas)',
+                }
+            },
             PullToRefresh: {
                 refreshing: 'Lagi nyegeraké...',
                 releaseToRefresh: 'Lepas kanggo nyegeraké',

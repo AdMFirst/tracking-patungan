@@ -38,6 +38,23 @@ const min = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutkan badasa:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total akhia (Paling tinggi)',
+                    totalAsc: 'Total akhia (Paling randah)',
+                    createdLatest: 'Waktu dibuek (Paling baru)',
+                    createdOldest: 'Waktu dibuek (Paling lamo)',
+                    orderTimeLatest: 'Waktu pesan (Paling baru)',
+                    orderTimeOldest: 'Waktu pesan (Paling lamo)',
+                }
+            },
             PullToRefresh: {
                 refreshing: 'Manmanyegarkan...',
                 releaseToRefresh: 'Lapeh untuak manyegarkan',

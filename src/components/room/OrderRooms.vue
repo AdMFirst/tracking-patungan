@@ -5,7 +5,7 @@
             class="pointer-events-none"
         >
             <SortDescIcon class="w-5 h-5" />
-            <span class="text-md">Sort by:</span>
+            <span class="text-md">{{$t('components.common.sort.label')}}</span>
             <span class="text-md capitalize">{{ sortOptions.find(opt => opt.value === sortBy)?.label }}</span>
         </Button>
         <select
@@ -209,16 +209,16 @@ const emit = defineEmits(['pay-room']);
 const sortBy = ref('date-desc');
 
 const sortOptions = [
-    { label: 'Date (Newest)', value: 'date-desc' },
-    { label: 'Date (Oldest)', value: 'date-asc' },
-    { label: 'Title (A-Z)', value: 'title-asc' },
-    { label: 'Title (Z-A)', value: 'title-desc' },
-    { label: 'Restaurant (A-Z)', value: 'restaurant-asc' },
-    { label: 'Restaurant (Z-A)', value: 'restaurant-desc' },
-    { label: 'Platform (A-Z)', value: 'platform-asc' },
-    { label: 'Platform (Z-A)', value: 'platform-desc' },
-    { label: 'Total Amount (High-Low)', value: 'total-desc' },
-    { label: 'Total Amount (Low-High)', value: 'total-asc' }
+    { label: t('components.common.sort.options.createdLatest'), value: 'date-desc' },
+    { label: t('components.common.sort.options.createdOldest'), value: 'date-asc' },
+    { label: t('components.common.sort.options.titleAsc'), value: 'title-asc' },
+    { label: t('components.common.sort.options.titleDesc'), value: 'title-desc' },
+    { label: t('components.common.sort.options.restaurantAsc'), value: 'restaurant-asc' },
+    { label: t('components.common.sort.options.restaurantDesc'), value: 'restaurant-desc' },
+    { label: t('components.common.sort.options.platformAsc'), value: 'platform-asc' },
+    { label: t('components.common.sort.options.platformDesc'), value: 'platform-desc' },
+    { label: t('components.common.sort.options.totalDesc'), value: 'total-desc' },
+    { label: t('components.common.sort.options.totalAsc'), value: 'total-asc' }
 ];
 
 const calculateCalculatedTotal = (room) => {

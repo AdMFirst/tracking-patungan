@@ -38,6 +38,23 @@ const zh = {
             },
         },
         common: {
+            sort: {
+                label: '排序方式:',
+                options: {
+                    titleAsc: '标题 (A-Z)',
+                    titleDesc: '标题 (Z-A)',
+                    restaurantAsc: '餐厅 (A-Z)',
+                    restaurantDesc: '餐厅 (Z-A)',
+                    platformAsc: '平台 (A-Z)',
+                    platformDesc: '平台 (Z-A)',
+                    totalDesc: '最终总额 (最高)',
+                    totalAsc: '最终总额 (最低)',
+                    createdLatest: '创建时间 (最新)',
+                    createdOldest: '创建时间 (最早)',
+                    orderTimeLatest: '下单时间 (最新)',
+                    orderTimeOldest: '下单时间 (最早)',
+                }
+            },
             PullToRefresh: {
                 refreshing: '刷新中...',
                 releaseToRefresh: '松开刷新',

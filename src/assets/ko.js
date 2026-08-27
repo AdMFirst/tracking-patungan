@@ -40,6 +40,23 @@ const ko = {
             },
         },
         common: {
+            sort: {
+                label: '정렬 기준:',
+                options: {
+                    titleAsc: '제목 (가나다순)',
+                    titleDesc: '제목 (역순)',
+                    restaurantAsc: '음식점 (가나다순)',
+                    restaurantDesc: '음식점 (역순)',
+                    platformAsc: '플랫폼 (가나다순)',
+                    platformDesc: '플랫폼 (역순)',
+                    totalDesc: '최종 합계 (높은 순)',
+                    totalAsc: '최종 합계 (낮은 순)',
+                    createdLatest: '생성일 (최신순)',
+                    createdOldest: '생성일 (오래된순)',
+                    orderTimeLatest: '주문 시간 (최신순)',
+                    orderTimeOldest: '주문 시간 (오래된순)',
+                }
+            },
             PullToRefresh: {
                 refreshing: '새로 고치는 중...',
                 releaseToRefresh: '놓아서 새로 고치기',

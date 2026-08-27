@@ -40,6 +40,23 @@ const ja = {
             },
         },
         common: {
+            sort: {
+                label: '並べ替え:',
+                options: {
+                    titleAsc: 'タイトル (A-Z)',
+                    titleDesc: 'タイトル (Z-A)',
+                    restaurantAsc: 'レストラン (A-Z)',
+                    restaurantDesc: 'レストラン (Z-A)',
+                    platformAsc: 'プラットフォーム (A-Z)',
+                    platformDesc: 'プラットフォーム (Z-A)',
+                    totalDesc: '最終合計 (高い順)',
+                    totalAsc: '最終合計 (低い順)',
+                    createdLatest: '作成日 (新しい順)',
+                    createdOldest: '作成日 (古い順)',
+                    orderTimeLatest: '注文時間 (新しい順)',
+                    orderTimeOldest: '注文時間 (古い順)',
+                }
+            },
             PullToRefresh: {
                 refreshing: '更新中...',
                 releaseToRefresh: '離して更新',

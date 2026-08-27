@@ -40,6 +40,23 @@ const ar = {
             },
         },
         common: {
+            sort: {
+                label: 'طريقة الفرز:',
+                options: {
+                    titleAsc: 'العنوان (A-Z)',
+                    titleDesc: 'العنوان (Z-A)',
+                    restaurantAsc: 'المطعم (A-Z)',
+                    restaurantDesc: 'المطعم (Z-A)',
+                    platformAsc: 'المنصة (A-Z)',
+                    platformDesc: 'المنصة (Z-A)',
+                    totalDesc: 'الإجمالي النهائي (الأعلى)',
+                    totalAsc: 'الإجمالي النهائي (الأدنى)',
+                    createdLatest: 'وقت الإنشاء (الأحدث)',
+                    createdOldest: 'وقت الإنشاء (الأقدم)',
+                    orderTimeLatest: 'وقت الطلب (الأحدث)',
+                    orderTimeOldest: 'وقت الطلب (الأقدم)',
+                }
+            },
             BottomNav: {
                 home: 'الرئيسية',
                 histori: 'السجل',
