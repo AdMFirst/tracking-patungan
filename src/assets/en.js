@@ -364,6 +364,8 @@ const en = {
             shareRoomTitle: 'Share Room',
             shareRoomDescription:
                 'Scan the QR code to share this room with others.',
+            shareNowButton: 'Share Now',
+            shareNowContent: "Everyone! I'm ordering {platform} from {restaurant}. Join me at {url} to add your order and let's split the bill transparently!",
             close: 'Close',
             errors: {
                 loginToJoin: 'You need to be logged in to join this room',
@@ -394,6 +396,8 @@ const en = {
                 deleteConfirm: 'Delete this order item?',
                 delete: 'Delete',
                 cancel: 'Cancel',
+                copySuccess: 'URL copied to clipboard!',
+                shareFailed: 'Failed to share room. Please try again.',
             },
         },
         histori: {

@@ -365,6 +365,8 @@ const ja = {
             shareRoomTitle: 'ルームを共有',
             shareRoomDescription:
                 'QRコードをスキャンしてこのルームを他の人と共有します。',
+            shareNowButton: '今すぐ共有',
+            shareNowContent: "みんな！{platform}から{restaurant}を注文しているよ。{url}に参加して注文を追加し、透明に割り勘しよう！",
             close: '閉じる',
             errors: {
                 loginToJoin: 'このルームに参加するにはログインが必要です',
@@ -398,6 +400,8 @@ const ja = {
                 deleteConfirm: 'この注文アイテムを削除しますか？',
                 delete: '削除',
                 cancel: 'キャンセル',
+                copySuccess: 'URLがクリップボードにコピーされました！',
+                shareFailed: 'ルームの共有に失敗しました。もう一度お試しください。',
             },
         },
         histori: {

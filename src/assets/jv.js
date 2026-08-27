@@ -363,6 +363,8 @@ const jv = {
             shareRoomTitle: 'Bagikaken Kamar',
             shareRoomDescription:
                 'Pindai kode QR kangge mbagikaken kamar niki.',
+            shareNowButton: 'Bagikaken Saiki',
+            shareNowContent: "Kabeh! Aku pesen {platform} saka {restaurant}. Gabung kula ing {url} kanggo nambah pesen lan bagi tagihan kanthi transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin:
@@ -394,6 +396,8 @@ const jv = {
                 deleteConfirm: 'Hapus item pesenen niki?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin menyang papan klip!',
+                shareFailed: 'Gagal mbagikaken kamar. Coba malih.',
             },
         },
         histori: {

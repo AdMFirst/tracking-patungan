@@ -362,6 +362,8 @@ const su = {
             shareRoomTitle: 'Bagikeun Kamar',
             shareRoomDescription:
                 'Pindai kode QR kanggo ngabagikeun kamar ieu.',
+            shareNowButton: 'Bagikeun Kamar',
+            shareNowContent: "Kabeh! Abdi pesen {platform} saka {restaurant}. Gabung kula ing {url} kanggo nambah pesen lan bagi tagihan kanthi transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anjeun kedah lebet kanggo gabung kamar ieu',
@@ -391,6 +393,8 @@ const su = {
                 deleteConfirm: 'Hapus item pesenan ieu?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal ngabagikeun kamar. Cobian deui.',
             },
         },
         histori: {

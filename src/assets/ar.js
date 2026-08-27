@@ -361,6 +361,8 @@ const ar = {
             noOrderItems: 'لا توجد عناصر طلب بعد.',
             shareRoomTitle: 'مشاركة الغرفة',
             shareRoomDescription: 'امسح رمز QR لمشاركة هذه الغرفة مع الآخرين.',
+            shareNowButton: 'شارك الآن',
+            shareNowContent: "يا جماعة! أنا بطلب {platform} من {restaurant}. انضموا إليّ عبر {url} لإضافة طلباتكم ونقسم الفاتورة بكل شفافية!",
             close: 'إغلاق',
             errors: {
                 loginToJoin: 'تحتاج لتسجيل الدخول للانضمام لهذه الغرفة',
@@ -388,6 +390,8 @@ const ar = {
                 deleteConfirm: 'حذف عنصر الطلب هذا؟',
                 delete: 'حذف',
                 cancel: 'إلغاء',
+                copySuccess: ' تم نسخ URL إلى الحامل!',
+                shareFailed: 'فشل مشاركة الغرفة. يرجى المحاولة مرة أخرى.',
             },
         },
         histori: {

@@ -360,6 +360,8 @@ const min = {
             noOrderItems: 'Alun ado item pesanan.',
             shareRoomTitle: 'Bagikan Bilik',
             shareRoomDescription: 'Pindai kode QR untuak membagikan bilik iko.',
+            shareNowButton: 'Bagikan Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Bergabunglah dengan saya di {url} untuk menambahkan pesanan dan bagi tagihan secara transparan!",
             close: 'Tutuik',
             errors: {
                 loginToJoin: 'Sanak paralu masuak untuak gabuang bilik iko',
@@ -388,6 +390,8 @@ const min = {
                 deleteConfirm: 'Hapus item pesanan iko?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal membagikan bilik. Cubo baliak.',
             },
         },
         histori: {

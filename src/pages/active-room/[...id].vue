@@ -265,7 +265,10 @@
                     class="w-64 h-64"
                 />
             </div>
-            <DialogFooter>
+            <DialogFooter class="flex-col sm:flex">
+                <Button variant="outline" @click="shareNow">
+                    {{ t('pages.activeRoom.shareNowButton') }}
+                </Button>
                 <Button variant="outline" @click="showShareModal = false">
                     {{ t('pages.activeRoom.close') }}
                 </Button>
@@ -537,6 +540,82 @@ const groupedOrderItems = computed(() => {
     });
     return grouped;
 });
+
+/**
+ * Function to trigger android/web sharing with the qr code as image
+ */
+const shareNow = async () => {
+    try {
+        const currentUrl = window.location.href;
+        
+        // Prepare the share text with dynamic values
+        const shareText = t('pages.activeRoom.shareNowContent', {
+            platform: room.value?.platform || '',
+            restaurant: room.value?.restaurant || '',
+            url: currentUrl,
+        });
+
+        // Convert existing QR code data URL to a Blob for sharing
+        let qrCodeBlob = null;
+        if (qrCodeUrl.value) {
+            const response = await fetch(qrCodeUrl.value);
+            qrCodeBlob = await response.blob();
+        }
+
+        const shareData = {
+            title: room.value?.title || t('pages.activeRoom.thisRoom'),
+            text: shareText
+        };
+
+        // Add file if QR code blob is available and Web Share API supports files
+        if (qrCodeBlob && navigator.canShare) {
+            const canShareWithFile = navigator.canShare({
+                ...shareData,
+                files: [
+                    new File([qrCodeBlob], 'qrcode.png', {
+                        type: 'image/png',
+                    }),
+                ],
+            });
+
+            if (canShareWithFile) {
+                shareData.files = [
+                    new File([qrCodeBlob], 'qrcode.png', {
+                        type: 'image/png',
+                    }),
+                ];
+            }
+        }
+
+        // Check if Web Share API is supported (mobile devices)
+        if (navigator.share) {
+            await navigator.share(shareData);
+            // silent on success, since it will show the native share dialog
+        } else {
+            // Fallback: Copy to clipboard (desktop browsers)
+            await navigator.clipboard.writeText(shareText);
+            toast.success(t('pages.activeRoom.toast.copySuccess'));
+        }
+
+        showShareModal.value = false;
+    } catch (err) {
+        // User cancelled sharing or error occurred
+        if (err.name !== 'AbortError') {
+            console.error('Error sharing:', err);
+
+            // Final fallback: try to copy to clipboard
+            try {
+                const currentUrl = window.location.href;
+                await navigator.clipboard.writeText(currentUrl);
+                toast.success(t('pages.activeRoom.toast.copySuccess'));
+                showShareModal.value = false;
+            } catch (clipboardErr) {
+                console.error('Error copying to clipboard:', clipboardErr);
+                toast.error(t('pages.activeRoom.errors.shareFailed'));
+            }
+        }
+    }
+};
 
 // Data loading functions
 const loadRoomDetails = async () => {

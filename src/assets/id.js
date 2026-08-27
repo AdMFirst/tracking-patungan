@@ -370,6 +370,8 @@ const id = {
             shareRoomTitle: 'Bagikan Room',
             shareRoomDescription:
                 'Pindai kode QR untuk membagikan room ini dengan orang lain.',
+            shareNowButton: 'Bagikan Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Bergabunglah dengan saya di {url} untuk menambahkan pesanan dan bagi tagihan secara transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anda harus masuk untuk bergabung dengan room ini',
@@ -402,6 +404,8 @@ const id = {
                 deleteConfirm: 'Hapus item pesanan ini?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal membagikan room. Silakan coba lagi.',
             },
         },
         histori: {

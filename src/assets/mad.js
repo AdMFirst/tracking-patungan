@@ -359,6 +359,8 @@ const mad = {
             shareRoomTitle: 'Bagiyaghi Kamar',
             shareRoomDescription:
                 'Pindai kode QR kaangguy mbagiyaghi kamar reya.',
+            shareNowButton: 'Bagiyaghi Kapan',
+            shareNowContent: "Kabeh! Aku pesen {platform} saka {restaurant}. Gabung kula ing {url} kanggo nambah pesen lan bagi tagihan kanthi transparan!",
             close: 'Totop',
             errors: {
                 loginToJoin: 'Sampeyan kedah masok kaangguy gabung kamar reya',
@@ -388,6 +390,8 @@ const mad = {
                 deleteConfirm: 'Hapus item pesenen reya?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin menyang papan klip!',
+                shareFailed: 'Gagal mbagikaken kamar. Coba pole.',
             },
         },
         histori: {

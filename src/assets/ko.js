@@ -342,6 +342,8 @@ const ko = {
             shareRoomTitle: '방 공유',
             shareRoomDescription:
                 'QR 코드를 스캔하여 이 방을 다른 사람과 공유하세요.',
+            shareNowButton: '지금 공유',
+            shareNowContent: "모두! {platform}에서 {restaurant}를 주문했어요. {url}에 참여해서 주문을 추가하고 투명하게 나누어 보세요!",
             close: '닫기',
             errors: {
                 loginToJoin: '이 방에 참여하려면 로그인해야 합니다',
@@ -370,6 +372,8 @@ const ko = {
                 deleteConfirm: '이 주문 항목을 삭제하시겠습니까?',
                 delete: '삭제',
                 cancel: '취소',
+                copySuccess: 'URL이 클립보드에 복사되었습니다!',
+                shareFailed: '방 공유에 실패했습니다. 다시 시도해주세요.',
             },
         },
         histori: {

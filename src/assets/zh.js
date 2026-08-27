@@ -356,6 +356,8 @@ const zh = {
             noOrderItems: '暂无订单项目。',
             shareRoomTitle: '分享房间',
             shareRoomDescription: '扫描二维码与他人分享此房间。',
+            shareNowButton: '立即分享',
+            shareNowContent: "大家！我正在从 {platform} 订购 {restaurant}。加入 {url} 来添加您的订单，让我们透明地分摊账单！",
             close: '关闭',
             errors: {
                 loginToJoin: '您需要登录才能加入此房间',
@@ -383,6 +385,8 @@ const zh = {
                 deleteConfirm: '删除此订单项目？',
                 delete: '删除',
                 cancel: '取消',
+                copySuccess: 'URL已复制到剪贴板！',
+                shareFailed: '分享房间失败。请重试。',
             },
         },
         histori: {

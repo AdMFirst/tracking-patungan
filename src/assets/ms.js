@@ -369,6 +369,8 @@ const ms = {
             shareRoomTitle: 'Kongsi Bilik',
             shareRoomDescription:
                 'Imbas kod QR untuk berkongsi bilik ini dengan orang lain.',
+            shareNowButton: 'Kongsi Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Sertai saya di {url} untuk menambah pesanan dan bagi tagihan secara transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anda perlu log masuk untuk menyertai bilik ini',
@@ -402,6 +404,8 @@ const ms = {
                 deleteConfirm: 'Padam item pesanan ini?',
                 delete: 'Padam',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal mengongsi bilik. Sila cuba lagi.',
             },
         },
         histori: {
