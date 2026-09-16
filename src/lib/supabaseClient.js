@@ -33,6 +33,9 @@ export async function createRoom(roomData) {
 /**
  * Update a room
  *
+ * ps no need to update order time, will be updated server side by "trg_finalize_room" that
+ * will run finalize room function to verify data is correct and auto update order_time if null
+ * 
  * @param {string} roomID - The ID of the room to update
  * @param {Object} updates - Room data to update
  * @returns {Promise<Object>} Updated room object
@@ -371,7 +374,7 @@ export async function setParticipantAsPaid(roomID, paymentMethodID, userID) {
 export async function fetchRoomOrderItems(roomID) {
     const { data: participants, error: participantsError } = await supabase
         .from('room_participants')
-        .select('id, user_id')
+        .select('id, user_id, guest_name')
         .eq('room_id', roomID);
 
     if (participantsError) throw participantsError;
@@ -392,6 +395,7 @@ export async function fetchRoomOrderItems(roomID) {
     const mappedItems = items.map((item) => ({
         ...item,
         user_id: item.room_participants?.user_id || item.user_id,
+        guest_name: item.room_participants?.guest_name,
     }));
 
     return { items: mappedItems, participants };
@@ -745,6 +749,20 @@ export function subscribeToRoomUpdates(roomID, callbacks = {}) {
             (payload) => {
                 if (callbacks.onOrderItemsChange) {
                     callbacks.onOrderItemsChange(payload);
+                }
+            }
+        )
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'rooms',
+                filter: `id=eq.${roomID}`,
+            },
+            (payload) => {
+                if (callbacks.onRoomChange) {
+                    callbacks.onRoomChange(payload);
                 }
             }
         )

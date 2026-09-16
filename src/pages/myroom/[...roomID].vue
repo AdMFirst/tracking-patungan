@@ -258,6 +258,9 @@
                                         <div class="flex-1 min-w-0">
                                             <h4 class="font-medium truncate">
                                                 {{
+                                                    participant.display_name ||
+                                                    participant.guest_name ||
+                                                    participant.guest_email ||
                                                     participant.user_profile
                                                         ?.display_name ||
                                                     $t(

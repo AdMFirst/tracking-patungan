@@ -325,8 +325,8 @@ const handleClearFilters = (clearedState) => {
     showFilters.value = false;
 };
 
-function openRoom({ id, final_total }) {
-    const next = final_total ? `/myroom/${id}` : `/active-room/${id}`;
+function openRoom({ id, status }) {
+    const next = status === 'closed' ? `/myroom/${id}` : `/active-room/${id}`;
     router.push(next);
 }
 
@@ -345,6 +345,8 @@ const handleCloseRoomSubmit = async ({ roomId, finalTotal }) => {
             roomID: roomId,
             updates: {
                 final_total: finalTotal,
+                status: 'closed',
+                // order_time: null, // will be updated by supabase trigger
             },
         });
 

@@ -639,8 +639,8 @@ const loadRoomDetails = async () => {
             return false;
         }
 
-        // Check if the room is active (no final_total yet)
-        if (data.final_total) {
+        // Check if the room is active (status must be 'open')
+        if (data.status !== 'open') {
             console.error('Room is not active:', roomID);
             error.value = t('pages.activeRoom.errors.roomClosed');
             room.value = null;
@@ -769,6 +769,32 @@ const setupRealtimeSubscription = () => {
         onChannelError: (err) => {
             console.error('Realtime channel error:', err);
             // Don't force reload on channel errors, just log and let it reconnect
+        },
+        onRoomChange: (payload) => {
+            if (payload.eventType === 'UPDATE' && payload.new) {
+                const newStatus = payload.new.status;
+                if (newStatus === 'closed') {
+                    console.debug(
+                        '[Realtime] Room closed, redirecting:',
+                        roomID
+                    );
+                    // Clean up realtime subscription
+                    if (realtimeChannel.value) {
+                        supabase.removeChannel(realtimeChannel.value);
+                        realtimeChannel.value = null;
+                    }
+                    // Redirect based on whether user is the runner
+                    if (
+                        currentUser.value &&
+                        room.value &&
+                        room.value.runner_id === currentUser.value.id
+                    ) {
+                        router.push('/myroom');
+                    } else {
+                        router.push('/histori');
+                    }
+                }
+            }
         },
         onStatusChange: (status) => {
             console.debug('[Realtime status]', status);

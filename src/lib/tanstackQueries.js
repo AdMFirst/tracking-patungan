@@ -154,6 +154,9 @@ export function useCreateRoomMutation() {
 
 /**
  * Mutation for updating a room
+ * 
+ * ps no need to update order time, will be updated server side by "trg_finalize_room" that
+ * will run finalize room function to verify data is correct and auto update order time if null
  */
 export function useUpdateRoomMutation() {
     return {
