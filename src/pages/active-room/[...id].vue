@@ -99,6 +99,15 @@
             <PageHeader :title="room.title">
                 <template #actions>
                     <Button
+                        v-if="isRunner"
+                        variant="outline"
+                        size="icon"
+                        @click="handleAddParticipantClick"
+                        class="mr-2"
+                    >
+                        <UserPlus class="h-4 w-4 " />
+                    </Button>
+                    <Button
                         variant="outline"
                         size="icon"
                         @click="handleShareClick"
@@ -123,31 +132,42 @@
                     {{ t('pages.activeRoom.cartTitle') }}
                 </h2>
                 <div
-                    v-if="Object.keys(groupedOrderItems).length > 0"
+                    v-if="participantViewModels.length > 0"
                     class="space-y-6"
                 >
                     <div
-                        v-for="(userGroup, participantId) in groupedOrderItems"
-                        :key="participantId"
+                        v-for="participant in participantViewModels"
+                        :key="participant.id"
                         class="border rounded-lg p-4"
                     >
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img
-                                v-if="userCache[userGroup[0]?.user_id]?.picture"
-                                :src="userCache[userGroup[0]?.user_id]?.picture"
-                                alt="User Avatar"
-                                class="w-10 h-10 rounded-full"
-                            />
-                            <h3 class="font-semibold">
-                                {{
-                                    userCache[userGroup[0]?.user_id]
-                                        ?.display_name ||
-                                    t('pages.activeRoom.unknownUser')
-                                }}
-                            </h3>
+                        <div class="flex items-center justify-between space-x-3 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <img
+                                    v-if="participant.picture"
+                                    :src="participant.picture"
+                                    alt="User Avatar"
+                                    class="w-10 h-10 rounded-full"
+                                />
+                                <h3 class="font-semibold">
+                                    {{ participant.displayName }}
+                                </h3>
+                            </div>
+                            <!-- button for runner to add items to all participants, disabled for self -->
+                            <Button
+                                v-if="isRunner"
+                                :disabled="participant.isCurrentUser"
+                                variant="secondary"
+                                size="sm"
+                                @click="showAddItemModal = true"
+                            >
+                                <Plus class="h-4 w-4" />
+                            </Button>
                         </div>
                         <div class="text-sm">
-                            <template v-for="item in userGroup" :key="item.id">
+                            <template
+                                v-for="item in participant.items"
+                                :key="item.id"
+                            >
                                 <div class="flex justify-between items-start">
                                     <div class="flex-1">
                                         <div
@@ -213,6 +233,12 @@
                                     </div>
                                 </div>
                             </template>
+                            <p
+                                v-if="participant.items.length === 0"
+                                class="text-muted-foreground"
+                            >
+                                {{ t('pages.activeRoom.noOrderItems') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -237,6 +263,13 @@
         :item="editingItem"
         @update:open="showEditItemModal = $event"
         @itemUpdated="handleUpdateOrderItem"
+    />
+
+    <AddGuestParticipantModal
+        :disabled="!isRunner"
+        :isOpen="showAddParticipantModal"
+        @update:open="showAddParticipantModal = $event"
+        @participantAdded="handleAddParticipantDialog"
     />
 
     <!-- Floating Action Button -->
@@ -275,7 +308,7 @@ import Separator from '@/components/ui/separator/Separator.vue';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
-import { Share2, Edit2, Trash2 } from 'lucide-vue-next';
+import { Share2, Edit2, Trash2, Plus, UserPlus } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/room/JoinRoomPrompt.vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import FloatingButton from '@/components/common/FloatingButton.vue';
@@ -283,6 +316,9 @@ import AddOrderItemModal from '@/components/modals/AddOrderItemModal.vue';
 import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
 import ShareModal from '@/components/modals/ShareModal.vue';
 import { toast } from 'vue-sonner';
+import AddGuestParticipantModal from '@/components/modals/addGuestParticipantModal.vue';
+import { useAddGuestParticipantMutation } from '@/lib/tanstackQueries';
+import { useMutation } from '@tanstack/vue-query';
 
 // State management
 const route = useRoute();
@@ -291,25 +327,93 @@ const { t } = useI18n();
 const roomID = Array.isArray(route.params.id)
     ? route.params.id[0]
     : route.params.id;
+
+// Raw state (single source of truth)
 const room = ref(null);
-const orderItems = ref([]);
+const participants = ref([]);       // participant rows: { id, user_id, guest_name, guest_email, ... }
+const userProfiles = ref({});       // keyed by user_id -> profile object
+const orderItems = ref([]);         // order item rows
+
+// UI / auth state
 const loading = ref(true);
 const error = ref(null);
-const userCache = ref({});
 const isParticipant = ref(false);
-const isRunner = ref(false);
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
 const showAddItemModal = ref(false);
 const showShareModal = ref(false);
 const showEditItemModal = ref(false);
+const showAddParticipantModal = ref(false);
 const editingItem = ref(null);
-const participantIds = ref([]);
-let isFetchingData = false // flag to prevent edge case race condition in loading subscription
+let isFetchingData = false; // flag to prevent edge case race condition in loading subscription
 
 // UUID validation regex
 const uuidRegex =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Runner is derived from room + currentUser, no need to store it separately
+const isRunner = computed(() =>
+    Boolean(
+        currentUser.value &&
+            room.value &&
+            room.value.runner_id === currentUser.value.id
+    )
+);
+
+// A set of participant ids for the realtime order-items filter
+const participantIds = computed(
+    () => new Set(participants.value.map((p) => p.id))
+);
+
+// Group order items by participant_id once
+const orderItemsByParticipant = computed(() => {
+    const map = Object.create(null);
+    for (const item of orderItems.value) {
+        if (!map[item.participant_id]) map[item.participant_id] = [];
+        map[item.participant_id].push(item);
+    }
+    return map;
+});
+
+// Single derived view-model that joins participant + user profile + items
+const participantViewModels = computed(() => {
+    const itemsByParticipant = orderItemsByParticipant.value;
+
+    return participants.value.map((participant) => {
+        const profile = participant.user_id
+            ? userProfiles.value[participant.user_id]
+            : null;
+
+        const displayName =
+            profile?.display_name ||
+            profile?.name ||
+            profile?.full_name ||
+            profile?.email ||
+            participant.guest_name ||
+            participant.guest_email ||
+            t('pages.activeRoom.guest');
+
+        const picture =
+            profile?.picture ||
+            profile?.avatar_url ||
+            profile?.picture_url ||
+            profile?.avatar ||
+            null;
+
+        const isGuest = !participant.user_id;
+
+        return {
+            id: participant.id,
+            user_id: participant.user_id,
+            guest_name: participant.guest_name,
+            guest_email: participant.guest_email,
+            displayName: (isGuest ? "["+t('pages.activeRoom.guest')+"] " : "") + displayName,
+            picture,
+            isCurrentUser: participant.user_id === currentUser.value?.id,
+            items: itemsByParticipant[participant.id] || [],
+        };
+    });
+});
 
 const goBack = () => {
     router.push('/');
@@ -318,6 +422,10 @@ const goBack = () => {
 // Share functionality
 const handleShareClick = () => {
     showShareModal.value = true;
+};
+
+const handleAddParticipantClick = () => {
+    if (isRunner.value) showAddParticipantModal.value = true;
 };
 
 // Join room handlers
@@ -371,7 +479,8 @@ const handleAddOrderItem = async (itemData) => {
         console.debug('Order item added successfully:', data);
     } catch (err) {
         console.error('Error adding order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.addFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.addFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
@@ -380,20 +489,14 @@ const handleAddOrderItem = async (itemData) => {
 // Check if current user can edit an item (either owner or runner)
 const canEditItem = (item) => {
     if (!currentUser.value) return false;
-
-    // Check if user is the owner of this item
     const isOwner = item.user_id === currentUser.value.id;
-
-    // Check if user is the runner
-    const isRunnerUser = isRunner.value;
-
-    return isOwner || isRunnerUser;
+    return isOwner || isRunner.value;
 };
 
 // Edit order item handler
 const handleEditOrderItem = (item) => {
     if (!canEditItem(item)) {
-        error.value = t('pages.activeRoom.errors.editOwnItems');
+        toast.error(t('pages.activeRoom.errors.editOwnItems'));
         return;
     }
     editingItem.value = { ...item };
@@ -432,7 +535,8 @@ const handleUpdateOrderItem = async (updatedData) => {
         editingItem.value = null;
     } catch (err) {
         console.error('Error updating order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.updateFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.updateFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
@@ -451,7 +555,7 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
         const isRunnerUser = isRunner.value;
 
         if (!isOwner && !isRunnerUser) {
-            error.value = t('pages.activeRoom.errors.deleteOwnItems');
+            toast.error(t('pages.activeRoom.errors.deleteOwnItems'));
             return;
         }
 
@@ -480,23 +584,39 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
         await loadOrderItems();
     } catch (err) {
         console.error('Error deleting order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.deleteFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.deleteFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
 };
 
-// Data processing
-const groupedOrderItems = computed(() => {
-    const grouped = {};
-    orderItems.value.forEach((item) => {
-        if (!grouped[item.participant_id]) {
-            grouped[item.participant_id] = [];
-        }
-        grouped[item.participant_id].push(item);
-    });
-    return grouped;
-});
+const addGuestParticipantMutation = useMutation(useAddGuestParticipantMutation);
+
+const handleAddParticipantDialog = async (guestNameEmail) => {
+    try {
+        // Input is either a plain name like "john doe" or an email like "john@example.com"
+        const isEmail = guestNameEmail.includes('@');
+        const guestName = isEmail ? '' : guestNameEmail;
+        const guestEmail = isEmail ? guestNameEmail : '';
+
+        await addGuestParticipantMutation.mutateAsync({
+            roomID,
+            guestName,
+            guestEmail,
+        });
+
+        // Refresh data after adding participant
+        await loadRoomData();
+        showAddParticipantModal.value = false;
+        toast.success(t('pages.activeRoom.toast.participantAdded'));
+    } catch (err) {
+        console.error('Error adding participant:', err);
+        const errMessage =
+            err.message || t('pages.activeRoom.errors.addParticipantFailed');
+        toast.error(errMessage);
+    }
+};
 
 // Data loading functions
 const loadRoomDetails = async () => {
@@ -539,34 +659,36 @@ const loadRoomDetails = async () => {
 
 const loadOrderItems = async () => {
     try {
-        const { items, participants } = await fetchRoomOrderItems(roomID);
+        const { items, participants: parts } = await fetchRoomOrderItems(roomID);
 
-        // Get participant IDs and update reactive state
-        participantIds.value = participants.map((p) => p.id);
-
-        // Build user cache from participants
-        participants.forEach((p) => {
-            if (!userCache.value[p.user_id]) {
-                userCache.value[p.user_id] = { id: p.user_id };
-            }
-        });
-
+        participants.value = parts;
         orderItems.value = items;
+
+        // Only fetch profiles for real users (guests have user_id = null)
+        const missingUserIds = parts
+            .map((p) => p.user_id)
+            .filter((id) => id && !userProfiles.value[id]);
+
+        if (missingUserIds.length > 0) {
+            await loadUserProfiles(missingUserIds);
+        }
     } catch (err) {
         console.error('Error fetching order items:', err);
         error.value = t('pages.activeRoom.errors.loadItemsFailed');
         orderItems.value = [];
+        participants.value = [];
     }
 };
 
 const loadUserProfiles = async (userIds) => {
-    if (!userIds || userIds.length === 0) return;
+    const uniqueIds = [...new Set((userIds || []).filter(Boolean))];
+    if (uniqueIds.length === 0) return;
 
     try {
-        const data = await fetchUserProfiles(userIds);
-        data.forEach((user) => {
-            userCache.value[user.id] = user;
-        });
+        const data = await fetchUserProfiles(uniqueIds);
+        for (const user of data) {
+            userProfiles.value[user.id] = user;
+        }
     } catch (err) {
         console.error('Error fetching user profiles:', err);
     }
@@ -593,24 +715,6 @@ const checkParticipation = async () => {
     }
 };
 
-const checkRunnerStatus = async () => {
-    if (!currentUser.value || !room.value) {
-        isRunner.value = false;
-        return false;
-    }
-
-    try {
-        // Check if current user is the runner of this room
-        const runner = room.value.runner_id === currentUser.value.id;
-        isRunner.value = runner;
-        return runner;
-    } catch (err) {
-        console.error('Error checking runner status:', err);
-        isRunner.value = false;
-        return false;
-    }
-};
-
 const setupRealtimeSubscription = () => {
     if (!currentUser.value) return null;
 
@@ -623,17 +727,8 @@ const setupRealtimeSubscription = () => {
     return subscribeToRoomUpdates(roomID, {
         onParticipantsChange: async (payload) => {
             console.debug('[Realtime] room_participants', payload);
-            // If a new user joined, fetch their profile
-            if (payload.eventType === 'INSERT' && payload.new) {
-                const newUserId = payload.new.user_id;
-                if (newUserId && !userCache.value[newUserId]) {
-                    console.debug(
-                        'New user joined, fetching profile:',
-                        newUserId
-                    );
-                    await loadUserProfiles([newUserId]);
-                }
-            }
+            // loadOrderItems() also fetches missing profiles for new users,
+            // so this covers both new user joins and guest participants.
             await loadOrderItems();
         },
         onOrderItemsChange: async (payload) => {
@@ -641,7 +736,7 @@ const setupRealtimeSubscription = () => {
             if (
                 payload.eventType === 'DELETE' ||
                 (payload.new &&
-                    participantIds.value.includes(payload.new.participant_id))
+                    participantIds.value.has(payload.new.participant_id))
             ) {
                 await loadOrderItems();
             }
@@ -697,7 +792,6 @@ const setupRealtimeSubscription = () => {
 
 // Optimized data loading function
 const loadRoomData = async () => {
-
     // prevent race condition
     if (isFetchingData) return;
     isFetchingData = true;
@@ -716,18 +810,9 @@ const loadRoomData = async () => {
             return;
         }
 
-        // Check if current user is the runner
-        await checkRunnerStatus();
-
-        // Load order data
+        // Load order data (this also loads user profiles for real users)
         await loadOrderItems();
 
-        // Load user profiles for all participants
-        const userIds = Object.keys(userCache.value);
-        if (userIds.length > 0) {
-            await loadUserProfiles(userIds);
-        }
-        
         realtimeChannel.value = setupRealtimeSubscription();
     } catch (err) {
         console.error('Error loading room data:', err);

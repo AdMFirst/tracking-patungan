@@ -20,6 +20,7 @@ import {
     addPaymentMethod,
     updatePaymentMethod,
     deletePaymentMethod,
+    addGuestParticipant,
 } from './supabaseClient';
 
 // Create and export QueryClient instance
@@ -216,6 +217,24 @@ export function useSetParticipantAsPaidMutation() {
             });
             queryClient.invalidateQueries({
                 queryKey: ['roomWithParticipants', variables.roomID],
+            });
+        },
+    };
+}
+
+/**
+ * Mutation for adding a guest participant
+ */
+export function useAddGuestParticipantMutation() {
+    return {
+        mutationFn: ({ roomID, guestName, guestEmail }) =>
+            addGuestParticipant(roomID, guestName, guestEmail),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ['roomWithParticipants', variables.roomID],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ['roomOrderItems', variables.roomID],
             });
         },
     };

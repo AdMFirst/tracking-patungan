@@ -318,6 +318,30 @@ export async function joinRoom(roomID, userID) {
 }
 
 /**
+ * Handle adding guest participant to a room
+ *
+ * @param {string} roomID - The ID of the room
+ * @param {string} guestName - The name of the guest
+ * @param {string} guestEmail - The email of the guest
+ * @returns {Promise<Object>} added participant's participant_id
+ */
+export async function addGuestParticipant(roomID, guestName, guestEmail) {
+    const { data, error } = await supabase
+        .rpc('add_room_participant', {
+            p_room_id: roomID,
+            p_email: guestEmail,
+            p_guest_name: guestName,    
+        });
+    
+    if (error) {
+        console.error('Error in addGuestParticipant:', error);
+        throw error;
+    }
+
+    return data;
+}
+
+/**
  * Handle payment confirmation for a room participant
  *
  * @param {string} roomID - The ID of the room
@@ -374,7 +398,7 @@ export async function setParticipantAsPaid(roomID, paymentMethodID, userID) {
 export async function fetchRoomOrderItems(roomID) {
     const { data: participants, error: participantsError } = await supabase
         .from('room_participants')
-        .select('id, user_id, guest_name')
+        .select('id, user_id, guest_name, guest_email')
         .eq('room_id', roomID);
 
     if (participantsError) throw participantsError;

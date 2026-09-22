@@ -137,8 +137,8 @@ const en = {
         },
         modals: {
             AddOrderItemModal: {
-                title: 'Add New Order Item',
-                description: 'Add a new item to your order for this room.',
+                title: 'Add to Cart',
+                description: 'Add a new item to my cart.',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -146,7 +146,7 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Any special instructions',
+                notesPlaceholder: 'Special instructions for my items',
                 cancelButton: 'Cancel',
                 addItemButton: 'Add Item',
             },
@@ -168,8 +168,8 @@ const en = {
                 }
             },
             EditOrderItemModal: {
-                title: 'Edit Order Item',
-                description: 'Edit this order item.',
+                title: 'Edit Cart Item',
+                description: 'Edit this cart item.',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -177,9 +177,17 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Any special instructions',
+                notesPlaceholder: 'Special instructions for my items',
                 cancelButton: 'Cancel',
                 updateItemButton: 'Update Item',
+            },
+            AddGuestParticipantModal: {
+                title: 'Add Participant',
+                description: 'Participants can be added manually regardless of registration status. They will be treated as guests and must be managed manually. Guest users are automatically bound if they register with the email. Use a guest name to avoid this.',
+                guestNameEmailLabel: 'Participant Name or Email',
+                guestNameEmailPlaceholder: "Alphonso Eric or alphonso.E\\@example.com",
+                cancelButton: 'Cancel',
+                addItemButton: 'Add Participant',
             },
             FilterModal: {
                 title: 'Filters',
@@ -367,6 +375,7 @@ const en = {
             shareNowButton: 'Share Now',
             shareNowContent: "Everyone! I'm ordering {platform} from {restaurant}. Join me at {url} to add your order and let's split the bill transparently!",
             close: 'Close',
+            guest: "GUEST",
             errors: {
                 loginToJoin: 'You need to be logged in to join this room',
                 joinFailed: 'Failed to join room. Please try again.',
@@ -391,6 +400,7 @@ const en = {
                     'Failed to check your participation status.',
                 loadDataFailed: 'Failed to load room data.',
                 generateQrFailed: 'Failed to generate QR code.',
+                addParticipantFailed: 'Failed to add guest participant.',
             },
             toast: {
                 deleteConfirm: 'Delete this order item?',

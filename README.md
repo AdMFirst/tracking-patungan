@@ -56,6 +56,7 @@ This is a **fully functional Vue.js frontend** with Supabase backend integration
 - **Vue Router** for navigation
 - **Tailwind CSS** for styling
 - **Lucide Vue Next** for icons
+- **Shadcn-Vue** for reusable components
 - **Vue Sonner** for toast notifications
 - **HTML5-QRCode** for QR scanning
 - **QR Code** library for generation
