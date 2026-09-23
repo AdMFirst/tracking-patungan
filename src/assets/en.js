@@ -410,6 +410,7 @@ const en = {
                 cancel: 'Cancel',
                 copySuccess: 'URL copied to clipboard!',
                 shareFailed: 'Failed to share room. Please try again.',
+                participantAdded: 'Participant added successfully!',
             },
         },
         histori: {
