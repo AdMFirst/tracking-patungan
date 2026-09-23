@@ -260,6 +260,14 @@
     <!-- Edit Order Item Modal -->
     <EditOrderItemModal
         :isOpen="Boolean(showEditItemModal)"
+        :participantName="
+            // If the item belongs to a guest, show their name; if it belongs to a real user, show their display name; if it's the current user, show null
+            (() => {
+                const participant = participantViewModels.find(
+                    (p) => p.items.some((i) => i.id === showEditItemModal?.id)
+                );
+                return participant?.isCurrentUser ? null : participant?.displayName;
+            })()"
         :item="showEditItemModal"
         @update:open="showEditItemModal = $event"
         @itemUpdated="handleUpdateOrderItem"
@@ -316,7 +324,7 @@ import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
 import ShareModal from '@/components/modals/ShareModal.vue';
 import { toast } from 'vue-sonner';
 import AddGuestParticipantModal from '@/components/modals/addGuestParticipantModal.vue';
-import { useAddGuestParticipantMutation, useAddOrderItemMutation } from '@/lib/tanstackQueries';
+import { useAddGuestParticipantMutation, useAddOrderItemMutation, useUpdateOrderItemMutation } from '@/lib/tanstackQueries';
 import { useMutation } from '@tanstack/vue-query';
 
 // State management
@@ -523,9 +531,10 @@ const handleEditOrderItem = (item) => {
         toast.error(t('pages.activeRoom.errors.editOwnItems'));
         return;
     }
-    editingItem.value = { ...item };
-    showEditItemModal.value = true;
+    showEditItemModal.value = item;
 };
+
+const editOrderItemMutation = useMutation(useUpdateOrderItemMutation())
 
 // Update order item handler
 const handleUpdateOrderItem = async (updatedData) => {
@@ -538,25 +547,17 @@ const handleUpdateOrderItem = async (updatedData) => {
         loading.value = true;
         error.value = null;
 
-        const updates = {
-            item_name: updatedData.itemName,
+        await editOrderItemMutation.mutateAsync({
+            itemID: showEditItemModal.value.id,
+            roomID: roomID,                       // scopes the cache invalidation
+            itemName: updatedData.itemName,
             quantity: updatedData.quantity,
-            unit_price: updatedData.unitPrice,
-            notes: updatedData.notes || null,
-        };
-
-        await updateOrderItem(
-            editingItem.value.id,
-            updates,
-            currentUser.value.id
-        );
-
-        // Refresh the order items list
-        await loadOrderItems();
+            unitPrice: updatedData.unitPrice,
+            notes: updatedData.notes ?? null,
+        })
 
         // Close the modal
-        showEditItemModal.value = false;
-        editingItem.value = null;
+        showEditItemModal.value = null;
     } catch (err) {
         console.error('Error updating order item:', err);
         const errMsg = err.message || t('pages.activeRoom.errors.updateFailed');

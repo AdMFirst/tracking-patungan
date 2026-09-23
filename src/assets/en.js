@@ -169,8 +169,9 @@ const en = {
                 }
             },
             EditOrderItemModal: {
-                title: 'Edit Cart Item',
-                description: 'Edit this cart item.',
+                title: 'Edit My Cart',
+                runnerTitle: 'Edit {name}\'s Cart',
+                description: 'Modify item name, quantity, unit price and any special notes for this order item',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -178,7 +179,7 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Special instructions for my items',
+                notesPlaceholder: 'Special instructions for the items',
                 cancelButton: 'Cancel',
                 updateItemButton: 'Update Item',
             },
