@@ -444,6 +444,8 @@ const id = {
                 selectLanguage: 'Pilih Bahasa',
                 save: 'Simpan',
                 cancel: 'Batal',
+                darkMode: 'Mode Gelap',
+                lightMode: 'Mode Terang',
                 signingOut: 'Keluar...',
                 signOut: 'Keluar',
             },

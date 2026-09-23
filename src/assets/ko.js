@@ -410,6 +410,8 @@ const ko = {
                 selectLanguage: '언어 선택',
                 save: '저장',
                 cancel: '취소',
+                darkMode: '다크 모드',
+                lightMode: '라이트 모드',
                 signingOut: '로그아웃 중...',
                 signOut: '로그아웃',
             },

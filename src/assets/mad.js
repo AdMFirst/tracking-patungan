@@ -429,6 +429,8 @@ const mad = {
                 selectLanguage: 'Pile Basa',
                 save: 'Simpen',
                 cancel: 'Batal',
+                darkMode: 'Mode Gelap',
+                lightMode: 'Mode Terang',
                 signingOut: 'Kaluar...',
                 signOut: 'Kaluar',
             },

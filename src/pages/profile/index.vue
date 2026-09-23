@@ -69,6 +69,12 @@
                 {{ $t('pages.profile.index.changeLanguage') }}
             </Button>
 
+            <Button @click="toggleTheme" class="w-full mb-4">
+                <Moon v-if="isDark" class="mr-2 h-4 w-4" />
+                <Sun v-if="!isDark" class="mr-2 h-4 w-4" />
+                {{ isDark ? $t('pages.profile.index.lightMode') : $t('pages.profile.index.darkMode') }}
+            </Button>
+
             <Separator />
 
             <Button @click="openSettingsModal" class="w-full mb-4">
@@ -147,7 +153,7 @@ import { signOut } from '@/lib/auth';
 import { updateUser } from '@/lib/auth';
 
 // Import icons from lucide-vue-next
-import { User, CreditCard, Languages, LogOut, Loader2, Lock, Mail } from 'lucide-vue-next';
+import { User, CreditCard, Languages, LogOut, Loader2, Lock, Mail, Sun, Moon } from 'lucide-vue-next';
 import { toast } from 'vue-sonner';
 
 const { t } = useI18n();
@@ -160,6 +166,7 @@ const isSettingsModalOpen = ref(false);
 const isLanguageModalOpen = ref(false);
 const isUpdateEmailModalOpen = ref(false);
 const isUpdatePasswordModalOpen = ref(false);
+const isDark = ref(false);
 
 // User data for the settings modal
 const userData = computed(() => ({
@@ -197,6 +204,17 @@ const openLanguageModal = () => {
     isLanguageModalOpen.value = true;
 };
 
+const toggleTheme = () => {
+    isDark.value = !isDark.value;
+    if (isDark.value) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+};
+
 const handleSaveSettings = async (updatedUser) => {
     try {
         await updateUser({ full_name: updatedUser.username });
@@ -232,6 +250,11 @@ const checkHash = () => {
 
 onMounted(() => {
     checkHash();
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        isDark.value = true;
+        document.documentElement.classList.add('dark');
+    }
 });
 
 watch(() => route.hash, checkHash);

@@ -423,6 +423,8 @@ const zh = {
                 selectLanguage: '选择语言',
                 save: '保存',
                 cancel: '取消',
+                darkMode: '深色模式',
+                lightMode: '浅色模式',
                 signingOut: '正在退出...',
                 signOut: '退出',
             },
