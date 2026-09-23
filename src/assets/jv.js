@@ -436,6 +436,8 @@ const jv = {
                 selectLanguage: 'Pilih Basa',
                 save: 'Simpen',
                 cancel: 'Batal',
+                darkMode: 'Mode Gelap',
+                lightMode: 'Mode Terang',
                 signingOut: 'Metu...',
                 signOut: 'Metu',
             },

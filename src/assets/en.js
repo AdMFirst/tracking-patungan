@@ -449,6 +449,8 @@ const en = {
                 selectLanguage: 'Select Language',
                 save: 'Save',
                 cancel: 'Cancel',
+                darkMode: 'Dark Mode',
+                lightMode: 'Light Mode',
                 signingOut: 'Signing out...',
                 signOut: 'Sign Out',
             },

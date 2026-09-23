@@ -438,6 +438,8 @@ const ja = {
                 selectLanguage: '言語を選択',
                 save: '保存',
                 cancel: 'キャンセル',
+                darkMode: 'ダークモード',
+                lightMode: 'ライトモード',
                 signingOut: 'サインアウト中...',
                 signOut: 'サインアウト',
             },

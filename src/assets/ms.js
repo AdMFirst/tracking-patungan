@@ -444,6 +444,8 @@ const ms = {
                 selectLanguage: 'Pilih Bahasa',
                 save: 'Simpan',
                 cancel: 'Batal',
+                darkMode: 'Mode Gelap',
+                lightMode: 'Mode Terang',
                 signingOut: 'Log keluar...',
                 signOut: 'Log Keluar',
             },

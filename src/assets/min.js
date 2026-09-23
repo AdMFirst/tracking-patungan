@@ -429,6 +429,8 @@ const min = {
                 selectLanguage: 'Pilih Basa',
                 save: 'Simpan',
                 cancel: 'Batal',
+                darkMode: 'Mode Gelap',
+                lightMode: 'Mode Terang',
                 signingOut: 'Kaluar...',
                 signOut: 'Kaluar',
             },

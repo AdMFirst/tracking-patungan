@@ -428,6 +428,8 @@ const ar = {
                 selectLanguage: 'اختر اللغة',
                 save: 'حفظ',
                 cancel: 'إلغاء',
+                darkMode: 'الوضع الداكن',
+                lightMode: 'الوضع الفاتح',
                 signingOut: 'جاري تسجيل الخروج...',
                 signOut: 'تسجيل الخروج',
             },

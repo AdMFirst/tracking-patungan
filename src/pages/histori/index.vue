@@ -8,35 +8,17 @@
                     </h1>
                 </div>
 
-                <!-- Tab Navigation -->
-                <div class="flex mb-4 bg-muted rounded-lg p-1">
-                    <button
-                        @click="activeTab = 'active'"
-                        :class="[
-                            'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors',
-                            activeTab === 'active'
-                                ? 'bg-white text-black shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground',
-                        ]"
-                    >
-                        {{ t('pages.histori.tabs.active') }} ({{
-                            activeRooms.length
-                        }})
-                    </button>
-                    <button
-                        @click="activeTab = 'closed'"
-                        :class="[
-                            'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors',
-                            activeTab === 'closed'
-                                ? 'bg-white text-black shadow-sm'
-                                : 'text-muted-foreground hover:text-foreground',
-                        ]"
-                    >
-                        {{ t('pages.histori.tabs.closed') }} ({{
-                            closedRooms.length
-                        }})
-                    </button>
-                </div>
+                <!-- Tab Navigation (shadcn) -->
+                <Tabs v-model="activeTab" class="mb-4">
+                    <TabsList class="grid w-full h-full gap-2 grid-cols-2 p-2">
+                        <TabsTrigger value="active" class="py-3 px-4">
+                            {{ t('pages.histori.tabs.active') }} ({{ activeRooms.length }})
+                        </TabsTrigger>
+                        <TabsTrigger value="closed" class="py-3 px-4">
+                            {{ t('pages.histori.tabs.closed') }} ({{ closedRooms.length }})
+                        </TabsTrigger>
+                    </TabsList>
+                </Tabs>
 
                 <div v-if="isRoomsLoading" class="text-center space-y-4">
                     <OrderRoomSkeleton v-for="i in [1, 2, 3, 4, 5]" :key="i" />
@@ -89,9 +71,11 @@ import { useI18n } from 'vue-i18n';
 import { toast } from 'vue-sonner';
 import { formatCurrency } from '@/lib/utils';
 
-
 // ICON IMPORTS
 import { Home } from 'lucide-vue-next';
+
+// shadcn UI
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Queries & Custom Components
 import { useJoinedRoomsQuery, useSetParticipantAsPaidMutation } from '../../lib/tanstackQueries';
@@ -197,19 +181,17 @@ function closePaymentModal() {
 
 async function handlePaymentConfirmed(paymentData) {
     try {
-        // make sure user is logged in
-        var _user = user.value
+        var _user = user.value;
         if (!_user) {
             throw new Error('User not authenticated');
         }
 
-        console.debug(paymentData, _user.id)
+        console.debug(paymentData, _user.id);
 
-        // Use the TanStack Query mutation
         await setParticipantAsPaidMutation.mutateAsync({
             roomID: paymentData.roomId,
             paymentMethodID: paymentData.paymentMethodId,
-            userID: _user.id
+            userID: _user.id,
         });
 
         console.debug('Payment confirmed:', paymentData);
