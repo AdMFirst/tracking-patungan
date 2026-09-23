@@ -14,18 +14,22 @@ This is a **fully functional Vue.js frontend** with Supabase backend integration
 - **View your rooms** (created and joined) with filtering options
 - **Close rooms** to finalize orders and calculate totals
 - **Delete rooms** (owner only)
+- **Room status tracking** — open, locked, closed states
 
 #### 2. **Order Item Management**
 - **Add items** to active rooms (name, quantity, price, notes)
 - **Edit items** (owner or runner can modify)
 - **Delete items** (owner or runner can remove)
 - **View grouped items** by participant with automatic totals
+- **Runner adds items on behalf of guests** (non-registered users)
 
 #### 3. **Participant System**
 - **Join rooms** without creating full accounts
+- **Guest participants** — runner can invite non-registered users by name or email
 - **Real-time participant updates** via Supabase
 - **User profiles** with avatars and display names
-- **Visual indicators** for who's participating
+- **Visual indicators** for who's participating (guest-labeled)
+- **Guest to user promotion** — guest rows auto-claimed when the person signs up
 
 #### 4. **Payment Tracking**
 - **Payment method management** (runner's payment details)
@@ -93,21 +97,30 @@ This is a **fully functional Vue.js frontend** with Supabase backend integration
 - `CloseRoomModal` - Close room with final total
 - `FilterModal` - Filter room lists
 - `SettingsModal` - Update username
+- `addGuestParticipantModal` - Add guest participants by name or email
 
 ## 🎯 User Flow
 
 ### For the Runner (Order Creator)
 1. Create a room with order details
 2. Share room code or QR code with friends
-3. Add their own items to the order
-4. Close the room when everyone is ready
-5. Record who has paid
+3. Invite guests (non-registered users) by name or email
+4. Add items for themselves and on behalf of guests
+5. Close the room when everyone is ready
+6. Record who has paid
 
 ### For Participants (Joiners)
 1. Join room via code or QR scan
 2. Add their meal items
 3. Mark payment as done (select runner's payment method)
 4. View their total and payment status
+
+### For Guests (Non-Registered Users)
+1. Added to a room by the runner (by name or email)
+2. Receive items added by the runner on their behalf
+3. Appear in the split math with their share of the bill
+4. No login required — passive cost bucket managed by the runner
+5. Auto-promoted to full user if they sign up with matching email
 
 ## 🔧 Database Schema
 
@@ -155,7 +168,6 @@ The app uses these main tables:
 - **Fast**: Minimal clicks to add items and track payments
 - **Clear**: Visual hierarchy showing who owes what
 - **Real-time**: Changes appear instantly for all participants
-- **No accounts needed**: Joiners can participate without full registration
 
 ## 📊 Current Status
 
@@ -164,6 +176,8 @@ The app uses these main tables:
 - Room creation and management
 - Order item CRUD operations
 - Participant joining system
+- Guest participant support
+- Guest user auto-promotion on signup
 - Payment method management
 - Real-time updates
 - QR code sharing/scanning
@@ -176,6 +190,8 @@ The app uses these main tables:
 - Export to CSV/Google Sheets
 - Receipt photo uploads
 - Advanced fee splitting strategies
+- Automated invoice email delivery
+- Guest payment confirmation link
 
 ## 🎯 Success Metrics (What We're Building Towards)
 
