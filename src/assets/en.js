@@ -137,8 +137,9 @@ const en = {
         },
         modals: {
             AddOrderItemModal: {
-                title: 'Add to Cart',
-                description: 'Add a new item to my cart.',
+                title: 'Add to My Cart',
+                runnerTitle: 'Add to {name}\'s Cart',
+                description: 'Enter the name, quantity, unit price and any special notes you want to for a new order items to be added to cart',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -146,7 +147,7 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Special instructions for my items',
+                notesPlaceholder: 'Special instructions for the items',
                 cancelButton: 'Cancel',
                 addItemButton: 'Add Item',
             },

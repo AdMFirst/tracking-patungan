@@ -426,40 +426,28 @@ export async function fetchRoomOrderItems(roomID) {
 }
 
 /**
- * Add a new order item
+ * Add a new order item.
+ *
+ * The participant must belong to the given room. If the caller is not the
+ * room runner, they may only add items for their own participant record.
  *
  * @param {string} roomID - The ID of the room
- * @param {string} userID - The ID of the user
- * @param {Object} itemData - The item data
- * @returns {Promise<Object>} The created order item
+ * @param {string} participantID - The ID of the participant the item belongs to
+ * @param {string} itemName - The name of the item
+ * @param {number} quantity - The quantity of the item
+ * @param {number} unitPrice - The unit price of the item
+ * @param {string} [notes] - Optional notes for the item
+ * @returns {Promise<string>} The ID of the created order item
  */
-export async function addOrderItem(roomID, userID, itemData) {
-    const { data: participantData, error: participantError } = await supabase
-        .from('room_participants')
-        .select('id')
-        .eq('room_id', roomID)
-        .eq('user_id', userID)
-        .maybeSingle();
-
-    if (participantError) throw participantError;
-
-    if (!participantData) {
-        throw new Error('Participant not found');
-    }
-
-    const { data, error } = await supabase
-        .from('order_items')
-        .insert([
-            {
-                participant_id: participantData.id,
-                item_name: itemData.itemName,
-                quantity: itemData.quantity,
-                unit_price: itemData.unitPrice,
-                notes: itemData.notes || null,
-            },
-        ])
-        .select()
-        .maybeSingle();
+export async function addOrderItem(roomID, participantID, itemName, quantity, unitPrice, notes) {
+    const { data, error } = await supabase.rpc('add_order_item', {
+        p_room_id: roomID,
+        p_participant_id: participantID,
+        p_item_name: itemName,
+        p_quantity: quantity,
+        p_unit_price: unitPrice,
+        p_notes: notes ?? null,
+    });
 
     if (error) throw error;
 
@@ -467,132 +455,45 @@ export async function addOrderItem(roomID, userID, itemData) {
 }
 
 /**
- * Update an order item (with authorization check)
+ * Update an order item.
+ *
+ * Authorization is enforced by the RPC: the caller must be the room runner
+ * or the owner of the item, and the room must be open.
  *
  * @param {string} itemID - The ID of the order item
- * @param {Object} updates - Order item data to update
- * @returns {Promise<Object>} Updated order item
+ * @param {string} itemName - The name of the item
+ * @param {number} quantity - The quantity of the item
+ * @param {number} unitPrice - The unit price of the item
+ * @param {string} [notes] - Optional notes for the item
+ * @returns {Promise<void>}
  */
-export async function updateOrderItem(itemID, updates) {
-    const {
-        data: { user },
-        error: authError,
-    } = await supabase.auth.getUser();
+export async function updateOrderItem(itemID, itemName, quantity, unitPrice, notes) {
+    const { error } = await supabase.rpc('update_order_item', {
+        p_item_id: itemID,
+        p_item_name: itemName,
+        p_quantity: quantity,
+        p_unit_price: unitPrice,
+        p_notes: notes ?? null,
+    });
 
-    if (authError || !user) {
-        throw new Error('Not authenticated');
-    }
-
-    const userID = user.id;
-
-    const { data: itemData, error: itemError } = await supabase
-        .from('order_items')
-        .select(
-            `
-            id,
-            room_participants (
-                room_id,
-                user_id
-            )
-        `
-        )
-        .eq('id', itemID)
-        .maybeSingle();
-
-    if (itemError || !itemData) {
-        throw new Error('Order item not found');
-    }
-
-    const { room_id, user_id: ownerID } = itemData.room_participants;
-
-    const { data: roomData, error: roomError } = await supabase
-        .from('rooms')
-        .select('runner_id')
-        .eq('id', room_id)
-        .maybeSingle();
-
-    if (roomError || !roomData) {
-        throw new Error('Room not found');
-    }
-
-    if (ownerID !== userID && roomData.runner_id !== userID) {
-        throw new Error('Unauthorized');
-    }
-
-    const { data, error } = await supabase
-        .from('order_items')
-        .update(updates)
-        .eq('id', itemID)
-        .select()
-        .maybeSingle();
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+    if (error) throw error;
 }
 
 /**
- * Delete an order item (with authorization check)
+ * Delete an order item.
+ *
+ * Authorization is enforced by the RPC: the caller must be the room runner
+ * or the owner of the item, and the room must be open.
  *
  * @param {string} itemID - The ID of the order item
  * @returns {Promise<void>}
  */
 export async function deleteOrderItem(itemID) {
-    const {
-        data: { user },
-        error: authError,
-    } = await supabase.auth.getUser();
+    const { error } = await supabase.rpc('delete_order_item', {
+        p_item_id: itemID,
+    });
 
-    if (authError || !user) {
-        throw new Error('Not authenticated');
-    }
-
-    const userID = user.id;
-
-    const { data: itemData, error: itemError } = await supabase
-        .from('order_items')
-        .select(
-            `
-            id,
-            room_participants (
-                room_id,
-                user_id
-            )
-        `
-        )
-        .eq('id', itemID)
-        .maybeSingle();
-
-    if (itemError || !itemData) {
-        throw new Error('Order item not found');
-    }
-
-    const { room_id, user_id: ownerID } = itemData.room_participants;
-
-    const { data: roomData, error: roomError } = await supabase
-        .from('rooms')
-        .select('runner_id')
-        .eq('id', room_id)
-        .maybeSingle();
-
-    if (roomError || !roomData) {
-        throw new Error('Room not found');
-    }
-
-    if (ownerID !== userID && roomData.runner_id !== userID) {
-        throw new Error('Unauthorized');
-    }
-
-    const { error } = await supabase
-        .from('order_items')
-        .delete()
-        .eq('id', itemID);
-
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 }
 
 // ============================================

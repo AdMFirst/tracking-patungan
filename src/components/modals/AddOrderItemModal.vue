@@ -3,6 +3,8 @@
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>{{
+                    props.participantName ?
+                    $t('components.modals.AddOrderItemModal.runnerTitle', { name: props.participantName }) :
                     $t('components.modals.AddOrderItemModal.title')
                 }}</DialogTitle>
                 <DialogDescription>
@@ -120,9 +122,9 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
-    roomId: {
+    participantName: {
         type: String,
-        required: true,
+        required: false,
     },
 });
 
@@ -149,15 +151,12 @@ const handleDialogUpdate = (open) => {
 };
 
 const handleCancel = () => {
-    emit('update:open', false);
+    emit('update:open', null);
 };
 
 const handleSubmit = () => {
-    emit('itemAdded', {
-        ...formData.value,
-        roomId: props.roomId,
-    });
-    emit('update:open', false);
+    emit('itemAdded', formData.value);
+    emit('update:open', null);
 
     // Reset form
     formData.value = {
@@ -167,19 +166,6 @@ const handleSubmit = () => {
         notes: '',
     };
 };
-
-// Watch for roomId changes and reset form
-watch(
-    () => props.roomId,
-    () => {
-        formData.value = {
-            itemName: '',
-            quantity: 1,
-            unitPrice: 0,
-            notes: '',
-        };
-    }
-);
 </script>
 
 <style scoped>

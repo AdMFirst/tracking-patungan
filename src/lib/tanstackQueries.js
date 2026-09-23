@@ -245,12 +245,14 @@ export function useAddGuestParticipantMutation() {
 // ============================================
 
 /**
- * Mutation for adding an order item
+ * Mutation config for adding an order item.
+ *
+ * Usage: `useMutation(useAddOrderItemMutation())`
  */
 export function useAddOrderItemMutation() {
     return {
-        mutationFn: ({ roomID, userID, itemData }) =>
-            addOrderItem(roomID, userID, itemData),
+        mutationFn: ({ roomID, participantID, itemName, quantity, unitPrice, notes }) =>
+            addOrderItem(roomID, participantID, itemName, quantity, unitPrice, notes),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
                 queryKey: ['roomOrderItems', variables.roomID],
@@ -260,25 +262,38 @@ export function useAddOrderItemMutation() {
 }
 
 /**
- * Mutation for updating an order item
+ * Mutation config for updating an order item.
+ *
+ * `roomID` is passed in variables purely to scope the cache invalidation.
+ *
+ * Usage: `useMutation(useUpdateOrderItemMutation())`
  */
 export function useUpdateOrderItemMutation() {
     return {
-        mutationFn: ({ itemID, updates }) => updateOrderItem(itemID, updates),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['roomOrderItems'] });
+        mutationFn: ({ itemID, itemName, quantity, unitPrice, notes }) =>
+            updateOrderItem(itemID, itemName, quantity, unitPrice, notes),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ['roomOrderItems', variables.roomID],
+            });
         },
     };
 }
 
 /**
- * Mutation for deleting an order item
+ * Mutation config for deleting an order item.
+ *
+ * `roomID` is passed in variables purely to scope the cache invalidation.
+ *
+ * Usage: `useMutation(useDeleteOrderItemMutation())`
  */
 export function useDeleteOrderItemMutation() {
     return {
-        mutationFn: (itemID) => deleteOrderItem(itemID),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['roomOrderItems'] });
+        mutationFn: ({ itemID }) => deleteOrderItem(itemID),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ['roomOrderItems', variables.roomID],
+            });
         },
     };
 }

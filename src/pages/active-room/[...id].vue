@@ -158,7 +158,7 @@
                                 :disabled="participant.isCurrentUser"
                                 variant="secondary"
                                 size="sm"
-                                @click="showAddItemModal = true"
+                                @click="handleAddOrderItemButton(participant)"
                             >
                                 <Plus class="h-4 w-4" />
                             </Button>
@@ -251,16 +251,16 @@
 
     <!-- Add Order Item Modal -->
     <AddOrderItemModal
-        :isOpen="showAddItemModal"
-        :roomId="roomID"
+        :isOpen="Boolean(showAddItemModal)"
+        :participantName="showAddItemModal?.isCurrentUser ? null : showAddItemModal?.displayName"
         @update:open="showAddItemModal = $event"
         @itemAdded="handleAddOrderItem"
     />
 
     <!-- Edit Order Item Modal -->
     <EditOrderItemModal
-        :isOpen="showEditItemModal"
-        :item="editingItem"
+        :isOpen="Boolean(showEditItemModal)"
+        :item="showEditItemModal"
         @update:open="showEditItemModal = $event"
         @itemUpdated="handleUpdateOrderItem"
     />
@@ -276,7 +276,7 @@
     <FloatingButton
         v-if="room && isParticipant"
         v-show="!loading"
-        @click="showAddItemModal = true"
+        @click="handleAddOrderItemButton"
     />
 
     <!-- Share Modal -->
@@ -299,7 +299,6 @@ import {
     deleteOrderItem,
     fetchRoomDetails,
     fetchRoomOrderItems,
-    addOrderItem,
     fetchUserProfiles,
     subscribeToRoomUpdates,
     supabase, // Kept for removeChannel if needed, though we could wrap that too
@@ -317,7 +316,7 @@ import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
 import ShareModal from '@/components/modals/ShareModal.vue';
 import { toast } from 'vue-sonner';
 import AddGuestParticipantModal from '@/components/modals/addGuestParticipantModal.vue';
-import { useAddGuestParticipantMutation } from '@/lib/tanstackQueries';
+import { useAddGuestParticipantMutation, useAddOrderItemMutation } from '@/lib/tanstackQueries';
 import { useMutation } from '@tanstack/vue-query';
 
 // State management
@@ -337,14 +336,13 @@ const orderItems = ref([]);         // order item rows
 // UI / auth state
 const loading = ref(true);
 const error = ref(null);
-const isParticipant = ref(false);
+const isParticipant = ref(false);       // check if user is already a participant in this room
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
-const showAddItemModal = ref(false);
+const showAddItemModal = ref(null);    // also used to store participantId for adding items to specific participant
+const showEditItemModal = ref(null);   // also used to store item data for editing
 const showShareModal = ref(false);
-const showEditItemModal = ref(false);
 const showAddParticipantModal = ref(false);
-const editingItem = ref(null);
 let isFetchingData = false; // flag to prevent edge case race condition in loading subscription
 
 // UUID validation regex
@@ -459,6 +457,20 @@ const handleCancelJoin = () => {
 };
 
 // Add order item handler
+const handleAddOrderItemButton = (selectedParticipantViewModel) => {
+    
+    if (selectedParticipantViewModel) {
+        showAddItemModal.value = selectedParticipantViewModel; // store the whole data in show addItemModal
+    } else {
+        // get participants in view model
+        showAddItemModal.value = participantViewModels.value.find(
+            (p) => p.isCurrentUser
+        );
+    }
+}
+
+const addOrderItemMutation = useMutation(useAddOrderItemMutation());
+
 const handleAddOrderItem = async (itemData) => {
     try {
         if (!currentUser.value || !isParticipant.value) {
@@ -468,15 +480,27 @@ const handleAddOrderItem = async (itemData) => {
 
         loading.value = true;
         error.value = null;
-        console.debug('this is the room id', roomID);
 
-        const data = await addOrderItem(roomID, currentUser.value.id, itemData);
+        console.debug('adding items for ', showAddItemModal.value.displayName, ' with this item', itemData);
 
-        // Refresh the order items list
-        await loadOrderItems();
+        // `itemData` is whatever your form produces.
+        // `showAddItemModal.value` is the participant the item is being added for.
+        const data = await addOrderItemMutation.mutateAsync({
+            roomID: roomID,
+            participantID: showAddItemModal.value.id,   // <-- participant id, not user id
+            itemName: itemData.itemName,
+            quantity: itemData.quantity,
+            unitPrice: itemData.unitPrice,
+            notes: itemData.notes,
+        });
 
-        // Show success message or notification could be added here
+        // `data` is the new item's UUID
         console.debug('Order item added successfully:', data);
+
+        // The mutation's onSuccess already invalidated ['roomOrderItems', roomID],
+        // which triggers a refetch if that query is mounted. You usually don't
+        // need a manual reload — but if you're not using that query here, keep this:
+        // await loadOrderItems();
     } catch (err) {
         console.error('Error adding order item:', err);
         const errMsg = err.message || t('pages.activeRoom.errors.addFailed');
