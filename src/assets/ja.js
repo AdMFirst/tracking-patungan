@@ -40,6 +40,28 @@ const ja = {
             },
         },
         common: {
+            sort: {
+                label: '並べ替え:',
+                options: {
+                    titleAsc: 'タイトル (A-Z)',
+                    titleDesc: 'タイトル (Z-A)',
+                    restaurantAsc: 'レストラン (A-Z)',
+                    restaurantDesc: 'レストラン (Z-A)',
+                    platformAsc: 'プラットフォーム (A-Z)',
+                    platformDesc: 'プラットフォーム (Z-A)',
+                    totalDesc: '最終合計 (高い順)',
+                    totalAsc: '最終合計 (低い順)',
+                    createdLatest: '作成日 (新しい順)',
+                    createdOldest: '作成日 (古い順)',
+                    orderTimeLatest: '注文時間 (新しい順)',
+                    orderTimeOldest: '注文時間 (古い順)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: '更新中...',
+                releaseToRefresh: '離して更新',
+                pullToRefresh: '引っ張って更新',
+            },
             BottomNav: {
                 home: 'ホーム',
                 histori: '履歴',
@@ -106,9 +128,6 @@ const ja = {
                 each: '各',
                 paidAt: '{date}に支払い済み',
                 paidAtVia: '{date}に{method}経由で支払い済み',
-                paymentConfirmed:
-                    '選択された支払い方法で{amount}の支払いが確認されました。ルームは支払い済みとしてマークされました。',
-                paymentFailed: '支払いの確認に失敗しました: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'QRスキャン',
@@ -144,6 +163,9 @@ const ja = {
                     'この操作は取り消せません。すべてのルームデータは完全に削除されます。',
                 deleteCancelButton: 'キャンセル',
                 deleteConfirmButton: '削除',
+                errors: {
+                    greaterThanZero: '最終合計は0より大きくする必要があります',
+                }
             },
             EditOrderItemModal: {
                 title: '注文アイテムを編集',
@@ -343,6 +365,8 @@ const ja = {
             shareRoomTitle: 'ルームを共有',
             shareRoomDescription:
                 'QRコードをスキャンしてこのルームを他の人と共有します。',
+            shareNowButton: '今すぐ共有',
+            shareNowContent: "みんな！{platform}から{restaurant}を注文しているよ。{url}に参加して注文を追加し、透明に割り勘しよう！",
             close: '閉じる',
             errors: {
                 loginToJoin: 'このルームに参加するにはログインが必要です',
@@ -376,6 +400,8 @@ const ja = {
                 deleteConfirm: 'この注文アイテムを削除しますか？',
                 delete: '削除',
                 cancel: 'キャンセル',
+                copySuccess: 'URLがクリップボードにコピーされました！',
+                shareFailed: 'ルームの共有に失敗しました。もう一度お試しください。',
             },
         },
         histori: {
@@ -390,6 +416,11 @@ const ja = {
                 activeDescription: 'まだアクティブなルームに参加していません。',
                 closedDescription: 'まだ閉鎖されたルームに参加していません。',
             },
+            message: {
+                paymentConfirmed:
+                    '選択された支払い方法で{amount}の支払いが確認されました。ルームは支払い済みとしてマークされました。',
+                paymentFailed: '支払いの確認に失敗しました: {error}',
+            }
         },
         profile: {
             index: {

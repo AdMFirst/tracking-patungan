@@ -38,6 +38,28 @@ const min = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutkan badasa:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total akhia (Paling tinggi)',
+                    totalAsc: 'Total akhia (Paling randah)',
+                    createdLatest: 'Waktu dibuek (Paling baru)',
+                    createdOldest: 'Waktu dibuek (Paling lamo)',
+                    orderTimeLatest: 'Waktu pesan (Paling baru)',
+                    orderTimeOldest: 'Waktu pesan (Paling lamo)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: 'Manmanyegarkan...',
+                releaseToRefresh: 'Lapeh untuak manyegarkan',
+                pullToRefresh: 'Tariak untuak manyegarkan',
+            },
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',
@@ -104,9 +126,6 @@ const min = {
                 each: 'satiok',
                 paidAt: 'Dibayar pado {date}',
                 paidAtVia: 'Dibayar pado {date} via {method}',
-                paymentConfirmed:
-                    'Pambayaran dikonfirmasi {amount} pakai metode nan dipiliah. Bilik alah lunas.',
-                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -142,6 +161,9 @@ const min = {
                     'Tindakan iko indak bisa dibatalkan. Sadonyo data bilik akan hilang.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhia harus labiah dari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Ubah Item Pasanan',
@@ -338,6 +360,8 @@ const min = {
             noOrderItems: 'Alun ado item pesanan.',
             shareRoomTitle: 'Bagikan Bilik',
             shareRoomDescription: 'Pindai kode QR untuak membagikan bilik iko.',
+            shareNowButton: 'Bagikan Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Bergabunglah dengan saya di {url} untuk menambahkan pesanan dan bagi tagihan secara transparan!",
             close: 'Tutuik',
             errors: {
                 loginToJoin: 'Sanak paralu masuak untuak gabuang bilik iko',
@@ -366,6 +390,8 @@ const min = {
                 deleteConfirm: 'Hapus item pesanan iko?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal membagikan bilik. Cubo baliak.',
             },
         },
         histori: {
@@ -381,6 +407,11 @@ const min = {
                 closedDescription:
                     'Sanak alun gabuang bilik nan alah ditutuik.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pambayaran dikonfirmasi {amount} pakai metode nan dipiliah. Bilik alah lunas.',
+                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
+            }
         },
         profile: {
             index: {

@@ -38,6 +38,28 @@ const zh = {
             },
         },
         common: {
+            sort: {
+                label: '排序方式:',
+                options: {
+                    titleAsc: '标题 (A-Z)',
+                    titleDesc: '标题 (Z-A)',
+                    restaurantAsc: '餐厅 (A-Z)',
+                    restaurantDesc: '餐厅 (Z-A)',
+                    platformAsc: '平台 (A-Z)',
+                    platformDesc: '平台 (Z-A)',
+                    totalDesc: '最终总额 (最高)',
+                    totalAsc: '最终总额 (最低)',
+                    createdLatest: '创建时间 (最新)',
+                    createdOldest: '创建时间 (最早)',
+                    orderTimeLatest: '下单时间 (最新)',
+                    orderTimeOldest: '下单时间 (最早)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: '刷新中...',
+                releaseToRefresh: '松开刷新',
+                pullToRefresh: '下拉刷新', 
+            },
             BottomNav: {
                 home: '首页',
                 histori: '历史',
@@ -103,9 +125,6 @@ const zh = {
                 each: '每个',
                 paidAt: '支付于 {date}',
                 paidAtVia: '通过 {method} 支付于 {date}',
-                paymentConfirmed:
-                    '已确认使用所选支付方式支付 {amount}。房间已标记为已支付。',
-                paymentFailed: '确认支付失败：{error}',
             },
             QRScanDialog: {
                 scanQRButton: '扫描二维码',
@@ -141,6 +160,9 @@ const zh = {
                     '此操作无法撤销。所有房间数据将被永久删除。',
                 deleteCancelButton: '取消',
                 deleteConfirmButton: '删除',
+                errors: {
+                    greaterThanZero: '最终总额必须大于 0',
+                }
             },
             EditOrderItemModal: {
                 title: '编辑订单项目',
@@ -334,6 +356,8 @@ const zh = {
             noOrderItems: '暂无订单项目。',
             shareRoomTitle: '分享房间',
             shareRoomDescription: '扫描二维码与他人分享此房间。',
+            shareNowButton: '立即分享',
+            shareNowContent: "大家！我正在从 {platform} 订购 {restaurant}。加入 {url} 来添加您的订单，让我们透明地分摊账单！",
             close: '关闭',
             errors: {
                 loginToJoin: '您需要登录才能加入此房间',
@@ -361,6 +385,8 @@ const zh = {
                 deleteConfirm: '删除此订单项目？',
                 delete: '删除',
                 cancel: '取消',
+                copySuccess: 'URL已复制到剪贴板！',
+                shareFailed: '分享房间失败。请重试。',
             },
         },
         histori: {
@@ -375,6 +401,11 @@ const zh = {
                 activeDescription: '您尚未参与任何活跃房间。',
                 closedDescription: '您尚未参与任何已关闭房间。',
             },
+            message: {
+                paymentConfirmed:
+                    '已确认使用所选支付方式支付 {amount}。房间已标记为已支付。',
+                paymentFailed: '确认支付失败：{error}',
+            }
         },
         profile: {
             index: {

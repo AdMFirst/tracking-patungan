@@ -40,6 +40,28 @@ const ms = {
             },
         },
         common: {
+            sort: {
+                label: 'Isih mengikut:',
+                options: {
+                    titleAsc: 'Tajuk (A-Z)',
+                    titleDesc: 'Tajuk (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Jumlah akhir (Tertinggi)',
+                    totalAsc: 'Jumlah akhir (Terendah)',
+                    createdLatest: 'Masa dicipta (Terbaru)',
+                    createdOldest: 'Masa dicipta (Terlama)',
+                    orderTimeLatest: 'Masa pesanan (Terbaru)',
+                    orderTimeOldest: 'Masa pesanan (Terlama)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: 'Menyegarkan...',
+                releaseToRefresh: 'Lepaskan untuk menyegarkan',
+                pullToRefresh: 'Tarik untuk menyegarkan',
+            },
             BottomNav: {
                 home: 'Utama',
                 histori: 'Sejarah',
@@ -106,9 +128,6 @@ const ms = {
                 each: 'setiap satu',
                 paidAt: 'Dibayar pada {date}',
                 paidAtVia: 'Dibayar pada {date} melalui {method}',
-                paymentConfirmed:
-                    'Pembayaran disahkan sebanyak {amount} menggunakan kaedah pembayaran yang dipilih. Bilik telah ditandakan sebagai dibayar.',
-                paymentFailed: 'Gagal mengesahkan pembayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Imbas QR',
@@ -145,6 +164,9 @@ const ms = {
                     'Tindakan ini tidak boleh dibuat asal. Semua data bilik akan dipadamkan secara kekal.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Padam',
+                errors: {
+                    greaterThanZero: 'Jumlah akhir mesti lebih besar daripada 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Edit Item Pesanan',
@@ -347,6 +369,8 @@ const ms = {
             shareRoomTitle: 'Kongsi Bilik',
             shareRoomDescription:
                 'Imbas kod QR untuk berkongsi bilik ini dengan orang lain.',
+            shareNowButton: 'Kongsi Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Sertai saya di {url} untuk menambah pesanan dan bagi tagihan secara transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anda perlu log masuk untuk menyertai bilik ini',
@@ -380,6 +404,8 @@ const ms = {
                 deleteConfirm: 'Padam item pesanan ini?',
                 delete: 'Padam',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal mengongsi bilik. Sila cuba lagi.',
             },
         },
         histori: {
@@ -396,6 +422,11 @@ const ms = {
                 closedDescription:
                     'Anda belum menyertai sebarang bilik yang ditutup lagi.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pembayaran disahkan sebanyak {amount} menggunakan kaedah pembayaran yang dipilih. Bilik telah ditandakan sebagai dibayar.',
+                paymentFailed: 'Gagal mengesahkan pembayaran: {error}',
+            }
         },
         profile: {
             index: {

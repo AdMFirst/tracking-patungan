@@ -99,6 +99,15 @@
             <PageHeader :title="room.title">
                 <template #actions>
                     <Button
+                        v-if="isRunner"
+                        variant="outline"
+                        size="icon"
+                        @click="handleAddParticipantClick"
+                        class="mr-2"
+                    >
+                        <UserPlus class="h-4 w-4 " />
+                    </Button>
+                    <Button
                         variant="outline"
                         size="icon"
                         @click="handleShareClick"
@@ -123,31 +132,42 @@
                     {{ t('pages.activeRoom.cartTitle') }}
                 </h2>
                 <div
-                    v-if="Object.keys(groupedOrderItems).length > 0"
+                    v-if="participantViewModels.length > 0"
                     class="space-y-6"
                 >
                     <div
-                        v-for="(userGroup, participantId) in groupedOrderItems"
-                        :key="participantId"
+                        v-for="participant in participantViewModels"
+                        :key="participant.id"
                         class="border rounded-lg p-4"
                     >
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img
-                                v-if="userCache[userGroup[0]?.user_id]?.picture"
-                                :src="userCache[userGroup[0]?.user_id]?.picture"
-                                alt="User Avatar"
-                                class="w-10 h-10 rounded-full"
-                            />
-                            <h3 class="font-semibold">
-                                {{
-                                    userCache[userGroup[0]?.user_id]
-                                        ?.display_name ||
-                                    t('pages.activeRoom.unknownUser')
-                                }}
-                            </h3>
+                        <div class="flex items-center justify-between space-x-3 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <img
+                                    v-if="participant.picture"
+                                    :src="participant.picture"
+                                    alt="User Avatar"
+                                    class="w-10 h-10 rounded-full"
+                                />
+                                <h3 class="font-semibold">
+                                    {{ participant.displayName }}
+                                </h3>
+                            </div>
+                            <!-- button for runner to add items to all participants, disabled for self -->
+                            <Button
+                                v-if="isRunner"
+                                :disabled="participant.isCurrentUser"
+                                variant="secondary"
+                                size="sm"
+                                @click="handleAddOrderItemButton(participant)"
+                            >
+                                <Plus class="h-4 w-4" />
+                            </Button>
                         </div>
                         <div class="text-sm">
-                            <template v-for="item in userGroup" :key="item.id">
+                            <template
+                                v-for="item in participant.items"
+                                :key="item.id"
+                            >
                                 <div class="flex justify-between items-start">
                                     <div class="flex-1">
                                         <div
@@ -201,18 +221,19 @@
                                             variant="outline"
                                             size="icon"
                                             class="h-8 w-8"
-                                            @click="
-                                                handleDeleteOrderItem(
-                                                    item.id,
-                                                    item.user_id
-                                                )
-                                            "
+                                            @click="handleDeleteOrderItem(item)"
                                         >
                                             <Trash2 class="h-3 w-3" />
                                         </Button>
                                     </div>
                                 </div>
                             </template>
+                            <p
+                                v-if="participant.items.length === 0"
+                                class="text-muted-foreground"
+                            >
+                                {{ t('pages.activeRoom.noOrderItems') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -225,53 +246,48 @@
 
     <!-- Add Order Item Modal -->
     <AddOrderItemModal
-        :isOpen="showAddItemModal"
-        :roomId="roomID"
+        :isOpen="Boolean(showAddItemModal)"
+        :participantName="showAddItemModal?.isCurrentUser ? null : showAddItemModal?.displayName"
         @update:open="showAddItemModal = $event"
         @itemAdded="handleAddOrderItem"
     />
 
     <!-- Edit Order Item Modal -->
     <EditOrderItemModal
-        :isOpen="showEditItemModal"
-        :item="editingItem"
+        :isOpen="Boolean(showEditItemModal)"
+        :participantName="
+            // If the item belongs to a guest, show their name; if it belongs to a real user, show their display name; if it's the current user, show null
+            (() => {
+                const participant = participantViewModels.find(
+                    (p) => p.items.some((i) => i.id === showEditItemModal?.id)
+                );
+                return participant?.isCurrentUser ? null : participant?.displayName;
+            })()"
+        :item="showEditItemModal"
         @update:open="showEditItemModal = $event"
         @itemUpdated="handleUpdateOrderItem"
+    />
+
+    <AddGuestParticipantModal
+        :disabled="!isRunner"
+        :isOpen="showAddParticipantModal"
+        @update:open="showAddParticipantModal = $event"
+        @participantAdded="handleAddParticipantDialog"
     />
 
     <!-- Floating Action Button -->
     <FloatingButton
         v-if="room && isParticipant"
         v-show="!loading"
-        @click="showAddItemModal = true"
+        @click="handleAddOrderItemButton"
     />
 
     <!-- Share Modal -->
-    <Dialog v-model:open="showShareModal">
-        <DialogContent class="sm:max-w-md">
-            <DialogHeader>
-                <DialogTitle>{{
-                    t('pages.activeRoom.shareRoomTitle')
-                }}</DialogTitle>
-                <DialogDescription>
-                    {{ t('pages.activeRoom.shareRoomDescription') }}
-                </DialogDescription>
-            </DialogHeader>
-            <div class="flex justify-center py-4">
-                <img
-                    v-if="qrCodeUrl"
-                    :src="qrCodeUrl"
-                    alt="QR Code"
-                    class="w-64 h-64"
-                />
-            </div>
-            <DialogFooter>
-                <Button variant="outline" @click="showShareModal = false">
-                    {{ t('pages.activeRoom.close') }}
-                </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+    <ShareModal
+        v-model="showShareModal"
+        :roomId="roomID"
+        :room="room"
+    />
 </template>
 
 <script setup>
@@ -282,36 +298,32 @@ import { user as currentUser } from '@/lib/auth';
 import {
     checkUserParticipation,
     joinRoom,
-    updateOrderItem,
-    deleteOrderItem,
     fetchRoomDetails,
     fetchRoomOrderItems,
-    addOrderItem,
     fetchUserProfiles,
     subscribeToRoomUpdates,
     supabase, // Kept for removeChannel if needed, though we could wrap that too
 } from '@/lib/supabaseClient';
-import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import Button from '@/components/ui/button/Button.vue';
-import { Share2, Edit2, Trash2 } from 'lucide-vue-next';
+import { Share2, Edit2, Trash2, Plus, UserPlus } from 'lucide-vue-next';
 import JoinRoomPrompt from '@/components/room/JoinRoomPrompt.vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import FloatingButton from '@/components/common/FloatingButton.vue';
 import AddOrderItemModal from '@/components/modals/AddOrderItemModal.vue';
 import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
-import QRCode from 'qrcode';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import ShareModal from '@/components/modals/ShareModal.vue';
 import { toast } from 'vue-sonner';
+import AddGuestParticipantModal from '@/components/modals/addGuestParticipantModal.vue';
+import { 
+    useAddGuestParticipantMutation, 
+    useAddOrderItemMutation, 
+    useUpdateOrderItemMutation, 
+    useDeleteOrderItemMutation 
+} from '@/lib/tanstackQueries';
+import { useMutation } from '@tanstack/vue-query';
 
 // State management
 const route = useRoute();
@@ -320,44 +332,104 @@ const { t } = useI18n();
 const roomID = Array.isArray(route.params.id)
     ? route.params.id[0]
     : route.params.id;
+
+// Raw state (single source of truth)
 const room = ref(null);
-const orderItems = ref([]);
+const participants = ref([]);       // participant rows: { id, user_id, guest_name, guest_email, ... }
+const userProfiles = ref({});       // keyed by user_id -> profile object
+const orderItems = ref([]);         // order item rows
+
+// UI / auth state
 const loading = ref(true);
 const error = ref(null);
-const userCache = ref({});
-const isParticipant = ref(false);
-const isRunner = ref(false);
+const isParticipant = ref(false);       // check if user is already a participant in this room
 const showJoinPrompt = ref(false);
 const realtimeChannel = ref(null);
-const showAddItemModal = ref(false);
+const showAddItemModal = ref(null);    // also used to store participantId for adding items to specific participant
+const showEditItemModal = ref(null);   // also used to store item data for editing
 const showShareModal = ref(false);
-const showEditItemModal = ref(false);
-const editingItem = ref(null);
-const qrCodeUrl = ref('');
-const participantIds = ref([]);
+const showAddParticipantModal = ref(false);
+let isFetchingData = false; // flag to prevent edge case race condition in loading subscription
 
 // UUID validation regex
 const uuidRegex =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Runner is derived from room + currentUser, no need to store it separately
+const isRunner = computed(() =>
+    Boolean(
+        currentUser.value &&
+            room.value &&
+            room.value.runner_id === currentUser.value.id
+    )
+);
+
+// A set of participant ids for the realtime order-items filter
+const participantIds = computed(
+    () => new Set(participants.value.map((p) => p.id))
+);
+
+// Group order items by participant_id once
+const orderItemsByParticipant = computed(() => {
+    const map = Object.create(null);
+    for (const item of orderItems.value) {
+        if (!map[item.participant_id]) map[item.participant_id] = [];
+        map[item.participant_id].push(item);
+    }
+    return map;
+});
+
+// Single derived view-model that joins participant + user profile + items
+const participantViewModels = computed(() => {
+    const itemsByParticipant = orderItemsByParticipant.value;
+
+    return participants.value.map((participant) => {
+        const profile = participant.user_id
+            ? userProfiles.value[participant.user_id]
+            : null;
+
+        const displayName =
+            profile?.display_name ||
+            profile?.name ||
+            profile?.full_name ||
+            profile?.email ||
+            participant.guest_name ||
+            participant.guest_email ||
+            t('pages.activeRoom.guest');
+
+        const picture =
+            profile?.picture ||
+            profile?.avatar_url ||
+            profile?.picture_url ||
+            profile?.avatar ||
+            null;
+
+        const isGuest = !participant.user_id;
+
+        return {
+            id: participant.id,
+            user_id: participant.user_id,
+            guest_name: participant.guest_name,
+            guest_email: participant.guest_email,
+            displayName: (isGuest ? "["+t('pages.activeRoom.guest')+"] " : "") + displayName,
+            picture,
+            isCurrentUser: participant.user_id === currentUser.value?.id,
+            items: itemsByParticipant[participant.id] || [],
+        };
+    });
+});
 
 const goBack = () => {
     router.push('/');
 };
 
 // Share functionality
-const generateQRCode = async () => {
-    try {
-        const currentUrl = window.location.href;
-        qrCodeUrl.value = await QRCode.toDataURL(currentUrl);
-    } catch (err) {
-        console.error('Error generating QR code:', err);
-        error.value = t('pages.activeRoom.errors.generateQrFailed');
-    }
+const handleShareClick = () => {
+    showShareModal.value = true;
 };
 
-const handleShareClick = async () => {
-    await generateQRCode();
-    showShareModal.value = true;
+const handleAddParticipantClick = () => {
+    if (isRunner.value) showAddParticipantModal.value = true;
 };
 
 // Join room handlers
@@ -391,6 +463,20 @@ const handleCancelJoin = () => {
 };
 
 // Add order item handler
+const handleAddOrderItemButton = (selectedParticipantViewModel) => {
+    
+    if (selectedParticipantViewModel) {
+        showAddItemModal.value = selectedParticipantViewModel; // store the whole data in show addItemModal
+    } else {
+        // get participants in view model
+        showAddItemModal.value = participantViewModels.value.find(
+            (p) => p.isCurrentUser
+        );
+    }
+}
+
+const addOrderItemMutation = useMutation(useAddOrderItemMutation());
+
 const handleAddOrderItem = async (itemData) => {
     try {
         if (!currentUser.value || !isParticipant.value) {
@@ -398,20 +484,33 @@ const handleAddOrderItem = async (itemData) => {
             return;
         }
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
-        console.debug('this is the room id', roomID);
 
-        const data = await addOrderItem(roomID, currentUser.value.id, itemData);
+        console.debug('adding items for ', showAddItemModal.value.displayName, ' with this item', itemData);
 
-        // Refresh the order items list
-        await loadOrderItems();
+        // `itemData` is whatever your form produces.
+        // `showAddItemModal.value` is the participant the item is being added for.
+        const data = await addOrderItemMutation.mutateAsync({
+            roomID: roomID,
+            participantID: showAddItemModal.value.id,   // <-- participant id, not user id
+            itemName: itemData.itemName,
+            quantity: itemData.quantity,
+            unitPrice: itemData.unitPrice,
+            notes: itemData.notes,
+        });
 
-        // Show success message or notification could be added here
+        // `data` is the new item's UUID
         console.debug('Order item added successfully:', data);
+
+        // The mutation's onSuccess already invalidated ['roomOrderItems', roomID],
+        // which triggers a refetch if that query is mounted. You usually don't
+        // need a manual reload — but if you're not using that query here, keep this:
+        // await loadOrderItems();
     } catch (err) {
         console.error('Error adding order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.addFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.addFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
@@ -420,25 +519,20 @@ const handleAddOrderItem = async (itemData) => {
 // Check if current user can edit an item (either owner or runner)
 const canEditItem = (item) => {
     if (!currentUser.value) return false;
-
-    // Check if user is the owner of this item
     const isOwner = item.user_id === currentUser.value.id;
-
-    // Check if user is the runner
-    const isRunnerUser = isRunner.value;
-
-    return isOwner || isRunnerUser;
+    return isOwner || isRunner.value;
 };
 
 // Edit order item handler
 const handleEditOrderItem = (item) => {
     if (!canEditItem(item)) {
-        error.value = t('pages.activeRoom.errors.editOwnItems');
+        toast.error(t('pages.activeRoom.errors.editOwnItems'));
         return;
     }
-    editingItem.value = { ...item };
-    showEditItemModal.value = true;
+    showEditItemModal.value = item;
 };
+
+const editOrderItemMutation = useMutation(useUpdateOrderItemMutation())
 
 // Update order item handler
 const handleUpdateOrderItem = async (updatedData) => {
@@ -448,50 +542,46 @@ const handleUpdateOrderItem = async (updatedData) => {
             return;
         }
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
 
-        const updates = {
-            item_name: updatedData.itemName,
+        await editOrderItemMutation.mutateAsync({
+            itemID: showEditItemModal.value.id,
+            roomID: roomID,                       // scopes the cache invalidation
+            itemName: updatedData.itemName,
             quantity: updatedData.quantity,
-            unit_price: updatedData.unitPrice,
-            notes: updatedData.notes || null,
-        };
-
-        await updateOrderItem(
-            editingItem.value.id,
-            updates,
-            currentUser.value.id
-        );
-
-        // Refresh the order items list
-        await loadOrderItems();
+            unitPrice: updatedData.unitPrice,
+            notes: updatedData.notes ?? null,
+        })
 
         // Close the modal
-        showEditItemModal.value = false;
-        editingItem.value = null;
+        showEditItemModal.value = null;
     } catch (err) {
         console.error('Error updating order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.updateFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.updateFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
 };
 
+const deleteOrderItem = useMutation(useDeleteOrderItemMutation());
+
 // Delete order item handler
-const handleDeleteOrderItem = async (itemId, itemUserId) => {
+const handleDeleteOrderItem = async (item) => {
     try {
         if (!currentUser.value) {
             error.value = t('pages.activeRoom.errors.loginToDelete');
             return;
         }
 
+        console.debug(item)
         // Check if user can delete this item
-        const isOwner = itemUserId === currentUser.value.id;
+        const isOwner = item.user_id == currentUser.value.id;
         const isRunnerUser = isRunner.value;
 
         if (!isOwner && !isRunnerUser) {
-            error.value = t('pages.activeRoom.errors.deleteOwnItems');
+            toast.error(t('pages.activeRoom.errors.deleteOwnItems'));
             return;
         }
 
@@ -511,32 +601,47 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
 
         if (!confirmed) return;
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
 
-        await deleteOrderItem(itemId, currentUser.value.id);
-
-        // Refresh the order items list
-        await loadOrderItems();
+        await deleteOrderItem.mutateAsync({
+            itemID: item.id
+        })
     } catch (err) {
         console.error('Error deleting order item:', err);
-        error.value = err.message || t('pages.activeRoom.errors.deleteFailed');
+        const errMsg = err.message || t('pages.activeRoom.errors.deleteFailed');
+        toast.error(errMsg);
     } finally {
         loading.value = false;
     }
 };
 
-// Data processing
-const groupedOrderItems = computed(() => {
-    const grouped = {};
-    orderItems.value.forEach((item) => {
-        if (!grouped[item.participant_id]) {
-            grouped[item.participant_id] = [];
-        }
-        grouped[item.participant_id].push(item);
-    });
-    return grouped;
-});
+const addGuestParticipantMutation = useMutation(useAddGuestParticipantMutation);
+
+const handleAddParticipantDialog = async (guestNameEmail) => {
+    try {
+        // Input is either a plain name like "john doe" or an email like "john@example.com"
+        const isEmail = guestNameEmail.includes('@');
+        const guestName = isEmail ? '' : guestNameEmail;
+        const guestEmail = isEmail ? guestNameEmail : '';
+
+        await addGuestParticipantMutation.mutateAsync({
+            roomID,
+            guestName,
+            guestEmail,
+        });
+
+        // Refresh data after adding participant
+        await loadRoomData();
+        showAddParticipantModal.value = false;
+        toast.success(t('pages.activeRoom.toast.participantAdded'));
+    } catch (err) {
+        console.error('Error adding participant:', err);
+        const errMessage =
+            err.message || t('pages.activeRoom.errors.addParticipantFailed');
+        toast.error(errMessage);
+    }
+};
 
 // Data loading functions
 const loadRoomDetails = async () => {
@@ -559,8 +664,8 @@ const loadRoomDetails = async () => {
             return false;
         }
 
-        // Check if the room is active (no final_total yet)
-        if (data.final_total) {
+        // Check if the room is active (status must be 'open')
+        if (data.status !== 'open') {
             console.error('Room is not active:', roomID);
             error.value = t('pages.activeRoom.errors.roomClosed');
             room.value = null;
@@ -579,34 +684,36 @@ const loadRoomDetails = async () => {
 
 const loadOrderItems = async () => {
     try {
-        const { items, participants } = await fetchRoomOrderItems(roomID);
+        const { items, participants: parts } = await fetchRoomOrderItems(roomID);
 
-        // Get participant IDs and update reactive state
-        participantIds.value = participants.map((p) => p.id);
-
-        // Build user cache from participants
-        participants.forEach((p) => {
-            if (!userCache.value[p.user_id]) {
-                userCache.value[p.user_id] = { id: p.user_id };
-            }
-        });
-
+        participants.value = parts;
         orderItems.value = items;
+
+        // Only fetch profiles for real users (guests have user_id = null)
+        const missingUserIds = parts
+            .map((p) => p.user_id)
+            .filter((id) => id && !userProfiles.value[id]);
+
+        if (missingUserIds.length > 0) {
+            await loadUserProfiles(missingUserIds);
+        }
     } catch (err) {
         console.error('Error fetching order items:', err);
         error.value = t('pages.activeRoom.errors.loadItemsFailed');
         orderItems.value = [];
+        participants.value = [];
     }
 };
 
 const loadUserProfiles = async (userIds) => {
-    if (!userIds || userIds.length === 0) return;
+    const uniqueIds = [...new Set((userIds || []).filter(Boolean))];
+    if (uniqueIds.length === 0) return;
 
     try {
-        const data = await fetchUserProfiles(userIds);
-        data.forEach((user) => {
-            userCache.value[user.id] = user;
-        });
+        const data = await fetchUserProfiles(uniqueIds);
+        for (const user of data) {
+            userProfiles.value[user.id] = user;
+        }
     } catch (err) {
         console.error('Error fetching user profiles:', err);
     }
@@ -633,41 +740,20 @@ const checkParticipation = async () => {
     }
 };
 
-const checkRunnerStatus = async () => {
-    if (!currentUser.value || !room.value) {
-        isRunner.value = false;
-        return false;
-    }
-
-    try {
-        // Check if current user is the runner of this room
-        const runner = room.value.runner_id === currentUser.value.id;
-        isRunner.value = runner;
-        return runner;
-    } catch (err) {
-        console.error('Error checking runner status:', err);
-        isRunner.value = false;
-        return false;
-    }
-};
-
 const setupRealtimeSubscription = () => {
     if (!currentUser.value) return null;
+
+    // Clean up existing channel if one already exists
+    if (realtimeChannel.value) {
+        supabase.removeChannel(realtimeChannel.value);
+        realtimeChannel.value = null;
+    }
 
     return subscribeToRoomUpdates(roomID, {
         onParticipantsChange: async (payload) => {
             console.debug('[Realtime] room_participants', payload);
-            // If a new user joined, fetch their profile
-            if (payload.eventType === 'INSERT' && payload.new) {
-                const newUserId = payload.new.user_id;
-                if (newUserId && !userCache.value[newUserId]) {
-                    console.debug(
-                        'New user joined, fetching profile:',
-                        newUserId
-                    );
-                    await loadUserProfiles([newUserId]);
-                }
-            }
+            // loadOrderItems() also fetches missing profiles for new users,
+            // so this covers both new user joins and guest participants.
             await loadOrderItems();
         },
         onOrderItemsChange: async (payload) => {
@@ -675,7 +761,7 @@ const setupRealtimeSubscription = () => {
             if (
                 payload.eventType === 'DELETE' ||
                 (payload.new &&
-                    participantIds.value.includes(payload.new.participant_id))
+                    participantIds.value.has(payload.new.participant_id))
             ) {
                 await loadOrderItems();
             }
@@ -683,6 +769,32 @@ const setupRealtimeSubscription = () => {
         onChannelError: (err) => {
             console.error('Realtime channel error:', err);
             // Don't force reload on channel errors, just log and let it reconnect
+        },
+        onRoomChange: (payload) => {
+            if (payload.eventType === 'UPDATE' && payload.new) {
+                const newStatus = payload.new.status;
+                if (newStatus === 'closed') {
+                    console.debug(
+                        '[Realtime] Room closed, redirecting:',
+                        roomID
+                    );
+                    // Clean up realtime subscription
+                    if (realtimeChannel.value) {
+                        supabase.removeChannel(realtimeChannel.value);
+                        realtimeChannel.value = null;
+                    }
+                    // Redirect based on whether user is the runner
+                    if (
+                        currentUser.value &&
+                        room.value &&
+                        room.value.runner_id === currentUser.value.id
+                    ) {
+                        router.push('/myroom');
+                    } else {
+                        router.push('/histori');
+                    }
+                }
+            }
         },
         onStatusChange: (status) => {
             console.debug('[Realtime status]', status);
@@ -697,19 +809,7 @@ const setupRealtimeSubscription = () => {
                     'Realtime subscription failed or disconnected:',
                     status
                 );
-                // Don't force reload on navigation/disconnection - let it reconnect naturally
-                // Only force reload for critical errors that can't be recovered
-                if (status === 'CHANNEL_ERROR') {
-                    // For actual channel errors, we might want to reload, but not for normal disconnections
-                    setTimeout(() => {
-                        if (!realtimeChannel.value) {
-                            console.debug(
-                                'Attempting to re-establish realtime connection...'
-                            );
-                            realtimeChannel.value = setupRealtimeSubscription();
-                        }
-                    }, 3000);
-                }
+                // we dont subscribe again since supabase has its own way to handle network disconnections and will try to reconnect automatically, so we just log it
             }
         },
     });
@@ -717,6 +817,10 @@ const setupRealtimeSubscription = () => {
 
 // Optimized data loading function
 const loadRoomData = async () => {
+    // prevent race condition
+    if (isFetchingData) return;
+    isFetchingData = true;
+
     try {
         loading.value = true;
         error.value = null;
@@ -731,27 +835,17 @@ const loadRoomData = async () => {
             return;
         }
 
-        // Check if current user is the runner
-        await checkRunnerStatus();
-
-        // Load order data
+        // Load order data (this also loads user profiles for real users)
         await loadOrderItems();
 
-        // Load user profiles for all participants
-        const userIds = Object.keys(userCache.value);
-        if (userIds.length > 0) {
-            await loadUserProfiles(userIds);
-        }
-
-        if (!realtimeChannel.value) {
-            realtimeChannel.value = setupRealtimeSubscription();
-        }
+        realtimeChannel.value = setupRealtimeSubscription();
     } catch (err) {
         console.error('Error loading room data:', err);
         error.value =
             err.message || t('pages.activeRoom.errors.loadDataFailed');
     } finally {
         loading.value = false;
+        isFetchingData = false; // release the lock
     }
 };
 

@@ -1,6 +1,28 @@
 <template>
+    <div class="relative inline-flex items-center">
+        <Button
+            variant="none"
+            class="pointer-events-none"
+        >
+            <SortDescIcon class="w-5 h-5" />
+            <span class="text-md">{{$t('components.common.sort.label')}}</span>
+            <span class="text-md capitalize">{{ sortOptions.find(opt => opt.value === sortBy)?.label }}</span>
+        </Button>
+        <select
+            v-model="sortBy"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        >
+            <option
+                v-for="option in sortOptions"
+                :key="option.value"
+                :value="option.value"
+            >
+                {{ option.label }}
+            </option>
+        </select>
+    </div>
     <Card
-        v-for="room in props.rooms"
+        v-for="room in sortedRooms"
         :key="room.room_id"
         class="cursor-pointer transition-shadow"
     >
@@ -9,6 +31,7 @@
                 <CardTitle class="font-semibold text-lg">
                     {{
                         room.title ||
+                        room.room_title ||
                         $t('components.room.OrderRooms.untitledRoom')
                     }}
                 </CardTitle>
@@ -158,42 +181,94 @@
             </div>
         </CardContent>
     </Card>
-
-    <!-- Payment Modal -->
-    <PaymentModal
-        :room="selectedRoom"
-        :isOpen="showPaymentModal"
-        @close="showPaymentModal = false"
-        @payment-confirmed="handlePaymentConfirmed"
-    />
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
 import { formatCurrency } from '@/lib/utils';
-import { useSetParticipantAsPaidMutation } from '@/lib/supabaseClient';
-import { useMutation } from '@tanstack/vue-query';
 
 // SHADCN/UI COMPONENTS IMPORTS (Reduced list)
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import Button from '@/components/ui/button/Button.vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
-import PaymentModal from '@/components/modals/PaymentModal.vue';
-import { toast } from 'vue-sonner';
 import { useI18n } from 'vue-i18n';
+import { SortDescIcon } from 'lucide-vue-next';
+import { Button } from '@/components/ui/button';
 
 const router = useRouter();
 const { t, d } = useI18n();
 
 const props = defineProps({
-    rooms: Object, // <- this is rooms.value exactly as fetched
+    rooms: Object,
 });
 
-// State for payment modal
-const showPaymentModal = ref(false);
-const selectedRoom = ref(null);
+const emit = defineEmits(['pay-room']);
+
+// Sorting implementation
+const sortBy = ref('date-desc');
+
+const sortOptions = [
+    { label: t('components.common.sort.options.createdLatest'), value: 'date-desc' },
+    { label: t('components.common.sort.options.createdOldest'), value: 'date-asc' },
+    { label: t('components.common.sort.options.titleAsc'), value: 'title-asc' },
+    { label: t('components.common.sort.options.titleDesc'), value: 'title-desc' },
+    { label: t('components.common.sort.options.restaurantAsc'), value: 'restaurant-asc' },
+    { label: t('components.common.sort.options.restaurantDesc'), value: 'restaurant-desc' },
+    { label: t('components.common.sort.options.platformAsc'), value: 'platform-asc' },
+    { label: t('components.common.sort.options.platformDesc'), value: 'platform-desc' },
+    { label: t('components.common.sort.options.totalDesc'), value: 'total-desc' },
+    { label: t('components.common.sort.options.totalAsc'), value: 'total-asc' }
+];
+
+const calculateCalculatedTotal = (room) => {
+    if (room.proportional_item_total) return Number(room.proportional_item_total);
+    if (room.final_total && room.total_room_price && room.user_items) {
+        return (room.final_total / room.total_room_price) * totalOriginalPay(room.user_items);
+    }
+    if (room.user_items) return totalOriginalPay(room.user_items);
+    return 0;
+};
+
+const sortedRooms = computed(() => {
+    if (!props.rooms || !Array.isArray(props.rooms)) return props.rooms || [];
+    
+    const roomsArray = [...props.rooms];
+
+    return roomsArray.sort((a, b) => {
+        const titleA = a.title || a.room_title || '';
+        const titleB = b.title || b.room_title || '';
+        const restA = a.restaurant || '';
+        const restB = b.restaurant || '';
+        const platformA = a.platform || '';
+        const platformB = b.platform || '';
+
+        switch (sortBy.value) {
+            case 'date-desc':
+                return new Date(b.room_created_at || 0) - new Date(a.room_created_at || 0);
+            case 'date-asc':
+                return new Date(a.room_created_at || 0) - new Date(b.room_created_at || 0);
+            case 'title-asc':
+                return titleA.localeCompare(titleB);
+            case 'title-desc':
+                return titleB.localeCompare(titleA);
+            case 'restaurant-asc':
+                return restA.localeCompare(restB);
+            case 'restaurant-desc':
+                return restB.localeCompare(restA);
+            case 'platform-asc':
+                return platformA.localeCompare(platformB);
+            case 'platform-desc':
+                return platformB.localeCompare(platformA);
+            case 'total-desc':
+                return calculateCalculatedTotal(b) - calculateCalculatedTotal(a);
+            case 'total-asc':
+                return calculateCalculatedTotal(a) - calculateCalculatedTotal(b);
+            default:
+                return 0;
+        }
+    });
+});
 
 const formatDate = (dateString) => {
     return d(new Date(dateString), {
@@ -206,6 +281,7 @@ const formatDate = (dateString) => {
 };
 
 function totalOriginalPay(items) {
+    if (!Array.isArray(items)) return 0;
     return items.reduce(
         (acc, item) => acc + item.quantity * item.unit_price,
         0
@@ -224,58 +300,14 @@ function paymentStatus(room) {
 }
 
 function handleOpenRoom(room) {
-    router.push('/active-room/' + room.room_id || room.id);
+    router.push('/active-room/' + (room.room_id || room.id));
 }
 
 function handlePayment(room) {
-    // Ensure room has runner_id for payment methods lookup
     const roomWithRunnerId = {
         ...room,
-        runner_id: room.runner_id || room.room_runner_id, // Add fallback for different field names
+        runner_id: room.runner_id || room.room_runner_id,
     };
-    selectedRoom.value = roomWithRunnerId;
-    showPaymentModal.value = true;
-}
-
-// Set up mutation for payment confirmation
-const setParticipantAsPaidMutation = useMutation(useSetParticipantAsPaidMutation());
-
-async function handlePaymentConfirmed(paymentData) {
-    try {
-        // Get the current user's ID
-        const {
-            data: { user },
-            error: authError,
-        } = await supabase.auth.getUser();
-
-        if (authError || !user) {
-            throw new Error('User not authenticated');
-        }
-
-        // Use the TanStack Query mutation
-        await setParticipantAsPaidMutation.mutateAsync({
-            roomID: paymentData.roomId,
-            paymentMethodID: paymentData.paymentMethodId,
-            userID: user.id
-        });
-
-        console.debug('Payment confirmed:', paymentData);
-        toast.success(
-            t('components.room.OrderRooms.paymentConfirmed', {
-                amount: formatCurrency(paymentData.amount),
-            })
-        );
-
-        // Close the payment modal
-        showPaymentModal.value = false;
-        selectedRoom.value = null;
-    } catch (error) {
-        console.error('Error confirming payment:', error);
-        toast.error(
-            t('components.room.OrderRooms.paymentFailed', {
-                error: error.message,
-            })
-        );
-    }
+    emit('pay-room', roomWithRunnerId);
 }
 </script>

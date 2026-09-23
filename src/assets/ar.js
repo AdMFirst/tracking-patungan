@@ -40,6 +40,23 @@ const ar = {
             },
         },
         common: {
+            sort: {
+                label: 'طريقة الفرز:',
+                options: {
+                    titleAsc: 'العنوان (A-Z)',
+                    titleDesc: 'العنوان (Z-A)',
+                    restaurantAsc: 'المطعم (A-Z)',
+                    restaurantDesc: 'المطعم (Z-A)',
+                    platformAsc: 'المنصة (A-Z)',
+                    platformDesc: 'المنصة (Z-A)',
+                    totalDesc: 'الإجمالي النهائي (الأعلى)',
+                    totalAsc: 'الإجمالي النهائي (الأدنى)',
+                    createdLatest: 'وقت الإنشاء (الأحدث)',
+                    createdOldest: 'وقت الإنشاء (الأقدم)',
+                    orderTimeLatest: 'وقت الطلب (الأحدث)',
+                    orderTimeOldest: 'وقت الطلب (الأقدم)',
+                }
+            },
             BottomNav: {
                 home: 'الرئيسية',
                 histori: 'السجل',
@@ -71,6 +88,11 @@ const ar = {
                 emailPassword: 'بريد إلكتروني/كلمة مرور',
                 unknown: 'غير معروف',
             },
+            PullToRefresh: {
+                refreshing: 'جارٍ التحديث...',
+                releaseToRefresh: 'أفلت للتحديث',
+                pullToRefresh: 'اسحب للتحديث',
+            }
         },
         qr: {
             QRScanner: {
@@ -106,9 +128,6 @@ const ar = {
                 each: 'لكل',
                 paidAt: 'تم الدفع في {date}',
                 paidAtVia: 'تم الدفع في {date} عبر {method}',
-                paymentConfirmed:
-                    'تم تأكيد الدفع بمبلغ {amount} باستخدام طريقة الدفع المختارة. تم وضع علامة على الغرفة كمدفوعة.',
-                paymentFailed: 'فشل تأكيد الدفع: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'مسح QR',
@@ -144,6 +163,9 @@ const ar = {
                     'لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع بيانات الغرفة بشكل دائم.',
                 deleteCancelButton: 'إلغاء',
                 deleteConfirmButton: 'حذف',
+                errors: {
+                    greaterThanZero: 'يجب أن يكون الإجمالي النهائي أكبر من 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'تعديل عنصر الطلب',
@@ -339,6 +361,8 @@ const ar = {
             noOrderItems: 'لا توجد عناصر طلب بعد.',
             shareRoomTitle: 'مشاركة الغرفة',
             shareRoomDescription: 'امسح رمز QR لمشاركة هذه الغرفة مع الآخرين.',
+            shareNowButton: 'شارك الآن',
+            shareNowContent: "يا جماعة! أنا بطلب {platform} من {restaurant}. انضموا إليّ عبر {url} لإضافة طلباتكم ونقسم الفاتورة بكل شفافية!",
             close: 'إغلاق',
             errors: {
                 loginToJoin: 'تحتاج لتسجيل الدخول للانضمام لهذه الغرفة',
@@ -366,6 +390,8 @@ const ar = {
                 deleteConfirm: 'حذف عنصر الطلب هذا؟',
                 delete: 'حذف',
                 cancel: 'إلغاء',
+                copySuccess: ' تم نسخ URL إلى الحامل!',
+                shareFailed: 'فشل مشاركة الغرفة. يرجى المحاولة مرة أخرى.',
             },
         },
         histori: {
@@ -380,6 +406,11 @@ const ar = {
                 activeDescription: 'لم تشارك في أي غرف نشطة بعد.',
                 closedDescription: 'لم تشارك في أي غرف مغلقة بعد.',
             },
+            message: {
+                paymentConfirmed:
+                    'تم تأكيد الدفع بمبلغ {amount} باستخدام طريقة الدفع المختارة. تم وضع علامة على الغرفة كمدفوعة.',
+                paymentFailed: 'فشل تأكيد الدفع: {error}',
+            }
         },
         profile: {
             index: {

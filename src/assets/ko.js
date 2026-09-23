@@ -40,6 +40,28 @@ const ko = {
             },
         },
         common: {
+            sort: {
+                label: '정렬 기준:',
+                options: {
+                    titleAsc: '제목 (가나다순)',
+                    titleDesc: '제목 (역순)',
+                    restaurantAsc: '음식점 (가나다순)',
+                    restaurantDesc: '음식점 (역순)',
+                    platformAsc: '플랫폼 (가나다순)',
+                    platformDesc: '플랫폼 (역순)',
+                    totalDesc: '최종 합계 (높은 순)',
+                    totalAsc: '최종 합계 (낮은 순)',
+                    createdLatest: '생성일 (최신순)',
+                    createdOldest: '생성일 (오래된순)',
+                    orderTimeLatest: '주문 시간 (최신순)',
+                    orderTimeOldest: '주문 시간 (오래된순)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: '새로 고치는 중...',
+                releaseToRefresh: '놓아서 새로 고치기',
+                pullToRefresh: '당겨서 새로 고치기',
+            },
             BottomNav: {
                 home: '홈',
                 histori: '기록',
@@ -106,9 +128,6 @@ const ko = {
                 each: '개당',
                 paidAt: '{date}에 결제됨',
                 paidAtVia: '{date}에 {method}로 결제됨',
-                paymentConfirmed:
-                    '선택한 결제 수단으로 {amount} 결제가 확인되었습니다. 방이 결제 완료로 표시되었습니다.',
-                paymentFailed: '결제 확인 실패: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'QR 스캔',
@@ -144,6 +163,9 @@ const ko = {
                     '이 작업은 취소할 수 없습니다. 모든 방 데이터가 영구적으로 삭제됩니다.',
                 deleteCancelButton: '취소',
                 deleteConfirmButton: '삭제',
+                errors: {
+                    greaterThanZero: '최종 합계는 0보다 커야 합니다',
+                }
             },
             EditOrderItemModal: {
                 title: '주문 항목 수정',
@@ -320,6 +342,8 @@ const ko = {
             shareRoomTitle: '방 공유',
             shareRoomDescription:
                 'QR 코드를 스캔하여 이 방을 다른 사람과 공유하세요.',
+            shareNowButton: '지금 공유',
+            shareNowContent: "모두! {platform}에서 {restaurant}를 주문했어요. {url}에 참여해서 주문을 추가하고 투명하게 나누어 보세요!",
             close: '닫기',
             errors: {
                 loginToJoin: '이 방에 참여하려면 로그인해야 합니다',
@@ -348,6 +372,8 @@ const ko = {
                 deleteConfirm: '이 주문 항목을 삭제하시겠습니까?',
                 delete: '삭제',
                 cancel: '취소',
+                copySuccess: 'URL이 클립보드에 복사되었습니다!',
+                shareFailed: '방 공유에 실패했습니다. 다시 시도해주세요.',
             },
         },
         histori: {
@@ -362,6 +388,11 @@ const ko = {
                 activeDescription: '아직 활성 방에 참여하지 않았습니다.',
                 closedDescription: '아직 닫힌 방에 참여하지 않았습니다.',
             },
+            message: {
+                paymentConfirmed:
+                    '선택한 결제 수단으로 {amount} 결제가 확인되었습니다. 방이 결제 완료로 표시되었습니다.',
+                paymentFailed: '결제 확인 실패: {error}',
+            }
         },
         profile: {
             index: {

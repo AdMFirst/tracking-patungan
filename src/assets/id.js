@@ -40,6 +40,28 @@ const id = {
             },
         },
         common: {
+            sort: {
+                label: "Urutan:",
+                options: {
+                    "titleAsc": "Judul (A-Z)",
+                    "titleDesc": "Judul (Z-A)",
+                    "restaurantAsc": "Restoran (A-Z)",
+                    "restaurantDesc": "Restoran (Z-A)",
+                    "platformAsc": "Platform (A-Z)",
+                    "platformDesc": "Platform (Z-A)",
+                    "totalDesc": "Total akhir (tertinggi)",
+                    "totalAsc": "Total akhir (terendah)",
+                    "createdLatest": "Dibuat (terbaru)",
+                    "createdOldest": "Dibuat (terlama)",
+                    "orderTimeLatest": "Waktu pesanan (terbaru)",
+                    "orderTimeOldest": "Waktu pesanan (terlama)"
+                },
+            },
+            PullToRefresh: {
+                refreshing: 'Menyegarkan...',
+                releaseToRefresh: 'Lepaskan untuk menyegarkan',
+                pullToRefresh: 'Tarik untuk menyegarkan',
+            },
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',
@@ -106,9 +128,6 @@ const id = {
                 each: 'per-item',
                 paidAt: 'Dibayar pada {date}',
                 paidAtVia: 'Dibayar pada {date} via {method}',
-                paymentConfirmed:
-                    'Pembayaran dikonfirmasi sebesar {amount} menggunakan metode pembayaran yang dipilih. Room telah ditandai sebagai lunas.',
-                paymentFailed: 'Gagal mengonfirmasi pembayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -145,6 +164,9 @@ const id = {
                     'Tindakan ini tidak dapat dibatalkan. Semua data room akan dihapus secara permanen.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhir harus lebih besar dari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Edit Item Pesanan',
@@ -348,6 +370,8 @@ const id = {
             shareRoomTitle: 'Bagikan Room',
             shareRoomDescription:
                 'Pindai kode QR untuk membagikan room ini dengan orang lain.',
+            shareNowButton: 'Bagikan Sekarang',
+            shareNowContent: "Semua! Saya memesan {platform} dari {restaurant}. Bergabunglah dengan saya di {url} untuk menambahkan pesanan dan bagi tagihan secara transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anda harus masuk untuk bergabung dengan room ini',
@@ -380,6 +404,8 @@ const id = {
                 deleteConfirm: 'Hapus item pesanan ini?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal membagikan room. Silakan coba lagi.',
             },
         },
         histori: {
@@ -396,6 +422,11 @@ const id = {
                 closedDescription:
                     'Anda belum berpartisipasi dalam room yang ditutup apa pun.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pembayaran dikonfirmasi sebesar {amount} menggunakan metode pembayaran yang dipilih. Room telah ditandai sebagai lunas.',
+                paymentFailed: 'Gagal mengonfirmasi pembayaran: {error}',
+            }
         },
         profile: {
             index: {

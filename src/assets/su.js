@@ -39,6 +39,28 @@ const su = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutkeun dumasar:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total ahir (Pangluhurna)',
+                    totalAsc: 'Total ahir (Panghandapna)',
+                    createdLatest: 'Waktu dijieun (Panganyarna)',
+                    createdOldest: 'Waktu dijieun (Pangheubeulna)',
+                    orderTimeLatest: 'Waktu mesen (Panganyarna)',
+                    orderTimeOldest: 'Waktu mesen (Pangheubeulna)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: 'Nyegerkeun...',
+                releaseToRefresh: 'Leupaskeun pikeun nyegerkeun',
+                pullToRefresh: 'Tarik pikeun nyegerkeun',
+            },
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',
@@ -105,9 +127,6 @@ const su = {
                 each: 'hiji',
                 paidAt: 'Dibayar tanggal {date}',
                 paidAtVia: 'Dibayar tanggal {date} via {method}',
-                paymentConfirmed:
-                    'Pamayaran dikonfirmasi {amount} nganggo metode nu dipilih. Kamar parantos lunas.',
-                paymentFailed: 'Gagal konfirmasi pamayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -143,6 +162,9 @@ const su = {
                     'Tindakan ieu teu tiasa dibatalkeun. Sadaya data kamar bakal ical.',
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhir kudu leuwih ti 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Ubah Item Pesenan',
@@ -340,6 +362,8 @@ const su = {
             shareRoomTitle: 'Bagikeun Kamar',
             shareRoomDescription:
                 'Pindai kode QR kanggo ngabagikeun kamar ieu.',
+            shareNowButton: 'Bagikeun Kamar',
+            shareNowContent: "Kabeh! Abdi pesen {platform} saka {restaurant}. Gabung kula ing {url} kanggo nambah pesen lan bagi tagihan kanthi transparan!",
             close: 'Tutup',
             errors: {
                 loginToJoin: 'Anjeun kedah lebet kanggo gabung kamar ieu',
@@ -369,6 +393,8 @@ const su = {
                 deleteConfirm: 'Hapus item pesenan ieu?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin ke papan klip!',
+                shareFailed: 'Gagal ngabagikeun kamar. Cobian deui.',
             },
         },
         histori: {
@@ -384,6 +410,11 @@ const su = {
                 closedDescription:
                     'Anjeun teu acan gabung kamar nu parantos ditutup.',
             },
+            message: {
+                paymentConfirmed:
+                    'Pamayaran dikonfirmasi {amount} nganggo metode nu dipilih. Kamar parantos lunas.',
+                paymentFailed: 'Gagal konfirmasi pamayaran: {error}',
+            }
         },
         profile: {
             index: {

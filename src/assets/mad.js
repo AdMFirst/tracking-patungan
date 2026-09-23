@@ -38,6 +38,28 @@ const mad = {
             },
         },
         common: {
+            sort: {
+                label: 'Urutaghi manot:',
+                options: {
+                    titleAsc: 'Judul (A-Z)',
+                    titleDesc: 'Judul (Z-A)',
+                    restaurantAsc: 'Restoran (A-Z)',
+                    restaurantDesc: 'Restoran (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Total akhir (Paling tenggi)',
+                    totalAsc: 'Total akhir (Paling rendha)',
+                    createdLatest: 'Wektu ebhuten (Paling anyar)',
+                    createdOldest: 'Wektu ebhuten (Paling laos)',
+                    orderTimeLatest: 'Wektu mesen (Paling anyar)',
+                    orderTimeOldest: 'Wektu mesen (Paling laos)',
+                }
+            },
+            PullToRefresh: {
+                refreshing: 'Nyanggeraghi...',
+                releaseToRefresh: 'Lepas kaangguy nyanggeraghi',
+                pullToRefresh: 'Tarik kaangguy nyanggeraghi',
+            },
             BottomNav: {
                 home: 'Beranda',
                 histori: 'Riwayat',
@@ -104,9 +126,6 @@ const mad = {
                 each: 'sabbhan',
                 paidAt: 'Dimajar tanggal {date}',
                 paidAtVia: 'Dimajar tanggal {date} kalaban {method}',
-                paymentConfirmed:
-                    'Pambayaran dikonfirmasi {amount} ngangghuy metode se epile. Kamar ampon lunas.',
-                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Pindai QR',
@@ -142,6 +161,9 @@ const mad = {
                     "Tindakan reya ta' bisa dibatalaghi. Sadaja data kamar bakal elang.",
                 deleteCancelButton: 'Batal',
                 deleteConfirmButton: 'Hapus',
+                errors: {
+                    greaterThanZero: 'Total akhér koddhu lebbi raje dhari 0',
+                }
             },
             EditOrderItemModal: {
                 title: 'Uba Item Pesenen',
@@ -337,6 +359,8 @@ const mad = {
             shareRoomTitle: 'Bagiyaghi Kamar',
             shareRoomDescription:
                 'Pindai kode QR kaangguy mbagiyaghi kamar reya.',
+            shareNowButton: 'Bagiyaghi Kapan',
+            shareNowContent: "Kabeh! Aku pesen {platform} saka {restaurant}. Gabung kula ing {url} kanggo nambah pesen lan bagi tagihan kanthi transparan!",
             close: 'Totop',
             errors: {
                 loginToJoin: 'Sampeyan kedah masok kaangguy gabung kamar reya',
@@ -366,6 +390,8 @@ const mad = {
                 deleteConfirm: 'Hapus item pesenen reya?',
                 delete: 'Hapus',
                 cancel: 'Batal',
+                copySuccess: 'URL disalin menyang papan klip!',
+                shareFailed: 'Gagal mbagikaken kamar. Coba pole.',
             },
         },
         histori: {
@@ -381,6 +407,11 @@ const mad = {
                 closedDescription:
                     "Sampeyan gita' gabung kamar se ampon ditotop.",
             },
+            message: {
+                paymentConfirmed:
+                    'Pambayaran dikonfirmasi {amount} ngangghuy metode se epile. Kamar ampon lunas.',
+                paymentFailed: 'Gagal konfirmasi pambayaran: {error}',
+            }
         },
         profile: {
             index: {

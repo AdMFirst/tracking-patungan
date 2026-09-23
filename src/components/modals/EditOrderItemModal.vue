@@ -3,7 +3,10 @@
         <DialogContent class="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>{{
+                    props.participantName ?
+                    $t('components.modals.EditOrderItemModal.runnerTitle', { name: props.participantName }) :
                     $t('components.modals.EditOrderItemModal.title')
+
                 }}</DialogTitle>
                 <DialogDescription>
                     {{ $t('components.modals.EditOrderItemModal.description') }}
@@ -126,6 +129,10 @@ const props = defineProps({
         type: Object,
         required: false,
     },
+    participantName: {
+        type: String,
+        required: false,
+    },
 });
 
 const emit = defineEmits(['update:open', 'itemUpdated']);
@@ -154,8 +161,8 @@ watch(
 );
 
 const handleDialogUpdate = (open) => {
-    emit('update:open', open);
     if (!open) {
+        emit('update:open', null);
         // Reset form when dialog closes
         formData.value = {
             itemName: '',
@@ -163,11 +170,13 @@ const handleDialogUpdate = (open) => {
             unitPrice: 0,
             notes: '',
         };
+    } else {
+        emit('update:open', open);
     }
 };
 
 const handleCancel = () => {
-    emit('update:open', false);
+    emit('update:open', null);
 };
 
 const handleSubmit = () => {
@@ -175,7 +184,7 @@ const handleSubmit = () => {
         ...formData.value,
         itemId: props.item?.id,
     });
-    emit('update:open', false);
+    emit('update:open', null);
 
     // Reset form
     formData.value = {

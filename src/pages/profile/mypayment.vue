@@ -281,7 +281,7 @@
 <script setup>
 import { ref, onMounted, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { usePaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/supabaseClient';
+import { usePaymentMethodsQuery, useAddPaymentMethodMutation, useUpdatePaymentMethodMutation, useDeletePaymentMethodMutation } from '@/lib/tanstackQueries';
 import { useQuery, useMutation } from '@tanstack/vue-query';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

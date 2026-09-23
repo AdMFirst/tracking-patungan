@@ -17,7 +17,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { useCreateRoomMutation, useJoinRoomMutation } from '@/lib/supabaseClient';
+import { useCreateRoomMutation, useJoinRoomMutation } from '@/lib/tanstackQueries';
 import { useMutation } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';

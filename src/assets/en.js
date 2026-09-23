@@ -40,6 +40,23 @@ const en = {
             },
         },
         common: {
+            sort: {
+                label: 'Sort by:',
+                options: {
+                    titleAsc: 'Title (A-Z)',
+                    titleDesc: 'Title (Z-A)',
+                    restaurantAsc: 'Restaurant (A-Z)',
+                    restaurantDesc: 'Restaurant (Z-A)',
+                    platformAsc: 'Platform (A-Z)',
+                    platformDesc: 'Platform (Z-A)',
+                    totalDesc: 'Final total (highest)',
+                    totalAsc: 'Final total (lowest)',
+                    createdLatest: 'Created (newest)',
+                    createdOldest: 'Created (oldest)',
+                    orderTimeLatest: 'Order time (latest)',
+                    orderTimeOldest: 'Order time (oldest)',
+                }
+            },
             BottomNav: {
                 home: 'Home',
                 histori: 'Histori',
@@ -71,6 +88,11 @@ const en = {
                 emailPassword: 'Email/Password',
                 unknown: 'Unknown',
             },
+            PullToRefresh: {
+                refreshing: 'Refreshing...',
+                releaseToRefresh: 'Release to refresh',
+                pullToRefresh: 'Pull to refresh',
+            }
         },
         qr: {
             QRScanner: {
@@ -106,9 +128,6 @@ const en = {
                 each: 'each',
                 paidAt: 'Paid at {date}',
                 paidAtVia: 'Paid at {date} via {method}',
-                paymentConfirmed:
-                    'Payment confirmed for {amount} using selected payment method. Room has been marked as paid.',
-                paymentFailed: 'Failed to confirm payment: {error}',
             },
             QRScanDialog: {
                 scanQRButton: 'Scan QR',
@@ -118,8 +137,9 @@ const en = {
         },
         modals: {
             AddOrderItemModal: {
-                title: 'Add New Order Item',
-                description: 'Add a new item to your order for this room.',
+                title: 'Add to My Cart',
+                runnerTitle: 'Add to {name}\'s Cart',
+                description: 'Enter the name, quantity, unit price and any special notes you want to for a new order items to be added to cart',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -127,7 +147,7 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Any special instructions',
+                notesPlaceholder: 'Special instructions for the items',
                 cancelButton: 'Cancel',
                 addItemButton: 'Add Item',
             },
@@ -144,10 +164,14 @@ const en = {
                     'This action cannot be undone. All room data will be permanently deleted.',
                 deleteCancelButton: 'Cancel',
                 deleteConfirmButton: 'Delete',
+                errors: {
+                    greaterThanZero: 'Final total must be greater than 0',
+                }
             },
             EditOrderItemModal: {
-                title: 'Edit Order Item',
-                description: 'Edit this order item.',
+                title: 'Edit My Cart',
+                runnerTitle: 'Edit {name}\'s Cart',
+                description: 'Modify item name, quantity, unit price and any special notes for this order item',
                 itemNameLabel: 'Item Name',
                 itemNamePlaceholder: 'Enter item name',
                 quantityLabel: 'Quantity',
@@ -155,9 +179,17 @@ const en = {
                 unitPriceLabel: 'Unit Price',
                 unitPricePlaceholder: '0.00',
                 notesLabel: 'Notes (optional)',
-                notesPlaceholder: 'Any special instructions',
+                notesPlaceholder: 'Special instructions for the items',
                 cancelButton: 'Cancel',
                 updateItemButton: 'Update Item',
+            },
+            AddGuestParticipantModal: {
+                title: 'Add Participant',
+                description: 'Participants can be added manually regardless of registration status. They will be treated as guests and must be managed manually. Guest users are automatically bound if they register with the email. Use a guest name to avoid this.',
+                guestNameEmailLabel: 'Participant Name or Email',
+                guestNameEmailPlaceholder: "Alphonso Eric or alphonso.E\\@example.com",
+                cancelButton: 'Cancel',
+                addItemButton: 'Add Participant',
             },
             FilterModal: {
                 title: 'Filters',
@@ -342,7 +374,10 @@ const en = {
             shareRoomTitle: 'Share Room',
             shareRoomDescription:
                 'Scan the QR code to share this room with others.',
+            shareNowButton: 'Share Now',
+            shareNowContent: "Everyone! I'm ordering {platform} from {restaurant}. Join me at {url} to add your order and let's split the bill transparently!",
             close: 'Close',
+            guest: "GUEST",
             errors: {
                 loginToJoin: 'You need to be logged in to join this room',
                 joinFailed: 'Failed to join room. Please try again.',
@@ -367,11 +402,15 @@ const en = {
                     'Failed to check your participation status.',
                 loadDataFailed: 'Failed to load room data.',
                 generateQrFailed: 'Failed to generate QR code.',
+                addParticipantFailed: 'Failed to add guest participant.',
             },
             toast: {
                 deleteConfirm: 'Delete this order item?',
                 delete: 'Delete',
                 cancel: 'Cancel',
+                copySuccess: 'URL copied to clipboard!',
+                shareFailed: 'Failed to share room. Please try again.',
+                participantAdded: 'Participant added successfully!',
             },
         },
         histori: {
@@ -388,6 +427,11 @@ const en = {
                 closedDescription:
                     "You haven't participated in any closed rooms yet.",
             },
+            message: {
+                paymentConfirmed:
+                    'Payment confirmed for {amount} using selected payment method. Room has been marked as paid.',
+                paymentFailed: 'Failed to confirm payment: {error}',
+            }
         },
         profile: {
             index: {
