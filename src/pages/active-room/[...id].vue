@@ -221,12 +221,7 @@
                                             variant="outline"
                                             size="icon"
                                             class="h-8 w-8"
-                                            @click="
-                                                handleDeleteOrderItem(
-                                                    item.id,
-                                                    item.user_id
-                                                )
-                                            "
+                                            @click="handleDeleteOrderItem(item)"
                                         >
                                             <Trash2 class="h-3 w-3" />
                                         </Button>
@@ -303,8 +298,6 @@ import { user as currentUser } from '@/lib/auth';
 import {
     checkUserParticipation,
     joinRoom,
-    updateOrderItem,
-    deleteOrderItem,
     fetchRoomDetails,
     fetchRoomOrderItems,
     fetchUserProfiles,
@@ -324,7 +317,12 @@ import EditOrderItemModal from '@/components/modals/EditOrderItemModal.vue';
 import ShareModal from '@/components/modals/ShareModal.vue';
 import { toast } from 'vue-sonner';
 import AddGuestParticipantModal from '@/components/modals/addGuestParticipantModal.vue';
-import { useAddGuestParticipantMutation, useAddOrderItemMutation, useUpdateOrderItemMutation } from '@/lib/tanstackQueries';
+import { 
+    useAddGuestParticipantMutation, 
+    useAddOrderItemMutation, 
+    useUpdateOrderItemMutation, 
+    useDeleteOrderItemMutation 
+} from '@/lib/tanstackQueries';
 import { useMutation } from '@tanstack/vue-query';
 
 // State management
@@ -486,7 +484,7 @@ const handleAddOrderItem = async (itemData) => {
             return;
         }
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
 
         console.debug('adding items for ', showAddItemModal.value.displayName, ' with this item', itemData);
@@ -544,7 +542,7 @@ const handleUpdateOrderItem = async (updatedData) => {
             return;
         }
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
 
         await editOrderItemMutation.mutateAsync({
@@ -567,16 +565,19 @@ const handleUpdateOrderItem = async (updatedData) => {
     }
 };
 
+const deleteOrderItem = useMutation(useDeleteOrderItemMutation());
+
 // Delete order item handler
-const handleDeleteOrderItem = async (itemId, itemUserId) => {
+const handleDeleteOrderItem = async (item) => {
     try {
         if (!currentUser.value) {
             error.value = t('pages.activeRoom.errors.loginToDelete');
             return;
         }
 
+        console.debug(item)
         // Check if user can delete this item
-        const isOwner = itemUserId === currentUser.value.id;
+        const isOwner = item.user_id == currentUser.value.id;
         const isRunnerUser = isRunner.value;
 
         if (!isOwner && !isRunnerUser) {
@@ -600,13 +601,12 @@ const handleDeleteOrderItem = async (itemId, itemUserId) => {
 
         if (!confirmed) return;
 
-        loading.value = true;
+        //loading.value = true;
         error.value = null;
 
-        await deleteOrderItem(itemId, currentUser.value.id);
-
-        // Refresh the order items list
-        await loadOrderItems();
+        await deleteOrderItem.mutateAsync({
+            itemID: item.id
+        })
     } catch (err) {
         console.error('Error deleting order item:', err);
         const errMsg = err.message || t('pages.activeRoom.errors.deleteFailed');
